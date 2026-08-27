@@ -1,0 +1,7 @@
+# Build context is the repository root so that src/rel ships in the image.
+build:
+  python_version: "3.12"
+  system_packages:
+    - ffmpeg
+  python_requirements: requirements-replicate.txt
+run: "deploy/replicate/predict.py:Predictor"

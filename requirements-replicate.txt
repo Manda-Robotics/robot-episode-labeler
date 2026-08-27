@@ -1,0 +1,7 @@
+google-genai>=1.0.0
+pillow>=10.4
+pydantic>=2.9
+# The base image's ffmpeg is not ours to choose and may carry a hardware-only AV1
+# decoder; this provides a software fallback.
+imageio-ffmpeg>=0.5
+mcap>=1.4

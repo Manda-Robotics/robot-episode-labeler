@@ -55,12 +55,36 @@ synchronously.
 
 ## Replicate
 
+**The image is built and verified.** `cog run` against the built container performed
+real inference on a WGO-Bench episode and returned correct structured output in 14 s,
+so the packaging is proven rather than assumed. `cog.yaml` lives at the repository
+root so `src/rel` ships in the image, and `.dockerignore` keeps `data/` (1.3 GB of
+benchmark video) out of the build context.
+
+Two account-side steps remain, both needing a human:
+
+1. **`cog login` needs a CLI auth token, not a Replicate API token.** The API token
+   is rejected with "that looks like a Replicate API token, not a CLI auth token".
+   Fetch one from https://replicate.com/auth/token.
+2. **Create the model.** `POST /v1/models` returns HTTP 500 for this token — retried
+   four times, including a minimal payload under a throwaway name, so it is not
+   specific to our model. Reads on the same token succeed (`/v1/account`,
+   `/v1/deployments` both 200), so this is either a Replicate-side fault or a
+   missing org-write scope. Create it at https://replicate.com/create as
+   `mandarobotics/robot-episode-labeler`, private, CPU hardware.
+
+Then:
+
 ```bash
-cd deploy/replicate && cog push r8.im/<org>/robot-episode-labeler
+cog push r8.im/mandarobotics/robot-episode-labeler
 ```
 
-Replicate takes an uploaded file rather than a URL, which is the friendlier way to
-try the model from its interactive page.
+Set `GEMINI_API_KEY` as a secret on the model. Replicate takes an uploaded file
+rather than a URL, which is the friendlier way to try the model from its page.
+
+Note cog 0.22 renamed the entry point: `predict:` became `run:` in cog.yaml, and
+`Predictor.predict()` became `Predictor.run()`. Aliasing `cog.Path` also breaks its
+static analyser, so the import is unaliased.
 
 ## Before either goes public
 

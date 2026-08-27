@@ -1,30 +1,40 @@
-"""Replicate (Cog) entry point."""
+"""Replicate (Cog) entry point.
+
+The build context is the repository root (see cog.yaml), so `src/rel` ships in the
+image and is placed on the path here rather than being pip-installed.
+"""
 
 from __future__ import annotations
 
 import json
 import os
+import pathlib
 import sys
-from pathlib import Path
 
-from cog import BasePredictor, Input, Path as CogPath
+from cog import BasePredictor, Input, Path
 
-sys.path.insert(0, str(Path(__file__).resolve().parents[2] / "src"))
+REPO_ROOT = pathlib.Path(__file__).resolve().parents[2]
+sys.path.insert(0, str(REPO_ROOT / "src"))
 
 
 class Predictor(BasePredictor):
     def setup(self) -> None:
-        if not os.environ.get("GEMINI_API_KEY"):
-            raise RuntimeError("GEMINI_API_KEY must be set as a Replicate secret")
+        # Fail at startup, not on a caller's first request.
+        from rel.video.decode import _ffmpeg_binaries
 
-    def predict(
+        _ffmpeg_binaries()
+
+    def run(
         self,
-        video: CogPath = Input(description="Robot manipulation episode (mp4/mov/webm)."),
-        prompt: str = Input(description="What the robot is doing.",
-                            default="A robot arm manipulates objects on a table."),
+        video: Path = Input(description="Robot manipulation episode (mp4/mov/webm)."),
+        prompt: str = Input(
+            description="What the robot is doing. Optional: leave blank to annotate "
+                        "without a task hint.",
+            default="",
+        ),
         subtasks: str = Input(
             description="Optional comma-separated subtask vocabulary. Supplied, labels "
-                        "are constrained to it.",
+                        "are constrained to it and snapped to it in code.",
             default="",
         ),
         attributes: str = Input(
@@ -32,9 +42,17 @@ class Predictor(BasePredictor):
                         "e.g. retry,missed_grasp,dropped_object.",
             default="",
         ),
-        quality: str = Input(description="How much inference to spend.",
-                             choices=["fast", "balanced", "strict"], default="balanced"),
+        quality: str = Input(
+            description="fast = segmentation only. balanced = + subdivision of long "
+                        "segments + labeling (recommended). strict = + boundary "
+                        "refinement and disagreement flags.",
+            choices=["fast", "balanced", "strict"],
+            default="balanced",
+        ),
     ) -> str:
+        if not os.environ.get("GEMINI_API_KEY"):
+            raise RuntimeError("GEMINI_API_KEY is not set. Add it as a secret on the model.")
+
         from rel.pipeline import annotate
         from rel.schemas import AnnotateRequest, Quality
 
