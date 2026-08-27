@@ -8,14 +8,10 @@ thinks in. The pipeline underneath can change completely without changing what a
 from __future__ import annotations
 
 import os
-import sys
-from pathlib import Path
 
 import fal
 from fastapi import Response
 from pydantic import BaseModel, Field
-
-REPO_ROOT = Path(__file__).resolve().parents[2]
 
 
 class AnnotateInput(BaseModel):
@@ -64,13 +60,25 @@ class RobotEpisodeLabeler(fal.App, name="robot-episode-labeler", keep_alive=300)
         "google-genai>=1.0.0",
         "pillow>=10.4",
         "pydantic>=2.9",
+        # The container's ffmpeg is not ours to choose, and a host build can ship an
+        # AV1 decoder that is hardware-only. This carries a software fallback.
         "imageio-ffmpeg>=0.5",
     ]
+    # Ship the local package into the container. Without this the app imports
+    # nothing: a fal container has no checkout of this repository.
+    local_python_modules = ["rel"]
+    secrets = ["GEMINI_API_KEY"]
 
     def setup(self) -> None:
-        sys.path.insert(0, str(REPO_ROOT / "src"))
         if not os.environ.get("GEMINI_API_KEY"):
-            raise RuntimeError("GEMINI_API_KEY must be set as a fal secret")
+            raise RuntimeError(
+                "GEMINI_API_KEY must be set as a fal secret: "
+                "fal secrets set GEMINI_API_KEY=..."
+            )
+        # Fail at startup rather than on the first request if decoding is broken.
+        from rel.video.decode import _ffmpeg_binaries
+
+        _ffmpeg_binaries()
 
     @fal.endpoint("/")
     def annotate_episode(self, payload: AnnotateInput, response: Response) -> AnnotateOutput:
