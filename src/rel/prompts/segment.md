@@ -4,9 +4,10 @@ You are shown contact sheets. Each sheet tiles frames sampled every {interval}s 
 time order, left to right, top to bottom. Each frame is stamped with its episode
 time in seconds. Those stamps are the only valid source of timestamps.
 
-TASK BEING PERFORMED: {instruction}
+{instruction_block}
 
 Episode duration: {duration:.2f} seconds.
+{window_block}
 
 Segment the episode into completed manipulation subtasks.
 

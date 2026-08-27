@@ -39,7 +39,11 @@ class AnnotateRequest(BaseModel):
     """Only `video` and `prompt` are required; everything else sharpens the output."""
 
     video: str = Field(description="Local path or URL to the episode video.")
-    prompt: str = Field(description="What the robot is doing / what to annotate.")
+    prompt: str = Field(
+        default="",
+        description="What the robot is doing. Optional: left empty, the episode is "
+                    "annotated without a task hint.",
+    )
     subtasks: list[str] = Field(
         default_factory=list,
         description="Optional closed vocabulary. Supplied -> labels are constrained to it.",
@@ -52,10 +56,13 @@ class AnnotateRequest(BaseModel):
 
     @field_validator("prompt")
     @classmethod
-    def _prompt_not_blank(cls, v: str) -> str:
-        if not v.strip():
-            raise ValueError("prompt must not be empty")
+    def _tidy_prompt(cls, v: str) -> str:
         return v.strip()
+
+    @property
+    def described(self) -> bool:
+        """False when the caller gave no task hint at all."""
+        return bool(self.prompt)
 
     @field_validator("subtasks", "attributes")
     @classmethod

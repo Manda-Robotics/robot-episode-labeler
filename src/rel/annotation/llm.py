@@ -91,6 +91,10 @@ class LLMError(RuntimeError):
     pass
 
 
+class _Transient(LLMError):
+    """Retryable regardless of message; see _RETRY_MARKERS for the rest."""
+
+
 def png_bytes(image: Image.Image) -> bytes:
     buf = io.BytesIO()
     image.save(buf, format="PNG", optimize=False)
@@ -166,10 +170,16 @@ class GeminiClient:
                     return parsed
                 if resp.text:
                     return schema.model_validate_json(resp.text)
-                raise LLMError(f"{stage}: model returned no content")
+                # An empty candidate is intermittent rather than terminal -- the
+                # same request succeeds on a retry -- so it is treated as such.
+                finish = [str(c.finish_reason) for c in (resp.candidates or [])]
+                raise _Transient(f"{stage}: model returned no content (finish={finish})")
             except Exception as exc:  # noqa: BLE001 - retry policy is marker-based
                 last = exc
-                if not any(m in str(exc) for m in _RETRY_MARKERS) or attempt == self.max_retries - 1:
+                retryable = isinstance(exc, _Transient) or any(
+                    m in str(exc) for m in _RETRY_MARKERS
+                )
+                if not retryable or attempt == self.max_retries - 1:
                     break
                 self.usage.note_retry()
                 time.sleep(min(2**attempt + random.random(), 20))

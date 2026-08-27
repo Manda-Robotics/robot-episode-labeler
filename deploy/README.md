@@ -1,8 +1,26 @@
 # Deployment
 
-Both targets wrap the same `rel.pipeline.annotate`. Neither has been run against a
-live account yet — no fal or Replicate credentials were available at the time of
-writing, so treat these as reviewed-but-unexercised packaging.
+Both targets wrap the same `rel.pipeline.annotate`.
+
+## Blocker: fal serverless access is not yet granted
+
+Checked 2026-08-27 with Finn's personal fal key. The credential authenticates, but
+every serverless command returns:
+
+```
+✘ Insufficient permissions: Please visit
+  https://fal.ai/dashboard/serverless-get-started to request access.
+```
+
+`fal apps list`, `fal secrets list` and `fal keys list` all fail this way, so
+deploying a custom app is not possible on this account today. Deploying custom
+Python apps — and later listing one in the Marketplace — requires fal to enable
+serverless on the account, which is an approval request with human lead time.
+
+**Action: request serverless access now**, well before we want to launch, at
+https://fal.ai/dashboard/serverless-get-started. Until it is granted, the fal app
+here is unexercised packaging. Replicate has not been attempted (no credentials
+yet).
 
 ## fal (primary target)
 
