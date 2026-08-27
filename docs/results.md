@@ -194,6 +194,44 @@ replicate recorded runs.
 Sub-second events remain largely invisible: 0.038 recall under one second. Nothing
 here should be described as sub-second accurate.
 
+## Shipping configuration
+
+`balanced` on `gemini-3.7-flash`: windowed segmentation + subdivision + context
+labeling. This is what the endpoint runs by default.
+
+| metric | value |
+|---|---:|
+| segmentation F1 | 0.629 (P 0.677 / R 0.588) |
+| boundary recall ±0.25 s | 0.215 |
+| boundary recall ±0.5 s | 0.405 |
+| boundary recall ±1.0 s | 0.609 |
+| boundary recall ±2.0 s | 0.788 |
+| median boundary error | **0.703 s** |
+| label accuracy (matched segments) | 0.720 |
+| cost | $2.39 / video-hour |
+| failed episodes | 1 / 100 |
+
+Dropping refinement from this path cost nothing measurable and saved 26%
+($3.25 → $2.39 per video-hour, identical ±0.5 s boundary recall).
+
+Label accuracy is judged by `gemini-3.1-pro-preview` — a different tier from the
+annotator, so the judge does not share its blind spots — on temporally matched
+segments only. By family: **droid 0.461**, galaxea 0.806, homer 0.800. DROID is the
+clear weak spot and is the obvious next thing to look at; its gold labels read like
+task instructions ("Move the silver cup to the right") rather than event
+descriptions, so some of the gap may be a scoring-convention mismatch rather than a
+model failure. Not yet investigated.
+
+### Progress over the session
+
+| metric | start (3.5, single call) | now (3.7, balanced) |
+|---|---:|---:|
+| segmentation F1 | 0.544 | 0.629 |
+| boundary recall ±0.5 s | 0.234 | 0.405 |
+| boundary recall ±1.0 s | 0.425 | 0.609 |
+| median boundary error | 1.275 s | 0.703 s |
+| failed episodes | 11 | 1 |
+
 ## Cost
 
 Measured over two full 100-episode passes (135 minutes of video, 1.57 M tokens):
@@ -211,7 +249,6 @@ latency by roughly 60:1, and `thinking_budget` is an untested lever.
 
 ## What is not measured yet
 
-- `balanced` mode end to end: what boundary refinement and context labeling buy.
-- Label accuracy: the judge is implemented, the scoring run died on the credit
-  outage.
+- Why DROID label accuracy (0.461) trails Galaxea and HomER (~0.80).
+- Whether rejecting same-label splits recovers subdivision's precision loss.
 - Any measurement of `strict` mode.
