@@ -53,38 +53,56 @@ model calls the pipeline made. That keeps pricing stable while the pipeline
 changes. Long episodes should be called through fal's queue interface rather than
 synchronously.
 
-## Replicate
+## Replicate — DEPLOYED
 
-**The image is built and verified.** `cog run` against the built container performed
-real inference on a WGO-Bench episode and returned correct structured output in 14 s,
-so the packaging is proven rather than assumed. `cog.yaml` lives at the repository
-root so `src/rel` ships in the image, and `.dockerignore` keeps `data/` (1.3 GB of
-benchmark video) out of the build context.
+Live (private) at **https://replicate.com/mandarobotics/robot-episode-labeler**.
 
-Two account-side steps remain, both needing a human:
+Verified end to end: the image builds, the container performs real inference on a
+WGO-Bench episode (`cog run`, correct structured output, 14 s), the push succeeds,
+and the hosted version exposes the right input schema. The one thing not yet
+demonstrated is a hosted prediction, which returns:
 
-1. **`cog login` needs a CLI auth token, not a Replicate API token.** The API token
-   is rejected with "that looks like a Replicate API token, not a CLI auth token".
-   Fetch one from https://replicate.com/auth/token.
-2. **Create the model.** `POST /v1/models` returns HTTP 500 for this token — retried
-   four times, including a minimal payload under a throwaway name, so it is not
-   specific to our model. Reads on the same token succeed (`/v1/account`,
-   `/v1/deployments` both 200), so this is either a Replicate-side fault or a
-   missing org-write scope. Create it at https://replicate.com/create as
-   `mandarobotics/robot-episode-labeler`, private, CPU hardware.
+```
+402 — You have insufficient credit to run this model.
+```
 
-Then:
+**Action: add Replicate credit** at https://replicate.com/account/billing, then:
+
+```bash
+uv run python scripts/smoke_replicate.py
+```
+
+### Bring-your-own-key
+
+Replicate has no model-level secret store, so `gemini_api_key` is a write-only
+`Secret` **input** rather than an environment variable. The caller supplies their
+own Gemini key; it is scoped to the call and never returned in the response. This
+is the usual pattern for a model that wraps a third-party API.
+
+Note this differs from the intended fal model, where we would hold the key
+server-side and bill per second of video. The two distribution channels therefore
+have different commercial shapes: Replicate is bring-your-own-key and free to us
+per call, fal is our key and billed by the video second.
+
+### Rebuilding
 
 ```bash
 cog push r8.im/mandarobotics/robot-episode-labeler
 ```
 
-Set `GEMINI_API_KEY` as a secret on the model. Replicate takes an uploaded file
-rather than a URL, which is the friendlier way to try the model from its page.
+`cog.yaml` sits at the repository root so `src/rel` ships in the image, and
+`.dockerignore` keeps `data/` (1.3 GB of benchmark video) out of the build context.
+cog 0.22 renamed the entry point (`predict:` → `run:`, `Predictor.predict()` →
+`Predictor.run()`) and its static analyser rejects an aliased `cog.Path`, so the
+import is unaliased.
 
-Note cog 0.22 renamed the entry point: `predict:` became `run:` in cog.yaml, and
-`Predictor.predict()` became `Predictor.run()`. Aliasing `cog.Path` also breaks its
-static analyser, so the import is unaliased.
+Two account quirks worth recording:
+
+- **`cog login` needs a CLI auth token, not a Replicate API token.** The API token
+  is rejected outright. Fetch one from https://replicate.com/auth/token.
+- **`POST /v1/models` returned HTTP 500** for this token on every attempt, including
+  a minimal payload under a throwaway name, while reads on the same token
+  succeeded. The model had to be created through the web UI.
 
 ## Before either goes public
 

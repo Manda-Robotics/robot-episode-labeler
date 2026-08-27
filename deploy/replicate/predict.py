@@ -11,7 +11,7 @@ import os
 import pathlib
 import sys
 
-from cog import BasePredictor, Input, Path
+from cog import BasePredictor, Input, Path, Secret
 
 REPO_ROOT = pathlib.Path(__file__).resolve().parents[2]
 sys.path.insert(0, str(REPO_ROOT / "src"))
@@ -49,9 +49,21 @@ class Predictor(BasePredictor):
             choices=["fast", "balanced", "strict"],
             default="balanced",
         ),
+        gemini_api_key: Secret = Input(
+            description="Your Gemini API key, from https://aistudio.google.com/apikey. "
+                        "Write-only: it is never stored or returned.",
+            default=None,
+        ),
     ) -> str:
-        if not os.environ.get("GEMINI_API_KEY"):
-            raise RuntimeError("GEMINI_API_KEY is not set. Add it as a secret on the model.")
+        # Replicate has no model-level secret store, so the key is a write-only
+        # input. It is scoped to this call and never written to the response.
+        key = gemini_api_key.get_secret_value() if gemini_api_key else os.environ.get("GEMINI_API_KEY")
+        if not key:
+            raise RuntimeError(
+                "No Gemini API key. Pass gemini_api_key, or set GEMINI_API_KEY in "
+                "the environment. Get one at https://aistudio.google.com/apikey"
+            )
+        os.environ["GEMINI_API_KEY"] = key
 
         from rel.pipeline import annotate
         from rel.schemas import AnnotateRequest, Quality
