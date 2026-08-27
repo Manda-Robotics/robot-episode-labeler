@@ -2,7 +2,16 @@
 
 from __future__ import annotations
 
-import json, os, sys, time, urllib.request
+import json, os, ssl, sys, time, urllib.request
+
+# Some framework Python builds ship without a usable root store; certifi's is used
+# when available so this runs the same way everywhere.
+try:
+    import certifi
+
+    _SSL = ssl.create_default_context(cafile=certifi.where())
+except Exception:  # noqa: BLE001
+    _SSL = ssl.create_default_context()
 
 MODEL = "mandarobotics/robot-episode-labeler"
 API = "https://api.replicate.com/v1"
@@ -14,9 +23,11 @@ def call(path: str, token: str, data: dict | None = None) -> dict:
     req = urllib.request.Request(
         path if path.startswith("http") else f"{API}{path}",
         data=json.dumps(data).encode() if data else None,
-        headers={"Authorization": f"Bearer {token}", "Content-Type": "application/json"},
+        headers={"Authorization": f"Bearer {token}", "Content-Type": "application/json",
+                 # urllib's default User-Agent is rejected by the edge with 403.
+                 "User-Agent": "robot-episode-labeler-smoke/1.0"},
     )
-    with urllib.request.urlopen(req, timeout=90) as r:
+    with urllib.request.urlopen(req, timeout=90, context=_SSL) as r:
         return json.loads(r.read())
 
 
@@ -45,9 +56,10 @@ def main() -> int:
     req = urllib.request.Request(
         f"{API}/files", data=body,
         headers={"Authorization": f"Bearer {token}",
-                 "Content-Type": f"multipart/form-data; boundary={boundary}"},
+                 "Content-Type": f"multipart/form-data; boundary={boundary}",
+                 "User-Agent": "robot-episode-labeler-smoke/1.0"},
     )
-    with urllib.request.urlopen(req, timeout=180) as r:
+    with urllib.request.urlopen(req, timeout=180, context=_SSL) as r:
         video_url = json.loads(r.read())["urls"]["get"]
     print("uploaded episode")
 

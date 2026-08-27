@@ -57,20 +57,27 @@ synchronously.
 
 Live (private) at **https://replicate.com/mandarobotics/robot-episode-labeler**.
 
-Verified end to end: the image builds, the container performs real inference on a
-WGO-Bench episode (`cog run`, correct structured output, 14 s), the push succeeds,
-and the hosted version exposes the right input schema. The one thing not yet
-demonstrated is a hosted prediction, which returns:
+**Verified end to end, including a hosted prediction.** `scripts/smoke_replicate.py`
+uploads a WGO-Bench episode, runs it against the deployed version and prints the
+segments:
 
 ```
-402 — You have insufficient credit to run this model.
+use a gripper to pick the target object and place on the gray plate.  (4.43s, 2 subtasks)
+    0.00-  2.00  pass    pick_banana
+    2.00-  3.00  pass    place_banana
+metrics: {'predict_time': 8.27, 'total_time': 12.93}
 ```
 
-**Action: add Replicate credit** at https://replicate.com/account/billing, then:
+Gold for that episode is `0.00-1.96 pick` / `1.96-3.29 place`: both events found,
+the interior boundary within 0.04 s.
 
 ```bash
-uv run python scripts/smoke_replicate.py
+uv run --with certifi python scripts/smoke_replicate.py
 ```
+
+Two environment quirks the smoke test works around: some framework Python builds
+have no usable root certificate store (certifi's is used when present), and
+urllib's default User-Agent is rejected by Replicate's edge with 403.
 
 ### Bring-your-own-key
 

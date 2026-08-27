@@ -1,0 +1,431 @@
+<title>Robot Episode Labeler</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Chivo:wght@500;700;900&family=IBM+Plex+Mono:wght@400;500;600&family=Source+Serif+4:opsz,wght@8..60,400;8..60,600&display=swap">
+
+<style>
+:root{
+  --ground:#F5F7F8; --surface:#FFFFFF; --surface-2:#EDF1F3;
+  --ink:#0F1519; --ink-2:#31424C; --muted:#61717C;
+  --rule:#D9E1E6; --rule-strong:#B9C6CE;
+  --accent:#BE7A10; --series-a:#0079B8; --series-b:#BE7A10;
+  --good:#1F7A4D; --bad:#A33324;
+  --shadow:0 1px 2px rgba(15,21,25,.05),0 8px 24px rgba(15,21,25,.05);
+}
+@media (prefers-color-scheme:dark){
+  :root:not([data-theme="light"]){
+    --ground:#0C1115; --surface:#131A20; --surface-2:#1A232A;
+    --ink:#E6EDF2; --ink-2:#BCCAD4; --muted:#8A9BA7;
+    --rule:#222D35; --rule-strong:#33424C;
+    --accent:#BF8630; --series-a:#3D9FD6; --series-b:#BF8630;
+    --good:#4FA97A; --bad:#D8705F;
+    --shadow:0 1px 2px rgba(0,0,0,.4),0 8px 24px rgba(0,0,0,.3);
+  }
+}
+:root[data-theme="dark"]{
+  --ground:#0C1115; --surface:#131A20; --surface-2:#1A232A;
+  --ink:#E6EDF2; --ink-2:#BCCAD4; --muted:#8A9BA7;
+  --rule:#222D35; --rule-strong:#33424C;
+  --accent:#BF8630; --series-a:#3D9FD6; --series-b:#BF8630;
+  --good:#4FA97A; --bad:#D8705F;
+  --shadow:0 1px 2px rgba(0,0,0,.4),0 8px 24px rgba(0,0,0,.3);
+}
+
+*{box-sizing:border-box}
+body{
+  margin:0; background:var(--ground); color:var(--ink);
+  font-family:"Source Serif 4",Georgia,serif; font-size:17.5px; line-height:1.62;
+  -webkit-font-smoothing:antialiased;
+}
+.wrap{max-width:1080px; margin:0 auto; padding:0 24px}
+.col{max-width:660px}
+h1,h2,h3,.label,.stat-v,.tag,nav{font-family:Chivo,"Helvetica Neue",Arial,sans-serif}
+.mono,code,td.num,th.num,.axis text,.tip{font-family:"IBM Plex Mono",ui-monospace,Menlo,monospace}
+
+/* ---------- masthead ---------- */
+header{border-bottom:1px solid var(--rule); background:var(--surface)}
+.masthead{display:flex; flex-direction:column; gap:28px; padding:56px 0 44px}
+.eyebrow{
+  font-family:"IBM Plex Mono",monospace; font-size:11.5px; letter-spacing:.14em;
+  text-transform:uppercase; color:var(--muted); display:flex; gap:14px; flex-wrap:wrap; align-items:center;
+}
+.eyebrow .dot{width:4px;height:4px;border-radius:50%;background:var(--accent);display:inline-block}
+h1{
+  font-size:clamp(34px,5.4vw,58px); line-height:1.02; font-weight:900;
+  letter-spacing:-.028em; margin:0; text-wrap:balance; max-width:16ch;
+}
+.deck{font-size:20px; line-height:1.5; color:var(--ink-2); max-width:56ch; margin:0}
+.deck b{font-weight:600; color:var(--ink)}
+
+/* ---------- timeline motif ---------- */
+.ribbon{display:flex; height:8px; border-radius:2px; overflow:hidden; background:var(--surface-2); max-width:660px}
+.ribbon span{height:100%}
+
+/* ---------- sections ---------- */
+section{padding:52px 0; border-bottom:1px solid var(--rule)}
+section:last-of-type{border-bottom:none}
+h2{
+  font-size:12px; letter-spacing:.15em; text-transform:uppercase; font-weight:700;
+  color:var(--accent); margin:0 0 22px;
+}
+h3{font-size:23px; font-weight:700; letter-spacing:-.015em; margin:34px 0 10px; text-wrap:balance}
+p{margin:0 0 17px}
+.col>p:last-child{margin-bottom:0}
+strong{font-weight:600}
+a{color:var(--ink); text-decoration-color:var(--rule-strong); text-underline-offset:3px}
+a:hover{text-decoration-color:var(--accent)}
+:focus-visible{outline:2px solid var(--accent); outline-offset:3px; border-radius:2px}
+
+/* ---------- stat row ---------- */
+.stats{display:grid; grid-template-columns:repeat(auto-fit,minmax(150px,1fr)); gap:1px;
+  background:var(--rule); border:1px solid var(--rule); border-radius:6px; overflow:hidden; margin:28px 0}
+.stat{background:var(--surface); padding:17px 18px}
+.stat-k{font-family:"IBM Plex Mono",monospace; font-size:10.5px; letter-spacing:.08em;
+  text-transform:uppercase; color:var(--muted); margin-bottom:7px}
+.stat-v{font-size:29px; font-weight:700; letter-spacing:-.02em; font-variant-numeric:tabular-nums; line-height:1}
+.stat-n{font-size:12.5px; color:var(--muted); margin-top:6px; font-family:"IBM Plex Mono",monospace}
+.stat-n .up{color:var(--good)} .stat-n .down{color:var(--bad)}
+
+/* ---------- tables ---------- */
+.scroll{overflow-x:auto; margin:26px 0; border:1px solid var(--rule); border-radius:6px; background:var(--surface)}
+table{border-collapse:collapse; width:100%; font-size:14.5px}
+th,td{padding:10px 15px; text-align:left; border-bottom:1px solid var(--rule); white-space:nowrap}
+thead th{
+  font-family:Chivo,sans-serif; font-size:10.5px; letter-spacing:.09em; text-transform:uppercase;
+  color:var(--muted); font-weight:700; background:var(--surface-2);
+}
+tbody tr:last-child td{border-bottom:none}
+td.num,th.num{text-align:right; font-variant-numeric:tabular-nums; font-size:13.5px}
+td.win{color:var(--good); font-weight:600}
+td.lose{color:var(--bad)}
+tr.total td{font-weight:600; background:var(--surface-2)}
+.tag{display:inline-block; font-family:"IBM Plex Mono",monospace; font-size:10.5px; letter-spacing:.05em;
+  padding:2.5px 7px; border-radius:3px; border:1px solid var(--rule-strong); color:var(--muted)}
+.tag.sig{color:var(--good); border-color:var(--good)}
+.tag.ns{color:var(--muted)}
+
+/* ---------- figure ---------- */
+figure{margin:30px 0; background:var(--surface); border:1px solid var(--rule); border-radius:6px; padding:22px 20px 14px}
+figcaption{font-size:13.5px; color:var(--muted); margin-top:12px; line-height:1.5; max-width:62ch}
+.legend{display:flex; gap:20px; flex-wrap:wrap; margin-bottom:16px;
+  font-family:"IBM Plex Mono",monospace; font-size:12px; color:var(--ink-2)}
+.legend i{width:11px;height:11px;border-radius:2.5px;display:inline-block;margin-right:7px;vertical-align:-1px}
+.chart{width:100%; overflow-x:auto}
+.axis text{font-size:11px; fill:var(--muted)}
+.grid line{stroke:var(--rule); stroke-width:1}
+.zero{stroke:var(--rule-strong); stroke-width:1}
+.bar{transition:opacity .12s}
+.chart:hover .bar{opacity:.45}
+.chart .bar:hover{opacity:1}
+.tip{position:fixed; pointer-events:none; opacity:0; transition:opacity .1s;
+  background:var(--ink); color:var(--ground); font-size:12px; padding:7px 10px; border-radius:4px;
+  box-shadow:var(--shadow); z-index:20; white-space:nowrap; line-height:1.45}
+
+/* ---------- callout ---------- */
+.note{border-left:2.5px solid var(--accent); padding:3px 0 3px 20px; margin:28px 0; color:var(--ink-2)}
+.note p:last-child{margin-bottom:0}
+.note .label{font-family:Chivo,sans-serif; font-size:11px; letter-spacing:.11em; text-transform:uppercase;
+  color:var(--accent); font-weight:700; display:block; margin-bottom:7px}
+
+pre{background:var(--surface); border:1px solid var(--rule); border-radius:6px; padding:16px 18px;
+  overflow-x:auto; font-family:"IBM Plex Mono",monospace; font-size:12.5px; line-height:1.65; margin:22px 0}
+code{font-size:.9em; background:var(--surface-2); padding:1.5px 5px; border-radius:3px}
+pre code{background:none; padding:0; font-size:inherit}
+
+footer{padding:40px 0 64px; color:var(--muted); font-size:14px}
+@media(max-width:620px){ body{font-size:16.5px} .stat-v{font-size:24px} section{padding:40px 0} }
+</style>
+
+<header>
+  <div class="wrap masthead">
+    <div class="eyebrow">
+      <span>Manda</span><span class="dot"></span><span>Evaluation infrastructure for robot learning</span>
+      <span class="dot"></span><span>27 Aug 2026</span>
+    </div>
+    <h1>What we learned measuring a robot video annotator</h1>
+    <p class="deck">An endpoint that turns a robot manipulation episode into timestamped subtasks. Every number below is measured on a public benchmark — including <b>the two changes we expected to work, and didn't</b>.</p>
+    <div class="ribbon" aria-hidden="true">
+      <span style="flex:0.215;background:var(--series-b)"></span>
+      <span style="flex:0.19;background:var(--series-a);opacity:.75"></span>
+      <span style="flex:0.204;background:var(--series-a);opacity:.45"></span>
+      <span style="flex:0.179;background:var(--series-a);opacity:.22"></span>
+      <span style="flex:0.212;background:var(--surface-2)"></span>
+    </div>
+    <div class="eyebrow" style="margin-top:-16px">
+      <span>share of boundaries found within ±0.25s · ±0.5s · ±1s · ±2s · missed</span>
+    </div>
+  </div>
+</header>
+
+<div class="wrap">
+
+<section>
+  <div class="col">
+    <h2>The product</h2>
+    <p>Robot teams sit on thousands of teleoperation episodes that are effectively opaque. To find <em>every failed grasp of the yellow block</em>, someone has to watch them. Making episodes temporally and semantically searchable is the useful part of what annotation vendors sell, and much of it can now be produced automatically.</p>
+    <p>So: send a video and a sentence describing it, get back structured labels. No onboarding, no ontology workshop, no annotation contract.</p>
+  </div>
+  <pre><code>{ "start_seconds": 4.25, "end_seconds": 10.50,
+  "label": "place_banana", "result": "fail",
+  "attributes": ["retry"], "confidence": "low",
+  "flags": ["boundary_moved_0.90s"] }</code></pre>
+  <div class="col">
+    <p>Deliberately <em>not</em> in scope: object masks, 6D pose, 3D reconstruction, dense captioning, or a human-in-the-loop review operation. The bottleneck in public benchmarks is temporal boundaries, so that is where the engineering went.</p>
+  </div>
+</section>
+
+<section>
+  <h2>Where it landed</h2>
+  <div class="col"><p>Measured on <a href="https://huggingface.co/datasets/macrodata/WGO-Bench">WGO-Bench</a> — 100 manually annotated robot and egocentric episodes, 743 gold subtask segments — from a first working pipeline to the shipping configuration.</p></div>
+  <div class="stats">
+    <div class="stat"><div class="stat-k">Segmentation F1</div><div class="stat-v">0.629</div><div class="stat-n"><span class="up">▲</span> from 0.544</div></div>
+    <div class="stat"><div class="stat-k">Boundaries ±0.5s</div><div class="stat-v">40.5%</div><div class="stat-n"><span class="up">▲</span> from 23.4%</div></div>
+    <div class="stat"><div class="stat-k">Boundaries ±1.0s</div><div class="stat-v">60.9%</div><div class="stat-n"><span class="up">▲</span> from 42.5%</div></div>
+    <div class="stat"><div class="stat-k">Median error</div><div class="stat-v">0.70s</div><div class="stat-n"><span class="up">▼</span> from 1.28s</div></div>
+    <div class="stat"><div class="stat-k">Label accuracy</div><div class="stat-v">0.720</div><div class="stat-n">on matched segments</div></div>
+    <div class="stat"><div class="stat-k">Cost</div><div class="stat-v">$2.39</div><div class="stat-n">per video-hour</div></div>
+  </div>
+  <div class="col">
+    <div class="note">
+      <span class="label">What we will not claim</span>
+      <p>These use <em>our</em> scoring protocol: greedy one-to-one matching at IoU ≥ 0.5, pooled across the corpus. The benchmark's authors report 0.306 segmentation F1 for their best configuration, but their published repository contains no scoring code, so we cannot know the protocols match. <strong>This is not a head-to-head win, and we do not present it as one.</strong></p>
+    </div>
+  </div>
+</section>
+
+<section>
+  <h2>First, the noise floor</h2>
+  <div class="col">
+    <p>Before trusting any improvement, we ran the <em>identical</em> configuration twice at temperature 0.</p>
+  </div>
+  <div class="scroll">
+    <table>
+      <thead><tr><th>Metric</th><th class="num">Run 1</th><th class="num">Run 2</th><th class="num">Δ</th></tr></thead>
+      <tbody>
+        <tr><td>Segmentation F1</td><td class="num">0.5327</td><td class="num">0.4992</td><td class="num lose">−0.0335</td></tr>
+        <tr><td>Boundary recall ±0.5s</td><td class="num">0.2917</td><td class="num">0.2692</td><td class="num lose">−0.0224</td></tr>
+        <tr><td>Boundary recall ±1.0s</td><td class="num">0.4551</td><td class="num">0.4231</td><td class="num lose">−0.0321</td></tr>
+        <tr class="total"><td>Episodes that changed score</td><td class="num" colspan="3">33 of 99 · median per-episode |ΔF1| = 0.145</td></tr>
+      </tbody>
+    </table>
+  </div>
+  <div class="col">
+    <p>Temperature 0 is not determinism. On a 100-episode corpus that produces swings of <strong>±0.03–0.08 in corpus F1</strong> from nothing at all.</p>
+    <p>So the project adopted a rule: nothing counts as an improvement unless a paired bootstrap over episodes gives a confidence interval excluding zero, <em>and</em> the effect replicates against a second independent baseline run. The first casualty was one of our own claims — a “+0.024 F1” improvement that evaporated, and came out at −0.014 against the second baseline.</p>
+  </div>
+</section>
+
+<section>
+  <h2>The finding that mattered</h2>
+  <div class="col">
+    <p>Recall is almost entirely a function of <em>how long the event lasts</em>. Missed events had a median duration of 2.4s; found ones 5.5s.</p>
+  </div>
+
+  <figure>
+    <div class="legend">
+      <span><i style="background:var(--series-a)"></i>Baseline</span>
+      <span><i style="background:var(--series-b)"></i>With subdivision</span>
+    </div>
+    <div class="chart">
+      <svg id="c1" viewBox="0 0 660 300" width="660" height="300" role="img" aria-label="Recall by gold segment duration, baseline versus with subdivision"></svg>
+    </div>
+    <figcaption>Recall by gold-segment duration, <span class="mono">gemini-3.7-flash</span>, paired on 97 episodes. Under one second, the baseline finds nothing at all.</figcaption>
+  </figure>
+
+  <div class="col">
+    <p>This is not primarily a reasoning failure. At 0.5s sampling with 20 frames per contact sheet, a one-second event is <strong>two frames inside a sheet spanning ten seconds</strong> — the model can barely see it. The benchmark's authors report the same shape (7.4% recall under two seconds), which suggests it is a property of the contact-sheet approach rather than of any particular model.</p>
+    <p>The fix follows directly: re-read any predicted segment longer than 3s at 0.25s sampling, and split it where a second completed event is visible. Inference is spent only where an event can hide.</p>
+    <p>It is the largest gain in the project, significant at every tolerance across <strong>three independent comparisons on two different models</strong>.</p>
+  </div>
+
+  <figure>
+    <div class="legend">
+      <span><i style="background:var(--series-a)"></i>Session start</span>
+      <span><i style="background:var(--series-b)"></i>Shipping configuration</span>
+    </div>
+    <div class="chart">
+      <svg id="c2" viewBox="0 0 660 290" width="660" height="290" role="img" aria-label="Share of true boundaries found within each tolerance"></svg>
+    </div>
+    <figcaption>Share of true boundaries found within ±t seconds. The curve is the number a robotics user can actually interpret, which is why it is the headline rather than F1.</figcaption>
+  </figure>
+
+  <div class="col">
+    <div class="note">
+      <span class="label">The honest trade</span>
+      <p>Subdivision buys recall with precision. On the weaker model, precision fell 0.635 → 0.480 and F1 did not move at all — we found many more real events and over-split some genuine ones. For making episodes searchable a missed event is worse than a spurious boundary a user can see and skip, so we took the trade, and low-confidence splits carry flags.</p>
+    </div>
+  </div>
+</section>
+
+<section>
+  <h2>Two things that didn't work</h2>
+  <div class="col">
+    <h3>Boundary refinement — the change we bet on</h3>
+    <p>The plan's central bet was localised refinement: re-read a dense window around each proposed boundary and re-place it. The uncertainty is concentrated at boundaries, so it should pay.</p>
+  </div>
+  <div class="scroll">
+    <table>
+      <thead><tr><th>Metric</th><th class="num">Without</th><th class="num">With refinement</th><th>Verdict</th></tr></thead>
+      <tbody>
+        <tr><td>Segmentation F1</td><td class="num">0.655</td><td class="num">0.624</td><td><span class="tag ns">not significant</span></td></tr>
+        <tr><td>Boundary recall ±0.25s</td><td class="num">0.220</td><td class="num">0.246</td><td><span class="tag ns">not significant</span></td></tr>
+        <tr><td>Boundary recall ±0.5s</td><td class="num">0.412</td><td class="num">0.413</td><td><span class="tag ns">not significant</span></td></tr>
+        <tr><td>Boundary recall ±1.0s</td><td class="num">0.579</td><td class="num">0.600</td><td><span class="tag ns">not significant</span></td></tr>
+        <tr class="total"><td>Share of all model calls</td><td class="num">—</td><td class="num">31%</td><td>$1.40 → $3.25 / video-hour</td></tr>
+      </tbody>
+    </table>
+  </div>
+  <div class="col">
+    <p>Nothing significant, F1 trending slightly <em>down</em>, at nearly a third of total spend. It was moved out of the default path.</p>
+
+    <h3>Robot telemetry — the obvious edge</h3>
+    <p>A gripper opening or closing <em>is</em> the world-state change that defines most manipulation boundaries, and the benchmark ships synchronised gripper channels. It looked like a free advantage over a video-only competitor. We measured it before building on it:</p>
+  </div>
+  <div class="scroll">
+    <table>
+      <thead><tr><th>Robot family</th><th class="num">Gold boundaries</th><th class="num">Recall ±0.5s</th><th class="num">Recall ±1.0s</th></tr></thead>
+      <tbody>
+        <tr><td>Galaxea</td><td class="num">98</td><td class="num win">0.561</td><td class="num win">0.816</td></tr>
+        <tr><td>DROID</td><td class="num">100</td><td class="num lose">0.130</td><td class="num lose">0.210</td></tr>
+        <tr><td>HomER (egocentric)</td><td class="num">—</td><td class="num" colspan="2">no telemetry at all</td></tr>
+      </tbody>
+    </table>
+  </div>
+  <div class="col">
+    <p>Strong on one robot, weak on another, absent on the family contributing 470 of the 743 gold segments. Since the product's premise is that you can send a plain video, the video-only path has to carry accuracy by itself. It stayed an optional enhancement rather than the foundation.</p>
+    <div class="note">
+      <p>Both bets came from the plan. The change that actually worked came from measuring recall against event duration and noticing it was zero below one second. <strong>The measurement chose, not the plan.</strong></p>
+    </div>
+  </div>
+</section>
+
+<section>
+  <h2>What it still gets wrong</h2>
+  <div class="col">
+    <p><strong>Events under one second are close to invisible</strong> — 0.038 recall. Timestamps have sub-second <em>resolution</em>; their <em>accuracy</em> is a much weaker claim, and we do not describe the system as sub-second accurate.</p>
+    <p><strong>Label accuracy is uneven.</strong> 0.806 on Galaxea and 0.800 on HomER, but <strong>0.461 on DROID</strong>. DROID's gold labels read like task instructions ("Move the silver cup to the right") rather than event descriptions, so part of that gap may be a scoring-convention mismatch rather than a model failure. Not yet investigated.</p>
+    <p><strong>The corpus is small and unbalanced.</strong> 100 episodes, with HomER supplying 470 of 743 segments, so pooled metrics lean egocentric and per-family numbers from single runs are noisier than the corpus. We report both.</p>
+  </div>
+</section>
+
+<section>
+  <h2>Where it runs</h2>
+  <div class="col">
+    <p>One pipeline, three entry points: a Python API, a CLI, and a container. Output as JSON, JSONL, CSV, or <strong>MCAP</strong> — episode-relative segment times on an absolute log clock, so annotations drop into a team's existing tooling instead of arriving as another sidecar format.</p>
+    <p>Two engineering notes worth passing on, both found by running the thing rather than reading it. Homebrew's macOS ffmpeg ships an AV1 decoder that is <em>videotoolbox-only</em>: on hardware without AV1 acceleration, every AV1 video is silently undecodable — a quarter of the benchmark, and any customer sending AV1. And a request with no deadline will wedge every worker at 0% CPU indefinitely. Decoding is now a property of the package rather than of the host, and every request has a timeout.</p>
+  </div>
+</section>
+
+</div>
+
+<footer>
+  <div class="wrap col">
+    <p>Manda builds evaluation infrastructure for robot learning. Benchmark: <span class="mono">macrodata/WGO-Bench</span>, used under CC-BY-NC-SA-4.0 for evaluation only. Model: <span class="mono">gemini-3.7-flash</span>. Every figure is reproducible from the committed run files.</p>
+  </div>
+</footer>
+
+<div class="tip" id="tip" role="status"></div>
+
+<script>
+(function(){
+  const tip = document.getElementById('tip');
+  function show(e, html){ tip.innerHTML = html; tip.style.opacity = 1;
+    tip.style.left = Math.min(e.clientX + 14, innerWidth - tip.offsetWidth - 10) + 'px';
+    tip.style.top = (e.clientY - tip.offsetHeight - 12) + 'px'; }
+  function hide(){ tip.style.opacity = 0; }
+  const NS = 'http://www.w3.org/2000/svg';
+  const el = (n, a) => { const x = document.createElementNS(NS, n);
+    for (const k in a) x.setAttribute(k, a[k]); return x; };
+
+  // ---- Chart 1: grouped bars, recall by gold-segment duration ----
+  const d1 = [
+    {k:'0–1s',   base:0.000, sub:0.038, n:52},
+    {k:'1–2s',   base:0.183, sub:0.367, n:120},
+    {k:'2–4s',   base:0.509, sub:0.619, n:226},
+    {k:'4–8s',   base:0.637, sub:0.709, n:179},
+    {k:'8s +',   base:0.754, sub:0.746, n:142}
+  ];
+  (function(){
+    const svg = document.getElementById('c1');
+    const W=660,H=300,L=44,R=14,T=14,B=44, pw=W-L-R, ph=H-T-B;
+    const g = el('g',{class:'grid'});
+    for(let v=0; v<=0.8; v+=0.2){
+      const y = T+ph-(v/0.8)*ph;
+      g.appendChild(el('line',{x1:L,x2:W-R,y1:y,y2:y}));
+      const t = el('text',{x:L-9,y:y+4,'text-anchor':'end'}); t.textContent = v.toFixed(1);
+      g.appendChild(t);
+    }
+    g.setAttribute('class','grid axis'); svg.appendChild(g);
+
+    const band = pw/d1.length, bw = Math.min(38,(band-26)/2);
+    d1.forEach((d,i)=>{
+      const cx = L + band*i + band/2;
+      [['base','var(--series-a)','Baseline'],['sub','var(--series-b)','With subdivision']].forEach((s,j)=>{
+        const v=d[s[0]], h=Math.max(v/0.8*ph, v>0?2:0);
+        const x = cx - bw - 1 + j*(bw+2);
+        if(h>0){
+          const r = el('rect',{x:x,y:T+ph-h,width:bw,height:h,rx:4,fill:s[1],class:'bar'});
+          r.addEventListener('mousemove',e=>show(e,
+            `<b>${s[2]}</b><br>${d.k} · recall ${v.toFixed(3)}<br>${d.n} gold segments`));
+          r.addEventListener('mouseleave',hide);
+          svg.appendChild(r);
+        }
+      });
+      const t = el('text',{x:cx,y:H-22,'text-anchor':'middle'}); t.textContent = d.k;
+      const a = el('g',{class:'axis'}); a.appendChild(t); svg.appendChild(a);
+    });
+    svg.appendChild(el('line',{x1:L,x2:W-R,y1:T+ph,y2:T+ph,class:'zero'}));
+    const ax = el('g',{class:'axis'});
+    const lab = el('text',{x:L,y:H-6,'text-anchor':'start'}); lab.textContent='gold segment duration';
+    ax.appendChild(lab); svg.appendChild(ax);
+  })();
+
+  // ---- Chart 2: tolerance curve ----
+  const d2 = [
+    {t:'±0.25s', a:0.113, b:0.215},
+    {t:'±0.5s',  a:0.234, b:0.405},
+    {t:'±1.0s',  a:0.425, b:0.609},
+    {t:'±2.0s',  a:0.637, b:0.788}
+  ];
+  (function(){
+    const svg = document.getElementById('c2');
+    const W=660,H=290,L=44,R=54,T=16,B=44, pw=W-L-R, ph=H-T-B;
+    const g = el('g',{class:'grid axis'});
+    for(let v=0; v<=0.8; v+=0.2){
+      const y=T+ph-(v/0.85)*ph;
+      g.appendChild(el('line',{x1:L,x2:W-R,y1:y,y2:y}));
+      const t=el('text',{x:L-9,y:y+4,'text-anchor':'end'}); t.textContent=v.toFixed(1);
+      g.appendChild(t);
+    }
+    svg.appendChild(g);
+    const X = i => L + (pw/(d2.length-1))*i;
+    const Y = v => T+ph-(v/0.85)*ph;
+
+    [['a','var(--series-a)','Session start'],['b','var(--series-b)','Shipping configuration']].forEach(s=>{
+      const pts = d2.map((d,i)=>`${X(i)},${Y(d[s[0]])}`).join(' ');
+      svg.appendChild(el('polyline',{points:pts,fill:'none',stroke:s[1],'stroke-width':2,
+        'stroke-linejoin':'round','stroke-linecap':'round'}));
+      d2.forEach((d,i)=>{
+        const c = el('circle',{cx:X(i),cy:Y(d[s[0]]),r:5,fill:s[1],
+          stroke:'var(--surface)','stroke-width':2});
+        c.addEventListener('mousemove',e=>show(e,
+          `<b>${s[2]}</b><br>within ${d.t}: ${(d[s[0]]*100).toFixed(1)}%`));
+        c.addEventListener('mouseleave',hide);
+        svg.appendChild(c);
+      });
+      const last = d2[d2.length-1][s[0]];
+      const t = el('text',{x:X(d2.length-1)+10,y:Y(last)+4,class:'axis',
+        fill:s[1],style:'font-weight:600'});
+      t.textContent = (last*100).toFixed(0)+'%';
+      svg.appendChild(t);
+    });
+    d2.forEach((d,i)=>{
+      const t=el('text',{x:X(i),y:H-22,'text-anchor':'middle',class:'axis'});
+      t.textContent=d.t; svg.appendChild(t);
+    });
+    svg.appendChild(el('line',{x1:L,x2:W-R,y1:T+ph,y2:T+ph,class:'zero'}));
+    const lab=el('text',{x:L,y:H-6,'text-anchor':'start',class:'axis'});
+    lab.textContent='boundary tolerance'; svg.appendChild(lab);
+  })();
+})();
+</script>
