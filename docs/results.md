@@ -111,10 +111,88 @@ model can barely see it. Macrodata report the same shape (7.4% recall for subtas
 under two seconds), which suggests it is a property of the contact-sheet approach
 rather than of a particular model.
 
-The `subdivide` pass in `annotation/subdivide.py` targets exactly this: it re-reads
-segments longer than 3 s at 0.25 s sampling and splits them where a second event is
-visible, spending inference only where an event can hide. **It is implemented and
-tested but not yet measured** — the credit outage hit first.
+### Subdivision fixes it, and the fix is paid for in precision
+
+`annotation/subdivide.py` re-reads any predicted segment longer than 3 s at 0.25 s
+sampling and splits it where a second completed event is visible, spending
+inference only where an event can hide.
+
+Recall by gold-segment duration, paired on 93 episodes:
+
+| gold segment duration | baseline | subdivided | n |
+|---|---:|---:|---:|
+| 0–1 s | 0.000 | **0.109** | 46 |
+| 1–2 s | 0.200 | **0.529** | 70 |
+| 2–4 s | 0.451 | 0.646 | 164 |
+| 4–8 s | 0.573 | 0.685 | 143 |
+| 8 s + | 0.706 | 0.675 | 126 |
+
+Corpus effect, paired against **two** independent baseline runs. Every tolerance is
+significant in both, at 3–6× the noise floor:
+
+| metric | baseline | subdivided | delta (95% CI) | replication |
+|---|---:|---:|---|---|
+| boundary recall ±0.25 s | 0.149 | **0.263** | +0.114 [+0.070, +0.158] | +0.099 [+0.062, +0.137] |
+| boundary recall ±0.5 s | 0.290 | **0.447** | +0.158 [+0.091, +0.223] | +0.165 [+0.109, +0.216] |
+| boundary recall ±1.0 s | 0.452 | **0.654** | +0.202 [+0.128, +0.275] | +0.239 [+0.170, +0.303] |
+| boundary recall ±2.0 s | 0.640 | **0.816** | +0.175 [+0.111, +0.240] | +0.224 [+0.169, +0.276] |
+| segment recall | 0.472 | **0.603** | | |
+| segment precision | 0.635 | 0.480 | | |
+| segmentation F1 | 0.541 | 0.534 | −0.007, not significant | +0.014, not significant |
+
+The trade is explicit: we discover many more real events and also over-split some
+genuinely single ones, so F1 is unchanged while boundary recall improves sharply.
+For making episodes searchable, a missed event is worse than a spurious boundary a
+user can see and skip — and low-confidence splits carry flags. Cost roughly triples,
+$0.62 → $1.95 per video-hour on `gemini-3.5-flash`.
+
+The obvious next lever on precision is to reject splits whose pieces all carry the
+same label, which is a cut through one event rather than the discovery of two.
+Untested.
+
+## Current best configuration
+
+`gemini-3.7-flash`, windowed segmentation, subdivision on. Paired on 97 episodes
+against the same model without subdivision:
+
+| metric | 3.5 base | 3.7 base | **3.7 + subdivide** |
+|---|---:|---:|---:|
+| segmentation F1 | 0.531 | 0.598 | **0.643** |
+| precision | 0.635 | 0.743 | 0.716 |
+| recall | 0.472 | 0.498 | **0.583** |
+| boundary recall ±0.25 s | 0.148 | 0.174 | **0.217** |
+| boundary recall ±0.5 s | 0.291 | 0.330 | **0.405** |
+| boundary recall ±1.0 s | 0.454 | 0.490 | **0.569** |
+| cost per video-hour | $0.71 | **$0.61** | $1.40 |
+| failed episodes | 1 | 2 | 2 |
+
+**Subdivision replicates on a second model.** On 3.7 it is significant at ±0.25 s
+(+0.043, CI [+0.004, +0.086]), ±0.5 s (+0.076, CI [+0.026, +0.125]) and ±1.0 s
+(+0.079, CI [+0.014, +0.143]). Together with the two 3.5 comparisons that is three
+independent confirmations across two models, so this is the most solid result we
+have.
+
+Notably, 3.7 subdivides more judiciously than 3.5: precision falls only
+0.743 → 0.716 rather than 0.635 → 0.480, so on 3.7 subdivision raises F1 as well
+(+0.047, P(delta>0)=0.933, just short of significance) instead of leaving it flat.
+
+Recall by gold-segment duration on 3.7:
+
+| gold duration | base | + subdivide | n |
+|---|---:|---:|---:|
+| 0–1 s | 0.000 | 0.038 | 52 |
+| 1–2 s | 0.183 | **0.367** | 120 |
+| 2–4 s | 0.509 | 0.619 | 226 |
+| 4–8 s | 0.637 | 0.709 | 179 |
+| 8 s + | 0.754 | 0.746 | 142 |
+
+**3.5 vs 3.7 as models:** +0.066 F1, CI [−0.003, +0.146], P(delta>0)=0.969 — just
+short of significance, but 3.7 is also *cheaper* ($0.61 vs $0.71 per video-hour) and
+faster, so there is no trade to weigh. 3.7 is the default; 3.5 is kept only to
+replicate recorded runs.
+
+Sub-second events remain largely invisible: 0.038 recall under one second. Nothing
+here should be described as sub-second accurate.
 
 ## Cost
 
@@ -133,9 +211,7 @@ latency by roughly 60:1, and `thinking_budget` is an untested lever.
 
 ## What is not measured yet
 
-- The `subdivide` recall pass.
 - `balanced` mode end to end: what boundary refinement and context labeling buy.
 - Label accuracy: the judge is implemented, the scoring run died on the credit
   outage.
-- `gemini-3.6-flash` / `gemini-3.7-flash` against 3.5.
 - Any measurement of `strict` mode.
