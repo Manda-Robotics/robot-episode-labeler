@@ -19,8 +19,8 @@ class Quality(str, Enum):
     """How much inference to spend. Maps to a pipeline shape, not a knob count."""
 
     fast = "fast"          # coarse segmentation only
-    balanced = "balanced"  # + boundary refinement + context relabeling
-    strict = "strict"      # + repeat sampling and disagreement flags
+    balanced = "balanced"  # + subdivision of long segments + context labeling
+    strict = "strict"      # + boundary refinement, repeat pass, disagreement flags
 
 
 class Result(str, Enum):

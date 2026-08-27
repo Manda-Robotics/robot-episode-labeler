@@ -59,9 +59,13 @@ consistently across thousands of episodes.
 
 | Mode | Pipeline | For |
 |---|---|---|
-| `fast` | coarse segmentation | dataset browsing, prototyping |
-| `balanced` | + boundary refinement + context labeling | default |
-| `strict` | + repeat segmentation and disagreement flags | curation / QA |
+| `fast` | windowed coarse segmentation | dataset browsing, prototyping |
+| `balanced` | + subdivision of long segments + context labeling | default |
+| `strict` | + boundary refinement, repeat pass, disagreement flags | curation / QA |
+
+Boundary refinement sits in `strict` rather than `balanced` because it was measured
+and did not earn its cost: 31% of all model calls for no significant movement in
+any boundary metric. See [`docs/results.md`](docs/results.md).
 
 ## How it works
 
@@ -74,11 +78,16 @@ consistently across thousands of episodes.
 3. **Segment.** One call over the whole episode, with a prompt that defines
    boundaries as *completed world-state changes* and explicitly rules out
    approach, retreat, hesitation and regrasping.
-4. **Refine.** Each boundary is re-placed from a dense (0.25 s) window around it.
-   Paying for high frame rate only where the uncertainty is.
+4. **Subdivide.** Any segment longer than 3 s is re-read at 0.25 s sampling and
+   split where a second completed event is visible. Recall is otherwise a function
+   of event duration — measured at 0.00 below one second — because at coarse
+   sampling a short event is only a frame or two. This is the single largest
+   measured improvement in the pipeline.
 5. **Label.** Each segment is named and judged pass/fail with its neighbours as
    context.
-6. **Validate.** Ordering, bounds, contiguity, closed vocabularies and rubrics are
+6. **Refine** (`strict` only). Each boundary is re-placed from a dense window
+   around it. Measured as not earning its cost, so it is off by default.
+7. **Validate.** Ordering, bounds, contiguity, closed vocabularies and rubrics are
    enforced in code. The model proposes; `annotation/validate.py` decides.
 
 Confidence is derived from observable disagreement between stages, not from

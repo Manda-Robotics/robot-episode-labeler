@@ -159,7 +159,11 @@ def _annotate_local(
 
     if quality in (Quality.balanced, Quality.strict):
         segments, warnings = clean(segments, info.duration, request)
-        notes += _refine_all(client, request, segments, info)
+        # Boundary refinement is `strict`-only. Measured on WGO-Bench it was 31% of
+        # all calls and moved no boundary metric significantly (+0.002 at +-0.5s),
+        # so the default path does not pay for it. See docs/results.md.
+        if quality is Quality.strict:
+            notes += _refine_all(client, request, segments, info)
         segments = _label_all(client, request, segments, info)
         segments, more = clean(segments, info.duration, request)
         warnings += more

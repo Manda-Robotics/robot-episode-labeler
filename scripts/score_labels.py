@@ -16,7 +16,10 @@ def main() -> None:
     ap = argparse.ArgumentParser()
     ap.add_argument("--tag", required=True)
     ap.add_argument("--iou", type=float, default=0.5)
-    ap.add_argument("--model", default="gemini-3.5-flash")
+    # Judged by a stronger model from a different tier than the system under test,
+    # so the judge does not share the annotator's blind spots. Recorded in the
+    # result either way.
+    ap.add_argument("--model", default="gemini-3.1-pro-preview")
     args = ap.parse_args()
 
     path = Path("results") / f"{args.tag}.json"

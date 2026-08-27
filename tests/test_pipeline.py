@@ -73,22 +73,32 @@ def test_fast_mode_runs_one_call_and_skips_refinement(clip):
     assert r.metadata["quality"] == "fast"
 
 
-def test_balanced_mode_refines_then_labels(clip):
+def test_balanced_labels_but_does_not_refine(clip):
+    # Refinement was measured as 31% of calls for no significant gain, so it is
+    # strict-only; balanced must not pay for it.
     c = FakeClient([CoarseSegment(start_seconds=0, end_seconds=5, label="a"),
                     CoarseSegment(start_seconds=5, end_seconds=10, label="b")],
                    boundary=5.25, label=SegmentLabel(label="a", result="pass"))
     r = annotate(req(clip, quality=Quality.balanced), client=c, subdivide=False)
-    assert "refine" in c.calls and "label" in c.calls
+    assert "refine" not in c.calls
+    assert c.calls.count("label") == 2
+    assert r.segments[0].end_seconds == r.segments[1].start_seconds
+
+
+def test_strict_mode_refines_then_labels(clip):
+    c = FakeClient([CoarseSegment(start_seconds=0, end_seconds=5, label="a"),
+                    CoarseSegment(start_seconds=5, end_seconds=10, label="b")],
+                   boundary=5.25, label=SegmentLabel(label="a", result="pass"))
+    annotate(req(clip, quality=Quality.strict), client=c, subdivide=False)
     assert c.calls.count("refine") == 1        # one internal boundary
     assert c.calls.count("label") == 2        # one per segment
-    assert r.segments[0].end_seconds == r.segments[1].start_seconds
 
 
 def test_large_boundary_move_is_flagged_and_lowers_confidence(clip):
     c = FakeClient([CoarseSegment(start_seconds=0, end_seconds=5, label="a"),
                     CoarseSegment(start_seconds=5, end_seconds=10, label="b")],
                    boundary=3.5, label=SegmentLabel(label="a", result="pass"))
-    r = annotate(req(clip, quality=Quality.balanced), client=c, subdivide=False)
+    r = annotate(req(clip, quality=Quality.strict), client=c, subdivide=False)
     assert any(f.startswith("boundary_moved_") for f in r.segments[0].flags)
     assert r.segments[0].confidence is Confidence.low
     assert any("moved" in w for w in r.warnings)
@@ -99,7 +109,7 @@ def test_refinement_never_inverts_a_segment(clip):
     c = FakeClient([CoarseSegment(start_seconds=4, end_seconds=5, label="a"),
                     CoarseSegment(start_seconds=5, end_seconds=10, label="b")],
                    boundary=0.0, label=SegmentLabel(label="a", result="pass"))
-    r = annotate(req(clip, quality=Quality.balanced), client=c, subdivide=False)
+    r = annotate(req(clip, quality=Quality.strict), client=c, subdivide=False)
     for s in r.segments:
         assert s.end_seconds > s.start_seconds
 

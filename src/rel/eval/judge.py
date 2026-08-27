@@ -15,6 +15,7 @@ from pydantic import BaseModel, Field
 from ..annotation.llm import GeminiClient
 
 BATCH = 20
+JUDGE_MODEL = "gemini-3.1-pro-preview"
 
 _PROMPT = """You are scoring an automatic robot-video annotator against human labels.
 

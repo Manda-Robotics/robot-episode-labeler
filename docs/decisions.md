@@ -252,3 +252,38 @@ mark low-confidence splits. Cost roughly triples, $0.62 → $1.95 per video-hour
 If precision needs recovering, the first thing to try is rejecting splits whose
 pieces all carry the same label, which is a cut through one event rather than the
 discovery of two.
+
+---
+
+## ADR-013 — Boundary refinement is `strict`-only: it did not earn its cost (2026-08-27)
+
+**Context.** Localised boundary refinement — re-reading a dense window around each
+proposed boundary and re-placing it — was the change we expected to matter most,
+on the reasoning that temporal segmentation is the dominant bottleneck and the
+uncertainty is concentrated at the boundaries.
+
+**Measured** on `gemini-3.7-flash`, paired on 96 episodes against the same pipeline
+without refinement. The labeling pass does not move boundaries, so the deltas are
+attributable to refinement alone:
+
+| metric | without refine | with refine | 95% CI |
+|---|---:|---:|---|
+| segmentation F1 | 0.655 | 0.624 | [−0.074, +0.013] |
+| boundary recall ±0.25 s | 0.220 | 0.246 | [−0.031, +0.083] |
+| boundary recall ±0.5 s | 0.412 | 0.413 | [−0.042, +0.046] |
+| boundary recall ±1.0 s | 0.579 | 0.600 | [−0.018, +0.068] |
+
+Nothing significant, and F1 trends slightly down. Refinement was **515 of 1663
+model calls — 31% of the run** — and took cost from $1.40 to $3.25 per video-hour.
+
+**Decision.** Move refinement out of `balanced` into `strict`. `balanced` is now
+windowed segmentation + subdivision + context labeling.
+
+**Consequences.** The default path is 2.3× cheaper for no measured loss. The
+capability stays available for callers who want maximum effort, and the
+`boundary_moved_*` flags it produces are still useful as a QA signal even when the
+moves do not improve accuracy on aggregate.
+
+Worth noting which bet paid: refinement, the expected win, did nothing, while
+subdivision — which came out of measuring recall against event duration — was the
+largest gain in the project. The measurement chose, not the plan.
