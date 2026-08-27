@@ -13,6 +13,7 @@ from .annotation.label import label_segment
 from .annotation.llm import DEFAULT_MODEL, GeminiClient, prompts_fingerprint
 from .annotation.refine import refine_boundary
 from .annotation.segment import CoarseSegment, segment_episode
+from .annotation.subdivide import subdivide_segment
 from .annotation.validate import clean
 from .schemas import (
     AnnotateRequest, AnnotateResponse, Confidence, Quality, Segment, base_metadata,
@@ -95,23 +96,47 @@ def annotate(
     request: AnnotateRequest,
     client: GeminiClient | None = None,
     model: str = DEFAULT_MODEL,
+    subdivide: bool | None = None,
 ) -> AnnotateResponse:
-    """Accepts a local path, an http(s) URL or a data URI as `request.video`."""
+    """Accepts a local path, an http(s) URL or a data URI as `request.video`.
+
+    `subdivide` overrides the quality mode's default second-pass behaviour; it
+    exists so the pass can be measured in isolation.
+    """
     with resolve(request.video) as local:
         return _annotate_local(request.model_copy(update={"video": str(local)}),
-                               client or GeminiClient(model=model))
+                               client or GeminiClient(model=model), subdivide)
 
 
-def _annotate_local(request: AnnotateRequest, client: GeminiClient) -> AnnotateResponse:
+def _subdivide_all(
+    client: GeminiClient, request: AnnotateRequest, coarse: list[CoarseSegment]
+) -> list[CoarseSegment]:
+    if not coarse:
+        return coarse
+    with ThreadPoolExecutor(max_workers=MAX_PARALLEL) as pool:
+        pieces = list(pool.map(
+            lambda seg: subdivide_segment(client, request.video, seg, request), coarse
+        ))
+    return [p for group in pieces for p in group]
+
+
+def _annotate_local(
+    request: AnnotateRequest, client: GeminiClient, subdivide: bool | None = None
+) -> AnnotateResponse:
     started = time.time()
     info = probe(request.video)
     quality = request.quality
+    if subdivide is None:
+        subdivide = quality in (Quality.balanced, Quality.strict)
 
     coarse = segment_episode(
         client, request.video, request, duration=info.duration,
         interval=COARSE_INTERVAL, width=TILE_WIDTH,
         per_sheet=FRAMES_PER_SHEET, columns=SHEET_COLUMNS,
     )
+    if subdivide:
+        coarse = _subdivide_all(client, request, coarse)
+
     segments = _to_segments(coarse)
     notes: list[str] = []
 
@@ -149,6 +174,7 @@ def _annotate_local(request: AnnotateRequest, client: GeminiClient) -> AnnotateR
         metadata=base_metadata(
             client.model, quality,
             sampling_interval=COARSE_INTERVAL,
+            subdivided=subdivide,
             prompts=prompts_fingerprint(),
             elapsed_seconds=round(time.time() - started, 2),
             usage=client.usage.as_dict(),

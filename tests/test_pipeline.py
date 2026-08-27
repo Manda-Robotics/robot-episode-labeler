@@ -20,13 +20,14 @@ from rel.schemas import AnnotateRequest, Confidence, Quality, Result
 class FakeClient:
     """Stands in for GeminiClient; records calls and returns scripted answers."""
 
-    def __init__(self, segments, boundary=None, label=None, second_pass=None):
+    def __init__(self, segments, boundary=None, label=None, second_pass=None, split=None):
         self.model = "fake-model"
         self.usage = Usage()
         self._segments = segments
         self._second = second_pass
         self._boundary = boundary
         self._label = label
+        self._split = split
         self.calls = []
         self._segment_calls = 0
 
@@ -38,6 +39,10 @@ class FakeClient:
             if self._segment_calls > 1 and self._second is not None:
                 return CoarseSegments(segments=self._second)
             return CoarseSegments(segments=self._segments)
+        if stage == "subdivide":
+            # Default: the stretch is one event, so it comes back unchanged.
+            return CoarseSegments(segments=self._split) if self._split else CoarseSegments(
+                segments=[CoarseSegment(start_seconds=0, end_seconds=0, label="x")])
         if stage == "refine":
             return BoundaryChoice(boundary_seconds=self._boundary, reason="fake")
         if stage == "label":
@@ -72,7 +77,7 @@ def test_balanced_mode_refines_then_labels(clip):
     c = FakeClient([CoarseSegment(start_seconds=0, end_seconds=5, label="a"),
                     CoarseSegment(start_seconds=5, end_seconds=10, label="b")],
                    boundary=5.25, label=SegmentLabel(label="a", result="pass"))
-    r = annotate(req(clip, quality=Quality.balanced), client=c)
+    r = annotate(req(clip, quality=Quality.balanced), client=c, subdivide=False)
     assert "refine" in c.calls and "label" in c.calls
     assert c.calls.count("refine") == 1        # one internal boundary
     assert c.calls.count("label") == 2        # one per segment
@@ -83,7 +88,7 @@ def test_large_boundary_move_is_flagged_and_lowers_confidence(clip):
     c = FakeClient([CoarseSegment(start_seconds=0, end_seconds=5, label="a"),
                     CoarseSegment(start_seconds=5, end_seconds=10, label="b")],
                    boundary=3.5, label=SegmentLabel(label="a", result="pass"))
-    r = annotate(req(clip, quality=Quality.balanced), client=c)
+    r = annotate(req(clip, quality=Quality.balanced), client=c, subdivide=False)
     assert any(f.startswith("boundary_moved_") for f in r.segments[0].flags)
     assert r.segments[0].confidence is Confidence.low
     assert any("moved" in w for w in r.warnings)
@@ -94,7 +99,7 @@ def test_refinement_never_inverts_a_segment(clip):
     c = FakeClient([CoarseSegment(start_seconds=4, end_seconds=5, label="a"),
                     CoarseSegment(start_seconds=5, end_seconds=10, label="b")],
                    boundary=0.0, label=SegmentLabel(label="a", result="pass"))
-    r = annotate(req(clip, quality=Quality.balanced), client=c)
+    r = annotate(req(clip, quality=Quality.balanced), client=c, subdivide=False)
     for s in r.segments:
         assert s.end_seconds > s.start_seconds
 
@@ -104,7 +109,7 @@ def test_strict_mode_flags_unstable_segment_counts(clip):
                     CoarseSegment(start_seconds=5, end_seconds=10, label="b")],
                    second_pass=[CoarseSegment(start_seconds=0, end_seconds=10, label="a")],
                    boundary=5.0, label=SegmentLabel(label="a", result="pass"))
-    r = annotate(req(clip, quality=Quality.strict), client=c)
+    r = annotate(req(clip, quality=Quality.strict), client=c, subdivide=False)
     assert c.calls.count("segment") == 2
     assert any("segment_count_unstable" in s.flags for s in r.segments)
 
@@ -112,7 +117,7 @@ def test_strict_mode_flags_unstable_segment_counts(clip):
 def test_label_disagreement_is_flagged(clip):
     c = FakeClient([CoarseSegment(start_seconds=0, end_seconds=10, label="pick_cup")],
                    label=SegmentLabel(label="place_cup", result="fail", attributes=[]))
-    r = annotate(req(clip, quality=Quality.balanced), client=c)
+    r = annotate(req(clip, quality=Quality.balanced), client=c, subdivide=False)
     assert "label_disagreement" in r.segments[0].flags
     assert r.segments[0].result is Result.failed
 
@@ -136,3 +141,35 @@ def test_metadata_records_provenance(clip):
     m = r.metadata
     assert m["model"] == "fake-model" and m["pipeline_version"]
     assert m["usage"]["calls"] == 1
+
+
+def test_subdivision_is_off_in_fast_mode_by_default(clip):
+    c = FakeClient([CoarseSegment(start_seconds=0, end_seconds=10, label="a")])
+    annotate(req(clip, quality=Quality.fast), client=c)
+    assert "subdivide" not in c.calls
+
+
+def test_subdivision_can_be_forced_on(clip):
+    c = FakeClient([CoarseSegment(start_seconds=0, end_seconds=10, label="a")],
+                   split=[CoarseSegment(start_seconds=0, end_seconds=4, label="a"),
+                          CoarseSegment(start_seconds=4, end_seconds=10, label="b")])
+    r = annotate(req(clip, quality=Quality.fast), client=c, subdivide=True)
+    assert "subdivide" in c.calls
+    assert len(r.segments) == 2
+    assert r.metadata["subdivided"] is True
+
+
+def test_subdivision_never_moves_the_outer_boundaries(clip):
+    # A split that tries to escape its stretch must be clamped back into it.
+    c = FakeClient([CoarseSegment(start_seconds=2, end_seconds=8, label="a")],
+                   split=[CoarseSegment(start_seconds=0, end_seconds=5, label="a"),
+                          CoarseSegment(start_seconds=5, end_seconds=99, label="b")])
+    r = annotate(req(clip, quality=Quality.fast), client=c, subdivide=True)
+    assert r.segments[0].start_seconds == 2.0
+    assert r.segments[-1].end_seconds == 8.0
+
+
+def test_short_segments_are_not_subdivided(clip):
+    c = FakeClient([CoarseSegment(start_seconds=0, end_seconds=1.0, label="a")])
+    annotate(req(clip, quality=Quality.fast), client=c, subdivide=True)
+    assert "subdivide" not in c.calls   # below SUBDIVIDE_MIN_DURATION

@@ -15,13 +15,13 @@ from rel.pipeline import annotate
 from rel.schemas import AnnotateRequest, Quality
 
 
-def run_one(ep: wgo.Episode, model: str, quality: Quality) -> dict:
+def run_one(ep: wgo.Episode, model: str, quality: Quality, subdivide: bool | None) -> dict:
     client = GeminiClient(model=model)
     t0 = time.time()
     try:
         resp = annotate(
             AnnotateRequest(video=str(ep.video), prompt=ep.instruction, quality=quality),
-            client=client,
+            client=client, subdivide=subdivide,
         )
         return {
             "id": ep.id, "family": ep.family, "ok": True,
@@ -64,6 +64,10 @@ def main() -> None:
     ap.add_argument("--limit", type=int, default=None)
     ap.add_argument("--family", default=None)
     ap.add_argument("--workers", type=int, default=6)
+    ap.add_argument("--subdivide", dest="subdivide", action="store_true", default=None,
+                    help="force the subdivision pass on")
+    ap.add_argument("--no-subdivide", dest="subdivide", action="store_false",
+                    help="force the subdivision pass off")
     args = ap.parse_args()
 
     eps = wgo.load(limit=args.limit, family=args.family)
@@ -72,7 +76,7 @@ def main() -> None:
     rows: list[dict] = []
     t0 = time.time()
     with ThreadPoolExecutor(max_workers=args.workers) as pool:
-        futures = {pool.submit(run_one, e, args.model, Quality(args.quality)): e for e in eps}
+        futures = {pool.submit(run_one, e, args.model, Quality(args.quality), args.subdivide): e for e in eps}
         for i, fut in enumerate(as_completed(futures), 1):
             r = fut.result()
             rows.append(r)
@@ -86,6 +90,7 @@ def main() -> None:
     video_sec = sum(r.get("duration", 0) for r in rows if r.get("ok"))
     out = {
         "tag": args.tag, "model": args.model, "quality": args.quality,
+        "subdivide": args.subdivide,
         "episodes": len(rows), "failed": sum(1 for r in rows if not r.get("ok")),
         "wall_seconds": round(time.time() - t0, 1),
         "video_seconds": round(video_sec, 1),
