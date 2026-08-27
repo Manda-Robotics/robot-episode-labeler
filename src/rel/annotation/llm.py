@@ -20,7 +20,10 @@ from pathlib import Path
 from PIL import Image
 from pydantic import BaseModel
 
-DEFAULT_MODEL = "gemini-3.5-flash"
+DEFAULT_MODEL = "gemini-3.7-flash"
+# gemini-3.5-flash is kept only to replicate earlier recorded runs; it costs
+# materially more than 3.7 for this workload.
+REPLICATION_MODEL = "gemini-3.5-flash"
 # A request with no deadline can block a worker forever; observed in a full
 # benchmark pass where six workers wedged on network I/O at 0% CPU.
 REQUEST_TIMEOUT_S = 180

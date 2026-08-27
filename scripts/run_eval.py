@@ -64,6 +64,8 @@ def main() -> None:
     ap.add_argument("--limit", type=int, default=None)
     ap.add_argument("--family", default=None)
     ap.add_argument("--workers", type=int, default=6)
+    ap.add_argument("--resume", action="store_true",
+                    help="continue from results/<tag>.partial.jsonl")
     ap.add_argument("--subdivide", dest="subdivide", action="store_true", default=None,
                     help="force the subdivision pass on")
     ap.add_argument("--no-subdivide", dest="subdivide", action="store_false",
@@ -74,12 +76,27 @@ def main() -> None:
     print(f"{args.tag}: {len(eps)} episodes | model={args.model} quality={args.quality}", flush=True)
 
     rows: list[dict] = []
+    # Episodes are appended as they complete: a run killed part way through still
+    # leaves usable results, and --resume picks up from them.
+    checkpoint = Path("results") / f"{args.tag}.partial.jsonl"
+    done: dict[str, dict] = {}
+    if args.resume and checkpoint.exists():
+        for line in checkpoint.read_text().splitlines():
+            if line.strip():
+                r = json.loads(line)
+                done[r["id"]] = r
+        rows.extend(done.values())
+        eps = [e for e in eps if e.id not in done]
+        print(f"  resuming: {len(done)} already done, {len(eps)} to go", flush=True)
+
     t0 = time.time()
     with ThreadPoolExecutor(max_workers=args.workers) as pool:
         futures = {pool.submit(run_one, e, args.model, Quality(args.quality), args.subdivide): e for e in eps}
         for i, fut in enumerate(as_completed(futures), 1):
             r = fut.result()
             rows.append(r)
+            with checkpoint.open("a") as fh:
+                fh.write(json.dumps(r) + "\n")
             mark = "ok " if r.get("ok") else "ERR"
             extra = f"{len(r.get('pred', []))}seg" if r.get("ok") else r.get("error", "")[:60]
             print(f"  [{i:3d}/{len(eps)}] {mark} {r['id']:14s} {extra}", flush=True)
@@ -99,6 +116,7 @@ def main() -> None:
     }
     path = Path("results") / f"{args.tag}.json"
     path.write_text(json.dumps(out, indent=2))
+    checkpoint.unlink(missing_ok=True)
 
     s = out["scores"]["overall"]
     print(f"\n=== {args.tag} ===")

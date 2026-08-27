@@ -200,3 +200,55 @@ builds its own AV1 fixture with libsvtav1, so it needs no checked-in binary.
 **Consequences.** One extra dependency (~20 MB) in exchange for decoding not
 depending on how the deployment host's ffmpeg was compiled. This also matters for
 the fal and Replicate images, where we do not control the base ffmpeg build.
+
+---
+
+## ADR-011 — A single run cannot resolve a small change (2026-08-27)
+
+**Context.** Two runs of the *identical* configuration at temperature 0 scored
+0.5327 and 0.4992 corpus F1, with 33 of 99 episodes changing and a median
+per-episode |ΔF1| of 0.145. Temperature 0 is not determinism.
+
+**Decision.** No comparison is reported as an improvement unless a paired bootstrap
+over episodes gives a confidence interval excluding zero (`scripts/variance.py`),
+**and** the effect replicates against a second independent run of the baseline.
+
+**Consequences.** A previously claimed "+0.024 F1 from windowing" was withdrawn: it
+sat inside the noise, and against a second baseline run the same comparison gave
+−0.014. What survived the standard was windowing's effect on ±0.25 s boundary
+recall (+0.037 and +0.039, both CIs excluding zero). Per-family numbers from a
+single pair of runs are treated as unproven, because family subsets are smaller and
+noisier than the corpus.
+
+---
+
+## ADR-012 — Subdivision, and buying recall with precision (2026-08-27)
+
+**Context.** Recall was a near-monotonic function of event duration, and zero below
+one second. `annotation/subdivide.py` re-reads any predicted segment longer than
+3 s at 0.25 s sampling and splits it where a second completed event is visible.
+
+**Measured**, paired against two independent baseline runs, all significant in both:
+
+| metric | baseline | subdivided |
+|---|---:|---:|
+| boundary recall ±0.25 s | 0.149 | 0.263 |
+| boundary recall ±0.5 s | 0.290 | 0.447 |
+| boundary recall ±1.0 s | 0.452 | 0.654 |
+| recall (segments) | 0.472 | 0.603 |
+| precision (segments) | 0.635 | 0.480 |
+| segmentation F1 | 0.541 | 0.534 |
+
+By gold-segment duration, recall went 0.000 → 0.109 under a second, and
+0.200 → 0.529 between one and two seconds.
+
+**Decision.** Keep subdivision on for `balanced` and `strict`, off for `fast`.
+
+**Consequences.** This buys a large gain in event discovery with a real loss of
+precision — we now over-split some genuinely single events, which is why F1 is
+flat. For the product's purpose, making episodes searchable, a missed event is
+worse than a spurious boundary the user can see and ignore, and the flags exist to
+mark low-confidence splits. Cost roughly triples, $0.62 → $1.95 per video-hour.
+If precision needs recovering, the first thing to try is rejecting splits whose
+pieces all carry the same label, which is a cut through one event rather than the
+discovery of two.

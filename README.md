@@ -24,9 +24,15 @@ benchmarks is temporal boundaries, so that is what the engineering effort goes t
 
 ## Status
 
-Alpha. Automatically generated labels, no human review. Timestamps have
-sub-second *resolution*; see `results/` for their measured *accuracy*, which is a
-different and much weaker claim.
+Alpha. Automatically generated labels, no human review.
+
+Timestamps have sub-second *resolution*. Their *accuracy* is a different and much
+weaker claim: on our development benchmark, **29% of true boundaries are found
+within half a second** and the median boundary error is **1.1 s**. Recall depends
+strongly on how long an event lasts — 0.70 for events over 8 s, **0.00 under one
+second**. Measured numbers, scoring protocol, and what is not yet measured are all
+in [`docs/results.md`](docs/results.md). Do not describe this as "sub-second
+accurate".
 
 ## Interface
 

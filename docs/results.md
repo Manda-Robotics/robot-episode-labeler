@@ -26,6 +26,34 @@ are not a head-to-head comparison** and must not be presented as beating theirs.
 What is comparable is the pipeline: their sampling parameters (0.5 s, 224 px,
 20 frames per sheet, 5 columns) are the ones we use.
 
+## The noise floor comes first
+
+Everything below is interpreted against this measurement, because without it the
+numbers mean very little.
+
+The **same configuration run twice** (`fast_v3_chunked` vs `fast_v3_repeat`,
+`gemini-3.5-flash`, temperature 0, 99 episodes both completed):
+
+| metric | run 1 | run 2 | delta |
+|---|---:|---:|---:|
+| segmentation F1 | 0.5327 | 0.4992 | −0.0335 |
+| boundary recall ±0.25s | 0.1490 | 0.1538 | +0.0048 |
+| boundary recall ±0.5s | 0.2917 | 0.2692 | −0.0224 |
+| boundary recall ±1.0s | 0.4551 | 0.4231 | −0.0321 |
+
+33 of 99 episodes changed score, with a **median per-episode |ΔF1| of 0.145**.
+
+So temperature 0 is not determinism, and on a 100-episode corpus that produces
+swings of roughly **±0.03–0.08 in corpus F1**. The practical consequence:
+
+> **A single run cannot resolve a change smaller than about 0.05 F1.** Any
+> comparison of two single runs at that scale is reading noise. Comparisons must
+> either use a paired bootstrap whose interval excludes zero, replicate across
+> independent runs, or average several runs per configuration.
+
+`scripts/variance.py` does the paired bootstrap (4000 resamples over episodes) and
+prints a confidence interval for the delta.
+
 ## Runs
 
 `fast` = coarse segmentation only. 100 episodes, 743 gold segments,
@@ -35,43 +63,33 @@ What is comparable is the pipeline: their sampling parameters (0.5 s, 224 px,
 |---|---|---:|---:|---:|---:|---:|---:|---:|
 | `fast_v2` | one call per episode | 0.544 | 0.113 | 0.234 | 0.425 | 0.637 | 1.275s | 11 |
 | `fast_v3_chunked` | 60 s windows | 0.533 | 0.149 | 0.292 | 0.455 | 0.659 | 1.183s | 1 |
+| `fast_v3_repeat` | *identical to above* | 0.499 | 0.154 | 0.269 | 0.423 | 0.617 | — | 1 |
 
-Those two rows are **not directly comparable**: failed episodes are excluded from
-scoring, and the runs failed on different episodes, so their gold denominators
-differ (HomER gold 342 vs 450). Paired on the 89 episodes both completed
-(`scripts/paired.py`):
+Raw rows are not comparable across runs when failures differ, because failed
+episodes leave the gold denominator. `scripts/paired.py` and `scripts/variance.py`
+restrict to episodes both runs completed.
 
-| metric | one call | windowed | delta |
-|---|---:|---:|---:|
-| segmentation F1 | 0.544 | **0.568** | +0.024 |
-| precision | 0.679 | 0.667 | −0.012 |
-| recall | 0.454 | **0.495** | +0.041 |
-| boundary recall ±0.25s | 0.113 | **0.150** | +0.037 |
-| boundary recall ±0.5s | 0.234 | **0.296** | +0.062 |
-| boundary recall ±1.0s | 0.425 | **0.472** | +0.047 |
-| median boundary error | 1.275s | **1.115s** | −0.160s |
-| segments predicted | 402 | 447 | (gold 602) |
+### Does windowing help? Partly, and less than it first looked
 
-By family:
+Windowed segmentation compared against the single-call run, twice — once against
+each independent windowed run, so a claim has to replicate to count:
 
-| family | F1 (one call → windowed) | ±1.0s | predicted → | gold |
-|---|---|---|---|---:|
-| droid | 0.602 → 0.551 | 0.378 → 0.344 | 142 → 146 | 137 |
-| galaxea | 0.679 → 0.749 | 0.653 → 0.633 | 101 → 104 | 123 |
-| homer | 0.451 → 0.501 | 0.369 → 0.459 | 159 → 197 | 342 |
+| metric | vs run 1 | vs run 2 | verdict |
+|---|---|---|---|
+| segmentation F1 | +0.024, CI [−0.039, +0.089] | −0.014, CI [−0.079, +0.053] | **no effect shown** |
+| boundary recall ±0.25s | +0.037, CI [**+0.005**, +0.072] | +0.039, CI [**+0.002**, +0.076] | **significant, replicated** |
+| boundary recall ±0.5s | +0.062, CI [+0.002, +0.117] | +0.039, CI [−0.015, +0.097] | mixed, unproven |
+| boundary recall ±1.0s | +0.047, CI [−0.032, +0.125] | +0.014, CI [−0.052, +0.084] | no effect shown |
 
-Windowing was aimed at HomER, whose episodes run to 171 s — 17 contact sheets in a
-single call — and that is where it paid off. The reference implementation sends
-every sheet in one call, so this is a real difference rather than a reinvention.
+**What we can claim:** windowing improves the tightest boundary localisation
+(±0.25 s) by about 3–4 points, and that replicates across two independent runs. It
+also reduced failures from 11 to 1, which is deterministic rather than statistical.
 
-> **Caveat: the noise floor is not yet measured.** DROID moved 0.602 → 0.551 on
-> identical episodes through an unchanged code path (short episodes never window),
-> which can only be model nondeterminism at temperature 0. A repeat run under an
-> identical configuration was started to quantify this and was cut short by the API
-> account running out of credit. **Until that is measured, treat any delta smaller
-> than roughly ±0.05 F1 as unproven**, including the per-family numbers above. The
-> corpus-level boundary-recall gains are larger and more consistent, but they are
-> not yet proven either.
+**What we cannot claim:** that it improves segmentation F1. The earlier "+0.024 F1"
+read was inside the noise floor, and the second run put the same comparison at
+−0.014. The per-family numbers from a single pair of runs (e.g. "HomER F1
+0.451 → 0.501", "DROID regressed") are likewise unproven — per-family subsets are
+smaller and therefore noisier than the corpus.
 
 ## The dominant failure mode: short events
 
@@ -115,8 +133,6 @@ latency by roughly 60:1, and `thinking_budget` is an untested lever.
 
 ## What is not measured yet
 
-- Run-to-run variance (the noise floor). **Blocks confident interpretation of every
-  delta above.**
 - The `subdivide` recall pass.
 - `balanced` mode end to end: what boundary refinement and context labeling buy.
 - Label accuracy: the judge is implemented, the scoring run died on the credit

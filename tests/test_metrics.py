@@ -60,3 +60,32 @@ def test_aggregate_pools_segments_across_episodes():
     a.add([(0.0, 9.0)], GOLD)
     r = a.report()
     assert r["episodes"] == 2 and r["segments_gold"] == 6 and r["segments_matched"] == 3
+
+
+def test_aggregate_penalises_an_episode_with_no_predicted_boundaries():
+    # One blob predicted against three gold segments: the two gold boundaries
+    # must count against recall, not be silently skipped.
+    a = Aggregate()
+    a.add([(0.0, 9.0)], GOLD)
+    r = a.report()
+    assert r["boundary_recall_at"]["2.0"] == 0.0
+    assert a.boundary_total == 2
+
+
+def test_aggregate_pools_boundaries_across_episodes():
+    a = Aggregate()
+    a.add(GOLD, GOLD)          # 2 boundaries, both hit
+    a.add([(0.0, 9.0)], GOLD)  # 2 boundaries, both missed
+    assert a.boundary_total == 4
+    assert a.report()["boundary_recall_at"]["0.25"] == 0.5
+
+
+def test_gold_with_gaps_still_yields_a_boundary():
+    gapped = [(0.0, 2.0), (3.0, 5.0)]
+    assert internal_boundaries(gapped) == [2.5]
+
+
+def test_duplicate_boundaries_are_not_double_counted():
+    # Zero-length segments must not manufacture extra boundaries.
+    spans = [(0.0, 2.0), (2.0, 2.0), (2.0, 5.0)]
+    assert internal_boundaries(spans) == [2.0]
