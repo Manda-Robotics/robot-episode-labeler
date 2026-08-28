@@ -34,6 +34,8 @@ def call(path: str, token: str, data: dict | None = None) -> dict:
 def main() -> int:
     video = sys.argv[1] if len(sys.argv) > 1 else VIDEO
     prompt = sys.argv[2] if len(sys.argv) > 2 else PROMPT
+    subtasks = sys.argv[3] if len(sys.argv) > 3 else ""
+    attributes = sys.argv[4] if len(sys.argv) > 4 else ""
     token = os.environ.get("REPLICATE_API_TOKEN")
     gemini = os.environ.get("GEMINI_API_KEY")
     if not token or not gemini:
@@ -68,6 +70,7 @@ def main() -> int:
     pred = call("/predictions", token, {
         "version": version,
         "input": {"video": video_url, "prompt": prompt,
+                  "subtasks": subtasks, "attributes": attributes,
                   "quality": "balanced", "gemini_api_key": gemini},
     })
     print(f"prediction {pred['id']} -> {pred['status']}")
@@ -83,7 +86,9 @@ def main() -> int:
     out = json.loads(pred["output"])
     print(f"\n{out['task']}  ({out['duration_seconds']}s, {len(out['segments'])} subtasks)")
     for s in out["segments"]:
-        print(f"  {s['start_seconds']:6.2f}-{s['end_seconds']:6.2f}  {s['result']:7s} {s['label']}")
+        attrs = f"  [{', '.join(s['attributes'])}]" if s.get("attributes") else ""
+        print(f"  {s['start_seconds']:6.2f}-{s['end_seconds']:6.2f}  {s['result']:7s} "
+              f"{s['label']}{attrs}")
     print(f"\nmetrics: {pred.get('metrics')}")
     print(f"prediction id: {pred['id']}")
     return 0

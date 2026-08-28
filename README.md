@@ -101,6 +101,17 @@ cp .env.example .env        # add a Gemini key from https://aistudio.google.com/
 uv run pytest -q
 ```
 
+Run the CLI as a module rather than through the console script:
+
+```bash
+PYTHONPATH=src uv run python -m rel.cli annotate episode.mp4 "A robot folds a box."
+```
+
+The installed `rel` entry point works, but this venv intermittently stops
+processing `.pth` files, which leaves the editable install invisible and the
+console script unable to import `rel`. Recreating the venv (`rm -rf .venv &&
+uv sync --extra dev`) fixes it; invoking the module directly avoids it entirely.
+
 ### Evaluation
 
 Development benchmark is [WGO-Bench](https://huggingface.co/datasets/macrodata/WGO-Bench):
