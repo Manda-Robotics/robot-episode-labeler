@@ -856,14 +856,18 @@ dependencies = [
 
 [package.optional-dependencies]
 dev = [
+    { name = "certifi" },
+    { name = "mcap" },
     { name = "pytest" },
 ]
 
 [package.metadata]
 requires-dist = [
+    { name = "certifi", marker = "extra == 'dev'", specifier = ">=2024.0" },
     { name = "google-genai", specifier = ">=1.0.0" },
     { name = "imageio-ffmpeg", specifier = ">=0.6.0" },
     { name = "mcap", specifier = ">=1.4.0" },
+    { name = "mcap", marker = "extra == 'dev'", specifier = ">=1.4" },
     { name = "numpy", specifier = ">=2.0" },
     { name = "pillow", specifier = ">=10.4" },
     { name = "pyarrow", specifier = ">=17.0" },

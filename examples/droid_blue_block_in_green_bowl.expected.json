@@ -1,0 +1,50 @@
+{
+  "task": "Put the blue block in the green bowl",
+  "duration_seconds": 17.73,
+  "segments": [
+    {
+      "start_seconds": 0.0,
+      "end_seconds": 11.0,
+      "label": "place_blue_block_in_green_bowl",
+      "result": "fail",
+      "attributes": [],
+      "description": "The robot attempts to grasp the blue block to place it into the green bowl, but fails to pick it up from the table.",
+      "confidence": "low",
+      "flags": [
+        "label_disagreement"
+      ]
+    },
+    {
+      "start_seconds": 11.0,
+      "end_seconds": 15.5,
+      "label": "place_blue_block_in_green_bowl",
+      "result": "pass",
+      "attributes": [],
+      "description": "The robot carries the blue block over to the green bowl and successfully places it inside.",
+      "confidence": "medium",
+      "flags": []
+    }
+  ],
+  "warnings": [],
+  "metadata": {
+    "pipeline": "robot-episode-labeler",
+    "pipeline_version": "0.1.0",
+    "model": "gemini-3.7-flash",
+    "quality": "balanced",
+    "sampling_interval": 0.5,
+    "subdivided": true,
+    "prompts": "21e558a9af4c",
+    "elapsed_seconds": 21.85,
+    "usage": {
+      "calls": 5,
+      "prompt_tokens": 8153,
+      "output_tokens": 2767,
+      "retries": 0,
+      "calls_by_stage": {
+        "segment": 1,
+        "subdivide": 2,
+        "label": 2
+      }
+    }
+  }
+}

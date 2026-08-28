@@ -8,7 +8,7 @@ Robot teams hold thousands of teleoperation episodes that are effectively unsear
 
 Input: a 17 second DROID episode, with the instruction `Put the blue block in the green bowl`.
 
-Output:
+Output, verbatim from a real run (not edited):
 
 ```json
 {
@@ -17,21 +17,23 @@ Output:
   "segments": [
     {
       "start_seconds": 0.0,
-      "end_seconds": 11.5,
+      "end_seconds": 11.0,
       "label": "place_blue_block_in_green_bowl",
       "result": "fail",
       "attributes": [],
-      "description": "The arm grasps the blue block and moves it toward the bowl, but the block slips before it is released.",
+      "description": "The robot attempts to grasp the blue block to place it into the green bowl, but fails to pick it up from the table.",
       "confidence": "low",
-      "flags": ["label_disagreement"]
+      "flags": [
+        "label_disagreement"
+      ]
     },
     {
-      "start_seconds": 11.5,
+      "start_seconds": 11.0,
       "end_seconds": 15.5,
       "label": "place_blue_block_in_green_bowl",
       "result": "pass",
       "attributes": [],
-      "description": "The arm regrasps the block and releases it into the green bowl.",
+      "description": "The robot carries the blue block over to the green bowl and successfully places it inside.",
       "confidence": "medium",
       "flags": []
     }
