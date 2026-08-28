@@ -32,6 +32,8 @@ def call(path: str, token: str, data: dict | None = None) -> dict:
 
 
 def main() -> int:
+    video = sys.argv[1] if len(sys.argv) > 1 else VIDEO
+    prompt = sys.argv[2] if len(sys.argv) > 2 else PROMPT
     token = os.environ.get("REPLICATE_API_TOKEN")
     gemini = os.environ.get("GEMINI_API_KEY")
     if not token or not gemini:
@@ -50,7 +52,7 @@ def main() -> int:
         f"--{boundary}\r\n".encode(),
         b'Content-Disposition: form-data; name="content"; filename="episode.mp4"\r\n',
         b"Content-Type: video/mp4\r\n\r\n",
-        open(VIDEO, "rb").read(),
+        open(video, "rb").read(),
         f"\r\n--{boundary}--\r\n".encode(),
     ])
     req = urllib.request.Request(
@@ -65,7 +67,7 @@ def main() -> int:
 
     pred = call("/predictions", token, {
         "version": version,
-        "input": {"video": video_url, "prompt": PROMPT,
+        "input": {"video": video_url, "prompt": prompt,
                   "quality": "balanced", "gemini_api_key": gemini},
     })
     print(f"prediction {pred['id']} -> {pred['status']}")
@@ -83,6 +85,7 @@ def main() -> int:
     for s in out["segments"]:
         print(f"  {s['start_seconds']:6.2f}-{s['end_seconds']:6.2f}  {s['result']:7s} {s['label']}")
     print(f"\nmetrics: {pred.get('metrics')}")
+    print(f"prediction id: {pred['id']}")
     return 0
 
 
