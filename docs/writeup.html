@@ -312,6 +312,13 @@ footer{padding:40px 0 64px; color:var(--muted); font-size:14px}
   <h2>Where it runs</h2>
   <div class="col">
     <p>One pipeline, three entry points: a Python API, a CLI, and a container. Output as JSON, JSONL, CSV, or <strong>MCAP</strong> — episode-relative segment times on an absolute log clock, so annotations drop into a team's existing tooling instead of arriving as another sidecar format.</p>
+    <p>It is deployed and serving predictions. A hosted call on a four-second episode returns in 8.3s:</p>
+  </div>
+  <pre><code>use a gripper to pick the target object and place on the gray plate.   (4.43s, 2 subtasks)
+    0.00 -  2.00   pass   pick_banana
+    2.00 -  3.00   pass   place_banana</code></pre>
+  <div class="col">
+    <p>Gold for that episode is <span class="mono">0.00–1.96 pick</span> / <span class="mono">1.96–3.29 place</span>: both events found, the interior boundary within 0.04s.</p>
     <p>Two engineering notes worth passing on, both found by running the thing rather than reading it. Homebrew's macOS ffmpeg ships an AV1 decoder that is <em>videotoolbox-only</em>: on hardware without AV1 acceleration, every AV1 video is silently undecodable — a quarter of the benchmark, and any customer sending AV1. And a request with no deadline will wedge every worker at 0% CPU indefinitely. Decoding is now a property of the package rather than of the host, and every request has a timeout.</p>
   </div>
 </section>
