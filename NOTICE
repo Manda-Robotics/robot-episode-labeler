@@ -1,0 +1,25 @@
+robot-episode-labeler
+Copyright 2026 Manda Robotics PBC
+
+Licensed under the Apache License, Version 2.0. See LICENSE.
+
+--------------------------------------------------------------------------------
+Third-party material included in this repository
+--------------------------------------------------------------------------------
+
+examples/droid_blue_block_in_green_bowl.mp4
+examples/droid_duvet_tip_left.mp4
+
+  Single episodes cut from lerobot/droid_1.0.1 (Apache License 2.0), the LeRobot
+  conversion of DROID: A Large-Scale In-the-Wild Robot Manipulation Dataset,
+  which is licensed CC-BY-4.0. Redistributed here with attribution.
+  See examples/ATTRIBUTION.md.
+
+--------------------------------------------------------------------------------
+Referenced but NOT redistributed
+--------------------------------------------------------------------------------
+
+  macrodata/WGO-Bench is licensed CC-BY-NC-SA-4.0 and is used only as a
+  development benchmark. It is not redistributed in this repository, is excluded
+  by .gitignore, and must not be included in any commercial artifact. Measured
+  scores against it are reported in docs/results.md.

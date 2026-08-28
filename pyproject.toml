@@ -3,6 +3,8 @@ name = "robot-episode-labeler"
 version = "0.1.0"
 description = "Robot manipulation video -> timestamped subtask annotations, as one inference endpoint."
 readme = "README.md"
+license = "Apache-2.0"
+license-files = ["LICENSE", "NOTICE"]
 requires-python = ">=3.12"
 dependencies = [
     "google-genai>=1.0.0",
