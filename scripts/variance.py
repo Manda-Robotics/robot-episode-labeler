@@ -14,47 +14,24 @@ pooled precision, recall and boundary recall are all ratios of summed counts.
 from __future__ import annotations
 
 import argparse, json, random, statistics
-from dataclasses import dataclass
 from pathlib import Path
 import sys
 
 sys.path.insert(0, str(Path(__file__).resolve().parents[1] / "src"))
-from rel.eval.metrics import TOLERANCES, internal_boundaries, match_segments
+from rel.eval.metrics import TOLERANCES, EpisodeCounts, episode_counts
 
 BOOTSTRAP = 4000
 SEED = 20260827
 
 
-@dataclass
-class EpisodeCounts:
-    n_pred: int
-    n_gold: int
-    n_matched: int
-    b_total: int
-    b_hits: dict[float, int]
-
-    @property
-    def f1(self) -> float:
-        p = self.n_matched / self.n_pred if self.n_pred else 0.0
-        r = self.n_matched / self.n_gold if self.n_gold else 0.0
-        return 2 * p * r / (p + r) if (p + r) else 0.0
-
-
 def counts(row: dict) -> EpisodeCounts:
     pred = [(s[0], s[1]) for s in row["pred"]]
     gold = [(s[0], s[1]) for s in row["gold"]]
-    matched = len(match_segments(pred, gold))
-    gb, pb = internal_boundaries(gold), internal_boundaries(pred)
-    hits = {t: 0 for t in TOLERANCES}
-    if gb and pb:
-        errs = [min(abs(g - p) for p in pb) for g in gb]
-        for t in TOLERANCES:
-            hits[t] = sum(e <= t for e in errs)
-    return EpisodeCounts(len(pred), len(gold), matched, len(gb), hits)
+    return episode_counts(pred, gold)
 
 
-def pooled_f1(cs: list[EpisodeCounts]) -> float:
-    m = sum(c.n_matched for c in cs)
+def pooled_f1(cs: list[EpisodeCounts], key=0.5) -> float:
+    m = sum(c.matched_at[key] for c in cs)
     p = m / sum(c.n_pred for c in cs) if sum(c.n_pred for c in cs) else 0.0
     r = m / sum(c.n_gold for c in cs) if sum(c.n_gold for c in cs) else 0.0
     return 2 * p * r / (p + r) if (p + r) else 0.0
@@ -99,6 +76,13 @@ def main() -> None:
     sig = "SIGNIFICANT" if (lo > 0 or hi < 0) else "not significant (CI spans 0)"
     print(f"  {'':26s} 95% CI [{lo:+.4f}, {hi:+.4f}]  {sig}")
     print(f"  {'':26s} P(delta>0) = {sum(d > 0 for d in bd) / len(bd):.3f}\n")
+
+    wa, wb = pooled_f1(ca, "wgo"), pooled_f1(cb, "wgo")
+    wd = [pooled_f1([cb[i] for i in ix], "wgo") - pooled_f1([ca[i] for i in ix], "wgo") for ix in idxs]
+    lo, hi = ci(wd)
+    sig = "SIGNIFICANT" if (lo > 0 or hi < 0) else "not significant"
+    print(f"  {'F1 wgo (IoU .75, ends snapped)':26s} {wa:.4f} -> {wb:.4f}   delta {wb - wa:+.4f}"
+          f"  CI [{lo:+.4f}, {hi:+.4f}]  {sig}\n")
 
     print("  boundary recall:")
     for t in TOLERANCES:

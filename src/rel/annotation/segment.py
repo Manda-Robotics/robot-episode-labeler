@@ -36,6 +36,7 @@ def build_segment_prompt(
     interval: float,
     window: tuple[float, float] | None = None,
     previous_label: str | None = None,
+    prompt_name: str = "segment_v2.md",
 ) -> str:
     if request.schema_mode:
         vocab = load_prompt("vocabulary_closed.md").format(
@@ -69,7 +70,7 @@ def build_segment_prompt(
             )
         window_block = "\n".join(lines) + "\n"
 
-    return load_prompt("segment.md").format(
+    return load_prompt(prompt_name).format(
         interval=interval,
         instruction_block=instruction_block,
         duration=duration,
@@ -125,6 +126,8 @@ def segment_episode(
     per_sheet: int = 20,
     columns: int = 5,
     max_sheets: int | None = MAX_SHEETS_PER_CALL,
+    overlap: int = SHEET_OVERLAP,
+    prompt_name: str = "segment_v2.md",
 ) -> list[CoarseSegment]:
     """Sample the episode into stamped contact sheets and segment it.
 
@@ -136,13 +139,14 @@ def segment_episode(
     if not frames:
         return []
     sheets = build_sheets(frames, per_sheet=per_sheet, columns=columns)
-    windows = _chunks(sheets, max_sheets, SHEET_OVERLAP) if max_sheets else [sheets]
+    windows = _chunks(sheets, max_sheets, overlap) if max_sheets else [sheets]
 
     collected: list[CoarseSegment] = []
     previous_label: str | None = None
     for window in windows:
         span = (window[0].start, window[-1].end) if len(windows) > 1 else None
-        prompt = build_segment_prompt(request, duration, interval, span, previous_label)
+        prompt = build_segment_prompt(request, duration, interval, span, previous_label,
+                                      prompt_name=prompt_name)
         result = client.json("segment", prompt, CoarseSegments,
                              images=[s.image for s in window])
         got = list(result.segments)

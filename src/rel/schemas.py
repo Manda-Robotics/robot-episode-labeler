@@ -12,6 +12,12 @@ from typing import Any
 from pydantic import BaseModel, Field, field_validator, model_validator
 
 PIPELINE_NAME = "robot-episode-labeler"
+
+# Reserved label for a stretch in which no subtask completes: the robot fumbles,
+# retries without success, or is idle. Without a way to say this, a closed
+# vocabulary forces every stretch into a task-shaped label, which fabricates
+# events on exactly the failure-heavy episodes an eval customer cares about.
+NO_EVENT_LABEL = "no_completed_subtask"
 PIPELINE_VERSION = "0.1.0"
 
 

@@ -1,138 +1,182 @@
 {
-  "tag": "g37_subdivide",
+  "tag": "s_tempdef",
+  "dataset": "wgo",
   "model": "gemini-3.7-flash",
   "quality": "fast",
-  "subdivide": true,
+  "subdivide": false,
+  "config": {
+    "name": "fast",
+    "model": "gemini-3.7-flash",
+    "coarse_interval": 0.5,
+    "tile_width": 224,
+    "frames_per_sheet": 20,
+    "sheet_columns": 5,
+    "max_sheets_per_call": 6,
+    "sheet_overlap": 1,
+    "segment_prompt": "segment.md",
+    "segment_input": "sheets",
+    "video_fps": 2.0,
+    "video_window": 60.0,
+    "video_overlap": 5.0,
+    "video_width": 480,
+    "segment_video_prompt": "segment_video.md",
+    "segment_state_prompt": "segment_state.md",
+    "subdivide": false,
+    "subdivide_min_duration": 3.0,
+    "subdivide_interval": 0.25,
+    "subdivide_width": 256,
+    "subdivide_max_frames": 168,
+    "subdivide_prompt": "subdivide.md",
+    "subdivide_input": "sheets",
+    "subdivide_fps": 4.0,
+    "label": false,
+    "label_prompt": "label.md",
+    "label_context": 1.0,
+    "label_width": 256,
+    "label_max_frames": 20,
+    "refine": false,
+    "refine_input": "sheets",
+    "refine_fps": 8.0,
+    "refine_half_window": 1.5,
+    "refine_width": 480,
+    "repeat_pass": false,
+    "temperature": null,
+    "thinking_level": null,
+    "thinking_budget": null,
+    "media_resolution": null,
+    "media_processing": null,
+    "max_parallel": 4
+  },
   "episodes": 100,
-  "failed": 2,
-  "wall_seconds": 570.4,
-  "video_seconds": 4282.3,
+  "failed": 1,
+  "wall_seconds": 343.2,
+  "video_seconds": 4296.1,
   "tokens": {
-    "prompt": 1199708,
-    "output": 522638
+    "prompt": 646931,
+    "output": 229725
   },
   "scores": {
     "overall": {
-      "episodes": 98,
-      "segments_pred": 587,
-      "segments_gold": 721,
-      "segments_matched": 421,
-      "segmentation_precision": 0.7172,
-      "segmentation_recall": 0.5839,
-      "segmentation_f1": 0.6437,
+      "episodes": 99,
+      "segments_pred": 469,
+      "segments_gold": 723,
+      "segments_matched": 355,
+      "segmentation_precision": 0.7569,
+      "segmentation_recall": 0.491,
+      "segmentation_f1": 0.5956,
       "f1_at_iou": {
-        "0.1": 0.792,
-        "0.25": 0.7722,
-        "0.5": 0.6437,
-        "0.75": 0.3364
+        "0.1": 0.7483,
+        "0.25": 0.7399,
+        "0.5": 0.5956,
+        "0.75": 0.3356
       },
-      "f1_wgo": 0.3685,
+      "f1_wgo": 0.3809,
       "recall_by_duration": {
         "0-1": {
-          "recall": 0.0385,
+          "recall": 0.0,
           "n": 52
         },
         "1-2": {
-          "recall": 0.3667,
+          "recall": 0.1667,
           "n": 120
         },
         "2-4": {
-          "recall": 0.6211,
+          "recall": 0.4758,
           "n": 227
         },
         "4-8": {
-          "recall": 0.7111,
-          "n": 180
+          "recall": 0.6409,
+          "n": 181
         },
         "8-inf": {
-          "recall": 0.7465,
-          "n": 142
+          "recall": 0.7762,
+          "n": 143
         }
       },
       "boundary_recall_at": {
-        "0.25": 0.2167,
-        "0.5": 0.4061,
-        "1.0": 0.5698,
-        "2.0": 0.7271
+        "0.25": 0.1779,
+        "0.5": 0.3157,
+        "1.0": 0.4663,
+        "2.0": 0.6426
       },
       "boundary_precision_at": {
-        "0.25": 0.2735,
-        "0.5": 0.5102,
-        "1.0": 0.6959,
-        "2.0": 0.8286
+        "0.25": 0.2919,
+        "0.5": 0.5081,
+        "1.0": 0.7027,
+        "2.0": 0.8757
       },
-      "median_boundary_error_sec": 0.722
+      "median_boundary_error_sec": 1.259
     },
     "by_family": {
       "droid": {
-        "episodes": 49,
-        "segments_pred": 170,
-        "segments_gold": 148,
-        "segments_matched": 103,
-        "segmentation_precision": 0.6059,
-        "segmentation_recall": 0.6959,
-        "segmentation_f1": 0.6478,
+        "episodes": 50,
+        "segments_pred": 138,
+        "segments_gold": 150,
+        "segments_matched": 104,
+        "segmentation_precision": 0.7536,
+        "segmentation_recall": 0.6933,
+        "segmentation_f1": 0.7222,
         "f1_at_iou": {
-          "0.1": 0.8616,
-          "0.25": 0.8365,
-          "0.5": 0.6478,
-          "0.75": 0.3711
+          "0.1": 0.8958,
+          "0.25": 0.8819,
+          "0.5": 0.7222,
+          "0.75": 0.4167
         },
-        "f1_wgo": 0.4403,
+        "f1_wgo": 0.5278,
         "recall_by_duration": {
           "2-4": {
-            "recall": 0.6667,
+            "recall": 0.3889,
             "n": 18
           },
           "4-8": {
-            "recall": 0.6491,
-            "n": 57
+            "recall": 0.6552,
+            "n": 58
           },
           "8-inf": {
-            "recall": 0.7397,
-            "n": 73
+            "recall": 0.7973,
+            "n": 74
           }
         },
         "boundary_recall_at": {
-          "0.25": 0.1616,
-          "0.5": 0.2626,
-          "1.0": 0.4343,
-          "2.0": 0.6566
+          "0.25": 0.1,
+          "0.5": 0.18,
+          "1.0": 0.35,
+          "2.0": 0.59
         },
         "boundary_precision_at": {
-          "0.25": 0.1311,
-          "0.5": 0.2213,
-          "1.0": 0.3689,
-          "2.0": 0.5656
+          "0.25": 0.1136,
+          "0.5": 0.2045,
+          "1.0": 0.3977,
+          "2.0": 0.6932
         },
-        "median_boundary_error_sec": 1.216
+        "median_boundary_error_sec": 1.611
       },
       "galaxea": {
         "episodes": 25,
-        "segments_pred": 107,
+        "segments_pred": 92,
         "segments_gold": 123,
-        "segments_matched": 95,
-        "segmentation_precision": 0.8879,
-        "segmentation_recall": 0.7724,
-        "segmentation_f1": 0.8261,
+        "segments_matched": 82,
+        "segmentation_precision": 0.8913,
+        "segmentation_recall": 0.6667,
+        "segmentation_f1": 0.7628,
         "f1_at_iou": {
-          "0.1": 0.887,
-          "0.25": 0.8783,
-          "0.5": 0.8261,
-          "0.75": 0.6
+          "0.1": 0.8465,
+          "0.25": 0.8465,
+          "0.5": 0.7628,
+          "0.75": 0.5209
         },
-        "f1_wgo": 0.6261,
+        "f1_wgo": 0.5581,
         "recall_by_duration": {
           "0-1": {
             "recall": 0.0,
             "n": 1
           },
           "1-2": {
-            "recall": 0.5455,
+            "recall": 0.2727,
             "n": 22
           },
           "2-4": {
-            "recall": 0.7424,
+            "recall": 0.6364,
             "n": 66
           },
           "4-8": {
@@ -145,49 +189,49 @@
           }
         },
         "boundary_recall_at": {
-          "0.25": 0.2857,
-          "0.5": 0.6122,
-          "1.0": 0.7755,
-          "2.0": 0.8367
+          "0.25": 0.2755,
+          "0.5": 0.5102,
+          "1.0": 0.6633,
+          "2.0": 0.7959
         },
         "boundary_precision_at": {
-          "0.25": 0.3415,
-          "0.5": 0.7439,
-          "1.0": 0.939,
-          "2.0": 0.9756
+          "0.25": 0.403,
+          "0.5": 0.7463,
+          "1.0": 0.9403,
+          "2.0": 1.0
         },
-        "median_boundary_error_sec": 0.38
+        "median_boundary_error_sec": 0.495
       },
       "homer": {
         "episodes": 24,
-        "segments_pred": 310,
+        "segments_pred": 239,
         "segments_gold": 450,
-        "segments_matched": 223,
-        "segmentation_precision": 0.7194,
-        "segmentation_recall": 0.4956,
-        "segmentation_f1": 0.5868,
+        "segments_matched": 169,
+        "segmentation_precision": 0.7071,
+        "segmentation_recall": 0.3756,
+        "segmentation_f1": 0.4906,
         "f1_at_iou": {
-          "0.1": 0.7342,
-          "0.25": 0.7132,
-          "0.5": 0.5868,
-          "0.75": 0.2421
+          "0.1": 0.656,
+          "0.25": 0.6473,
+          "0.5": 0.4906,
+          "0.75": 0.2438
         },
-        "f1_wgo": 0.2605,
+        "f1_wgo": 0.2642,
         "recall_by_duration": {
           "0-1": {
-            "recall": 0.0392,
+            "recall": 0.0,
             "n": 51
           },
           "1-2": {
-            "recall": 0.3265,
+            "recall": 0.1429,
             "n": 98
           },
           "2-4": {
-            "recall": 0.5594,
+            "recall": 0.4126,
             "n": 143
           },
           "4-8": {
-            "recall": 0.6667,
+            "recall": 0.5312,
             "n": 96
           },
           "8-inf": {
@@ -196,18 +240,18 @@
           }
         },
         "boundary_recall_at": {
-          "0.25": 0.2136,
-          "0.5": 0.392,
-          "1.0": 0.554,
-          "2.0": 0.7183
+          "0.25": 0.1737,
+          "0.5": 0.3028,
+          "1.0": 0.4484,
+          "2.0": 0.6197
         },
         "boundary_precision_at": {
-          "0.25": 0.3147,
-          "0.5": 0.5664,
-          "1.0": 0.7657,
-          "2.0": 0.8986
+          "0.25": 0.3302,
+          "0.5": 0.5581,
+          "1.0": 0.7535,
+          "2.0": 0.9116
         },
-        "median_boundary_error_sec": 0.793
+        "median_boundary_error_sec": 1.347
       }
     }
   },
@@ -216,32 +260,32 @@
       "id": "galaxea_002",
       "family": "galaxea",
       "ok": true,
-      "elapsed": 90.09,
+      "elapsed": 43.93,
       "duration": 43.83,
       "pred": [
         [
           0.0,
           5.5,
-          "position_pink_stick"
+          "place_pink_stick"
         ],
         [
           5.5,
-          14.0,
-          "place_red_arc"
+          13.5,
+          "place_red_curve"
         ],
         [
-          14.0,
-          30.0,
+          13.5,
+          27.0,
           "place_purple_stick"
         ],
         [
-          30.0,
-          35.5,
+          27.0,
+          34.0,
           "place_blue_stick"
         ],
         [
-          35.5,
-          40.0,
+          34.0,
+          40.5,
           "place_pink_stick"
         ]
       ],
@@ -334,13 +378,12 @@
       ],
       "warnings": [],
       "usage": {
-        "calls": 6,
-        "prompt_tokens": 13040,
-        "output_tokens": 10941,
+        "calls": 1,
+        "prompt_tokens": 6042,
+        "output_tokens": 4025,
         "retries": 0,
         "calls_by_stage": {
-          "segment": 1,
-          "subdivide": 5
+          "segment": 1
         }
       }
     },
@@ -348,43 +391,28 @@
       "id": "galaxea_007",
       "family": "galaxea",
       "ok": true,
-      "elapsed": 65.63,
+      "elapsed": 36.76,
       "duration": 35.53,
       "pred": [
         [
           0.0,
-          6.0,
-          "place_snack_bag_in_basket"
+          6.5,
+          "place_snack_in_right_basket"
         ],
         [
-          6.0,
-          10.67,
-          "pick_white_box"
-        ],
-        [
-          10.67,
+          6.5,
           13.0,
-          "place_white_box_in_basket"
+          "place_white_box_in_right_basket"
         ],
         [
           13.0,
-          17.67,
-          "pick_tube"
-        ],
-        [
-          17.67,
           21.0,
-          "place_tube_in_basket"
+          "place_bottle_in_left_basket"
         ],
         [
           21.0,
-          27.12,
-          "pick_spoon"
-        ],
-        [
-          27.12,
           31.5,
-          "place_spoon_in_basket"
+          "place_spoon_in_left_basket"
         ]
       ],
       "gold": [
@@ -431,13 +459,12 @@
       ],
       "warnings": [],
       "usage": {
-        "calls": 5,
-        "prompt_tokens": 10602,
-        "output_tokens": 6725,
+        "calls": 1,
+        "prompt_tokens": 4912,
+        "output_tokens": 2325,
         "retries": 0,
         "calls_by_stage": {
-          "segment": 1,
-          "subdivide": 4
+          "segment": 1
         }
       }
     },
@@ -445,63 +472,43 @@
       "id": "galaxea_009",
       "family": "galaxea",
       "ok": true,
-      "elapsed": 115.89,
+      "elapsed": 49.99,
       "duration": 40.17,
       "pred": [
         [
           0.0,
-          5.5,
-          "place_water_bottle_in_right_basket"
+          5.0,
+          "place_water_bottle_in_basket"
         ],
         [
-          5.5,
-          7.5,
-          "pick_can"
-        ],
-        [
-          7.5,
+          5.0,
           10.5,
-          "place_can_in_right_basket"
+          "place_can_in_basket"
         ],
         [
           10.5,
-          13.0,
-          "pick_lotion_bottle"
+          15.0,
+          "place_pink_bottle_in_basket"
         ],
         [
-          13.0,
-          15.5,
-          "place_lotion_bottle_in_right_basket"
+          15.0,
+          21.5,
+          "place_spoon_in_basket"
         ],
         [
-          15.5,
-          19.02,
-          "pick_spoon"
+          21.5,
+          26.0,
+          "place_cloth_in_basket"
         ],
         [
-          19.02,
-          22.0,
-          "place_spoon_in_left_basket"
-        ],
-        [
-          22.0,
-          24.75,
-          "pick_cloth"
-        ],
-        [
-          24.75,
-          26.5,
-          "place_cloth_in_left_basket"
-        ],
-        [
-          26.5,
+          26.0,
           31.5,
-          "move_lemon"
+          "no_completed_subtask"
         ],
         [
           31.5,
-          37.0,
-          "place_lemon_in_right_basket"
+          36.5,
+          "place_lemon_in_basket"
         ]
       ],
       "gold": [
@@ -578,13 +585,12 @@
       ],
       "warnings": [],
       "usage": {
-        "calls": 8,
-        "prompt_tokens": 14956,
-        "output_tokens": 10650,
+        "calls": 1,
+        "prompt_tokens": 4961,
+        "output_tokens": 3703,
         "retries": 0,
         "calls_by_stage": {
-          "segment": 1,
-          "subdivide": 7
+          "segment": 1
         }
       }
     },
@@ -592,66 +598,36 @@
       "id": "galaxea_011",
       "family": "galaxea",
       "ok": true,
-      "elapsed": 44.44,
+      "elapsed": 30.9,
       "duration": 29.17,
       "pred": [
         [
           0.0,
-          2.5,
-          "pick_bread"
-        ],
-        [
-          2.5,
           5.0,
           "place_bread_in_basket"
         ],
         [
           5.0,
-          7.0,
-          "pick_juice_box"
-        ],
-        [
-          7.0,
           9.0,
-          "place_juice_box_in_basket"
+          "place_carton_in_basket"
         ],
         [
           9.0,
-          11.5,
-          "pick_cup"
-        ],
-        [
-          11.5,
-          13.0,
+          13.5,
           "place_cup_in_basket"
         ],
         [
-          13.0,
-          15.5,
-          "pick_cucumber"
+          13.5,
+          18.0,
+          "place_eggplant_in_basket"
         ],
         [
-          15.5,
-          17.5,
-          "place_cucumber_in_basket"
-        ],
-        [
-          17.5,
-          20.0,
-          "pick_pen"
-        ],
-        [
-          20.0,
+          18.0,
           21.5,
           "place_pen_in_basket"
         ],
         [
           21.5,
-          24.0,
-          "pick_spoon"
-        ],
-        [
-          24.0,
           26.0,
           "place_spoon_in_basket"
         ]
@@ -721,8 +697,8 @@
       "warnings": [],
       "usage": {
         "calls": 1,
-        "prompt_tokens": 3800,
-        "output_tokens": 2900,
+        "prompt_tokens": 3852,
+        "output_tokens": 2783,
         "retries": 0,
         "calls_by_stage": {
           "segment": 1
@@ -733,7 +709,7 @@
       "id": "galaxea_013",
       "family": "galaxea",
       "ok": true,
-      "elapsed": 43.93,
+      "elapsed": 22.35,
       "duration": 22.1,
       "pred": [
         [
@@ -748,11 +724,6 @@
         ],
         [
           6.0,
-          6.75,
-          "place_cup_in_basket"
-        ],
-        [
-          6.75,
           10.0,
           "pick_bottle"
         ],
@@ -768,7 +739,7 @@
         ],
         [
           18.0,
-          20.0,
+          20.5,
           "place_peach_in_basket"
         ]
       ],
@@ -806,13 +777,12 @@
       ],
       "warnings": [],
       "usage": {
-        "calls": 5,
-        "prompt_tokens": 9459,
-        "output_tokens": 3932,
+        "calls": 1,
+        "prompt_tokens": 3852,
+        "output_tokens": 1690,
         "retries": 0,
         "calls_by_stage": {
-          "segment": 1,
-          "subdivide": 4
+          "segment": 1
         }
       }
     },
@@ -820,53 +790,38 @@
       "id": "galaxea_028",
       "family": "galaxea",
       "ok": true,
-      "elapsed": 77.17,
+      "elapsed": 33.04,
       "duration": 38.67,
       "pred": [
         [
           0.0,
-          5.5,
-          "pick_yellow_test_tube"
+          5.0,
+          "pick_test_tube"
         ],
         [
-          5.5,
-          6.81,
-          "pick_yellow_test_tube"
-        ],
-        [
-          6.81,
+          5.0,
           16.0,
-          "pour_yellow_test_tube"
+          "pour_test_tube_into_container"
         ],
         [
           16.0,
-          16.5,
-          "place_yellow_test_tube_in_rack"
-        ],
-        [
-          16.5,
           20.0,
-          "pick_red_test_tube"
+          "place_test_tube_in_rack"
         ],
         [
           20.0,
           25.0,
-          "pick_red_test_tube"
+          "pick_test_tube"
         ],
         [
           25.0,
-          29.6,
-          "pour_red_test_tube"
-        ],
-        [
-          29.6,
           33.5,
-          "place_red_test_tube_in_rack"
+          "pour_test_tube_into_container"
         ],
         [
           33.5,
           36.0,
-          "place_red_test_tube_in_rack"
+          "place_test_tube_in_rack"
         ]
       ],
       "gold": [
@@ -903,13 +858,12 @@
       ],
       "warnings": [],
       "usage": {
-        "calls": 6,
-        "prompt_tokens": 12039,
-        "output_tokens": 6559,
+        "calls": 1,
+        "prompt_tokens": 4954,
+        "output_tokens": 1584,
         "retries": 0,
         "calls_by_stage": {
-          "segment": 1,
-          "subdivide": 5
+          "segment": 1
         }
       }
     },
@@ -917,7 +871,7 @@
       "id": "galaxea_033",
       "family": "galaxea",
       "ok": true,
-      "elapsed": 56.16,
+      "elapsed": 31.9,
       "duration": 34.87,
       "pred": [
         [
@@ -927,23 +881,28 @@
         ],
         [
           5.0,
-          14.5,
-          "pour_red_pigment"
-        ],
-        [
-          14.5,
-          16.83,
+          13.5,
           "pour_red_test_tube"
         ],
         [
-          16.83,
+          13.5,
+          16.0,
+          "place_red_test_tube"
+        ],
+        [
+          16.0,
           22.5,
           "pick_blue_test_tube"
         ],
         [
           22.5,
-          29.5,
-          "pour_blue_pigment"
+          29.0,
+          "pour_blue_test_tube"
+        ],
+        [
+          29.0,
+          31.0,
+          "place_blue_test_tube"
         ]
       ],
       "gold": [
@@ -980,13 +939,12 @@
       ],
       "warnings": [],
       "usage": {
-        "calls": 5,
-        "prompt_tokens": 10642,
-        "output_tokens": 4724,
+        "calls": 1,
+        "prompt_tokens": 4955,
+        "output_tokens": 2280,
         "retries": 0,
         "calls_by_stage": {
-          "segment": 1,
-          "subdivide": 4
+          "segment": 1
         }
       }
     },
@@ -994,28 +952,38 @@
       "id": "galaxea_037",
       "family": "galaxea",
       "ok": true,
-      "elapsed": 43.3,
+      "elapsed": 21.97,
       "duration": 18.6,
       "pred": [
         [
           0.0,
-          3.0,
+          2.5,
           "pick_yellow_test_tube"
         ],
         [
-          3.0,
-          5.5,
-          "pour_yellow_test_tube"
+          2.5,
+          5.0,
+          "pour_yellow_pigment_into_beaker"
         ],
         [
-          5.5,
+          5.0,
+          6.5,
+          "place_yellow_test_tube"
+        ],
+        [
+          6.5,
           11.5,
           "pick_red_test_tube"
         ],
         [
           11.5,
           14.5,
-          "pour_red_test_tube"
+          "pour_red_pigment_into_beaker"
+        ],
+        [
+          14.5,
+          16.5,
+          "place_red_test_tube"
         ]
       ],
       "gold": [
@@ -1052,13 +1020,12 @@
       ],
       "warnings": [],
       "usage": {
-        "calls": 4,
-        "prompt_tokens": 6984,
-        "output_tokens": 3095,
+        "calls": 1,
+        "prompt_tokens": 2746,
+        "output_tokens": 1548,
         "retries": 0,
         "calls_by_stage": {
-          "segment": 1,
-          "subdivide": 3
+          "segment": 1
         }
       }
     },
@@ -1066,7 +1033,7 @@
       "id": "galaxea_039",
       "family": "galaxea",
       "ok": true,
-      "elapsed": 85.1,
+      "elapsed": 40.44,
       "duration": 51.47,
       "pred": [
         [
@@ -1077,27 +1044,27 @@
         [
           8.5,
           22.5,
-          "pour_red_pigment_into_beaker"
+          "pour_red_test_tube_into_beaker"
         ],
         [
           22.5,
-          27.0,
-          "place_red_test_tube_into_bowl"
+          27.5,
+          "place_red_test_tube"
         ],
         [
-          27.0,
-          33.0,
+          27.5,
+          33.5,
           "pick_yellow_test_tube"
         ],
         [
-          33.0,
-          44.0,
-          "pour_yellow_pigment_into_beaker"
+          33.5,
+          43.5,
+          "pour_yellow_test_tube_into_beaker"
         ],
         [
-          44.0,
+          43.5,
           47.5,
-          "place_yellow_test_tube_into_bowl"
+          "place_yellow_test_tube"
         ]
       ],
       "gold": [
@@ -1134,13 +1101,12 @@
       ],
       "warnings": [],
       "usage": {
-        "calls": 7,
-        "prompt_tokens": 15703,
-        "output_tokens": 5232,
+        "calls": 1,
+        "prompt_tokens": 7162,
+        "output_tokens": 2335,
         "retries": 0,
         "calls_by_stage": {
-          "segment": 1,
-          "subdivide": 6
+          "segment": 1
         }
       }
     },
@@ -1148,7 +1114,7 @@
       "id": "galaxea_041",
       "family": "galaxea",
       "ok": true,
-      "elapsed": 46.32,
+      "elapsed": 28.8,
       "duration": 27.3,
       "pred": [
         [
@@ -1163,12 +1129,12 @@
         ],
         [
           11.0,
-          18.0,
+          17.5,
           "pick_yellow_test_tube"
         ],
         [
-          18.0,
-          23.5,
+          17.5,
+          23.0,
           "pour_yellow_test_tube"
         ]
       ],
@@ -1206,13 +1172,12 @@
       ],
       "warnings": [],
       "usage": {
-        "calls": 5,
-        "prompt_tokens": 9467,
-        "output_tokens": 3072,
+        "calls": 1,
+        "prompt_tokens": 3806,
+        "output_tokens": 3310,
         "retries": 0,
         "calls_by_stage": {
-          "segment": 1,
-          "subdivide": 4
+          "segment": 1
         }
       }
     },
@@ -1220,7 +1185,7 @@
       "id": "galaxea_043",
       "family": "galaxea",
       "ok": true,
-      "elapsed": 22.58,
+      "elapsed": 9.76,
       "duration": 9.17,
       "pred": [
         [
@@ -1248,13 +1213,12 @@
       ],
       "warnings": [],
       "usage": {
-        "calls": 3,
-        "prompt_tokens": 4424,
-        "output_tokens": 1348,
+        "calls": 1,
+        "prompt_tokens": 1638,
+        "output_tokens": 562,
         "retries": 0,
         "calls_by_stage": {
-          "segment": 1,
-          "subdivide": 2
+          "segment": 1
         }
       }
     },
@@ -1262,18 +1226,18 @@
       "id": "galaxea_045",
       "family": "galaxea",
       "ok": true,
-      "elapsed": 32.42,
+      "elapsed": 13.15,
       "duration": 12.63,
       "pred": [
         [
           0.0,
-          3.0,
+          3.5,
           "pick_cup"
         ],
         [
-          3.0,
+          3.5,
           7.5,
-          "pour_liquid"
+          "pour_liquid_into_tray"
         ],
         [
           7.5,
@@ -1300,13 +1264,12 @@
       ],
       "warnings": [],
       "usage": {
-        "calls": 4,
-        "prompt_tokens": 6929,
-        "output_tokens": 1993,
+        "calls": 1,
+        "prompt_tokens": 2739,
+        "output_tokens": 958,
         "retries": 0,
         "calls_by_stage": {
-          "segment": 1,
-          "subdivide": 3
+          "segment": 1
         }
       }
     },
@@ -1314,7 +1277,7 @@
       "id": "galaxea_047",
       "family": "galaxea",
       "ok": true,
-      "elapsed": 25.55,
+      "elapsed": 12.38,
       "duration": 13.43,
       "pred": [
         [
@@ -1324,11 +1287,11 @@
         ],
         [
           4.0,
-          9.0,
+          8.5,
           "pour_powder_into_tray"
         ],
         [
-          9.0,
+          8.5,
           11.0,
           "place_cup"
         ]
@@ -1352,13 +1315,12 @@
       ],
       "warnings": [],
       "usage": {
-        "calls": 3,
-        "prompt_tokens": 5503,
-        "output_tokens": 1479,
+        "calls": 1,
+        "prompt_tokens": 2740,
+        "output_tokens": 688,
         "retries": 0,
         "calls_by_stage": {
-          "segment": 1,
-          "subdivide": 2
+          "segment": 1
         }
       }
     },
@@ -1366,7 +1328,7 @@
       "id": "galaxea_049",
       "family": "galaxea",
       "ok": true,
-      "elapsed": 29.59,
+      "elapsed": 12.7,
       "duration": 13.17,
       "pred": [
         [
@@ -1404,13 +1366,12 @@
       ],
       "warnings": [],
       "usage": {
-        "calls": 3,
-        "prompt_tokens": 5494,
-        "output_tokens": 1488,
+        "calls": 1,
+        "prompt_tokens": 2740,
+        "output_tokens": 680,
         "retries": 0,
         "calls_by_stage": {
-          "segment": 1,
-          "subdivide": 2
+          "segment": 1
         }
       }
     },
@@ -1418,7 +1379,7 @@
       "id": "galaxea_050",
       "family": "galaxea",
       "ok": true,
-      "elapsed": 23.83,
+      "elapsed": 10.92,
       "duration": 12.9,
       "pred": [
         [
@@ -1428,11 +1389,11 @@
         ],
         [
           4.0,
-          8.5,
-          "pour_cup"
+          8.0,
+          "pour_into_tray"
         ],
         [
-          8.5,
+          8.0,
           11.5,
           "place_cup"
         ]
@@ -1456,13 +1417,12 @@
       ],
       "warnings": [],
       "usage": {
-        "calls": 4,
-        "prompt_tokens": 6912,
-        "output_tokens": 1893,
+        "calls": 1,
+        "prompt_tokens": 2740,
+        "output_tokens": 695,
         "retries": 0,
         "calls_by_stage": {
-          "segment": 1,
-          "subdivide": 3
+          "segment": 1
         }
       }
     },
@@ -1470,28 +1430,23 @@
       "id": "galaxea_052",
       "family": "galaxea",
       "ok": true,
-      "elapsed": 25.68,
+      "elapsed": 16.34,
       "duration": 13.5,
       "pred": [
         [
           0.0,
-          2.0,
+          2.5,
           "pick_cup"
         ],
         [
-          2.0,
+          2.5,
           6.0,
-          "pour_water_into_blue_cup"
+          "pour_water_into_cup"
         ],
         [
           6.0,
-          7.75,
-          "pick_cup"
-        ],
-        [
-          7.75,
           9.0,
-          "pour_water_into_white_cup"
+          "pour_water_into_cup"
         ],
         [
           9.0,
@@ -1523,13 +1478,12 @@
       ],
       "warnings": [],
       "usage": {
-        "calls": 4,
-        "prompt_tokens": 6934,
-        "output_tokens": 3163,
+        "calls": 1,
+        "prompt_tokens": 2738,
+        "output_tokens": 1722,
         "retries": 0,
         "calls_by_stage": {
-          "segment": 1,
-          "subdivide": 3
+          "segment": 1
         }
       }
     },
@@ -1537,7 +1491,7 @@
       "id": "galaxea_058",
       "family": "galaxea",
       "ok": true,
-      "elapsed": 27.68,
+      "elapsed": 12.79,
       "duration": 11.77,
       "pred": [
         [
@@ -1548,7 +1502,7 @@
         [
           3.5,
           9.0,
-          "place_banana_in_bowl"
+          "place_banana_on_bowl"
         ]
       ],
       "gold": [
@@ -1565,13 +1519,12 @@
       ],
       "warnings": [],
       "usage": {
-        "calls": 3,
-        "prompt_tokens": 5493,
-        "output_tokens": 1374,
+        "calls": 1,
+        "prompt_tokens": 2736,
+        "output_tokens": 788,
         "retries": 0,
         "calls_by_stage": {
-          "segment": 1,
-          "subdivide": 2
+          "segment": 1
         }
       }
     },
@@ -1579,7 +1532,7 @@
       "id": "galaxea_060",
       "family": "galaxea",
       "ok": true,
-      "elapsed": 21.48,
+      "elapsed": 8.52,
       "duration": 6.5,
       "pred": [
         [
@@ -1607,13 +1560,12 @@
       ],
       "warnings": [],
       "usage": {
-        "calls": 2,
-        "prompt_tokens": 2949,
-        "output_tokens": 1358,
+        "calls": 1,
+        "prompt_tokens": 1585,
+        "output_tokens": 698,
         "retries": 0,
         "calls_by_stage": {
-          "segment": 1,
-          "subdivide": 1
+          "segment": 1
         }
       }
     },
@@ -1621,7 +1573,7 @@
       "id": "galaxea_062",
       "family": "galaxea",
       "ok": true,
-      "elapsed": 20.66,
+      "elapsed": 11.84,
       "duration": 10.67,
       "pred": [
         [
@@ -1649,13 +1601,12 @@
       ],
       "warnings": [],
       "usage": {
-        "calls": 3,
-        "prompt_tokens": 5508,
-        "output_tokens": 1445,
+        "calls": 1,
+        "prompt_tokens": 2735,
+        "output_tokens": 544,
         "retries": 0,
         "calls_by_stage": {
-          "segment": 1,
-          "subdivide": 2
+          "segment": 1
         }
       }
     },
@@ -1663,7 +1614,7 @@
       "id": "galaxea_065",
       "family": "galaxea",
       "ok": true,
-      "elapsed": 4.98,
+      "elapsed": 7.16,
       "duration": 4.43,
       "pred": [
         [
@@ -1692,8 +1643,8 @@
       "warnings": [],
       "usage": {
         "calls": 1,
-        "prompt_tokens": 1578,
-        "output_tokens": 485,
+        "prompt_tokens": 1630,
+        "output_tokens": 598,
         "retries": 0,
         "calls_by_stage": {
           "segment": 1
@@ -1704,7 +1655,7 @@
       "id": "galaxea_067",
       "family": "galaxea",
       "ok": true,
-      "elapsed": 11.56,
+      "elapsed": 10.88,
       "duration": 6.63,
       "pred": [
         [
@@ -1715,7 +1666,7 @@
         [
           2.5,
           5.0,
-          "place_banana_in_bowl"
+          "place_banana_in_pink_bowl"
         ]
       ],
       "gold": [
@@ -1733,8 +1684,8 @@
       "warnings": [],
       "usage": {
         "calls": 1,
-        "prompt_tokens": 1533,
-        "output_tokens": 883,
+        "prompt_tokens": 1585,
+        "output_tokens": 1024,
         "retries": 0,
         "calls_by_stage": {
           "segment": 1
@@ -1745,7 +1696,7 @@
       "id": "galaxea_069",
       "family": "galaxea",
       "ok": true,
-      "elapsed": 18.2,
+      "elapsed": 8.56,
       "duration": 8.17,
       "pred": [
         [
@@ -1756,7 +1707,7 @@
         [
           3.0,
           5.5,
-          "place_banana_into_box"
+          "place_banana_in_box"
         ]
       ],
       "gold": [
@@ -1773,13 +1724,12 @@
       ],
       "warnings": [],
       "usage": {
-        "calls": 2,
-        "prompt_tokens": 2993,
-        "output_tokens": 1080,
+        "calls": 1,
+        "prompt_tokens": 1629,
+        "output_tokens": 647,
         "retries": 0,
         "calls_by_stage": {
-          "segment": 1,
-          "subdivide": 1
+          "segment": 1
         }
       }
     },
@@ -1787,16 +1737,16 @@
       "id": "galaxea_071",
       "family": "galaxea",
       "ok": true,
-      "elapsed": 7.08,
+      "elapsed": 6.72,
       "duration": 4.33,
       "pred": [
         [
           0.0,
-          1.5,
+          2.0,
           "pick_banana"
         ],
         [
-          1.5,
+          2.0,
           3.0,
           "place_banana_in_basket"
         ]
@@ -1816,8 +1766,8 @@
       "warnings": [],
       "usage": {
         "calls": 1,
-        "prompt_tokens": 1578,
-        "output_tokens": 1026,
+        "prompt_tokens": 1630,
+        "output_tokens": 741,
         "retries": 0,
         "calls_by_stage": {
           "segment": 1
@@ -1828,7 +1778,7 @@
       "id": "galaxea_073",
       "family": "galaxea",
       "ok": true,
-      "elapsed": 31.0,
+      "elapsed": 16.46,
       "duration": 14.87,
       "pred": [
         [
@@ -1856,13 +1806,12 @@
       ],
       "warnings": [],
       "usage": {
-        "calls": 3,
-        "prompt_tokens": 5510,
-        "output_tokens": 1681,
+        "calls": 1,
+        "prompt_tokens": 2735,
+        "output_tokens": 693,
         "retries": 0,
         "calls_by_stage": {
-          "segment": 1,
-          "subdivide": 2
+          "segment": 1
         }
       }
     },
@@ -1870,7 +1819,7 @@
       "id": "galaxea_075",
       "family": "galaxea",
       "ok": true,
-      "elapsed": 27.49,
+      "elapsed": 18.22,
       "duration": 13.4,
       "pred": [
         [
@@ -1898,13 +1847,12 @@
       ],
       "warnings": [],
       "usage": {
-        "calls": 3,
-        "prompt_tokens": 5496,
-        "output_tokens": 2296,
+        "calls": 1,
+        "prompt_tokens": 2735,
+        "output_tokens": 671,
         "retries": 0,
         "calls_by_stage": {
-          "segment": 1,
-          "subdivide": 2
+          "segment": 1
         }
       }
     },
@@ -1913,7 +1861,7 @@
       "family": "homer",
       "ok": false,
       "error": "LLMError: segment failed after 4 attempts: segment: model returned no content (finish=[])",
-      "trace": ", CoarseSegments,\n             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/Users/finnmetz/Documents/rando_projects/Manda/robot-episode-labeler/src/rel/annotation/llm.py\", line 189, in json\n    raise LLMError(f\"{stage} failed after {self.max_retries} attempts: {last}\") from last\nrel.annotation.llm.LLMError: segment failed after 4 attempts: segment: model returned no content (finish=[])\n",
+      "trace": ", CoarseSegments,\n             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/Users/finnmetz/Documents/rando_projects/Manda/robot-episode-labeler/src/rel/annotation/llm.py\", line 237, in json\n    raise LLMError(f\"{stage} failed after {self.max_retries} attempts: {last}\") from last\nrel.annotation.llm.LLMError: segment failed after 4 attempts: segment: model returned no content (finish=[])\n",
       "gold": [
         [
           0.0,
@@ -2018,7 +1966,7 @@
       ],
       "usage": {
         "calls": 4,
-        "prompt_tokens": 2200,
+        "prompt_tokens": 2408,
         "output_tokens": 0,
         "retries": 3,
         "calls_by_stage": {
@@ -2030,23 +1978,28 @@
       "id": "homer_10",
       "family": "homer",
       "ok": true,
-      "elapsed": 143.95,
+      "elapsed": 85.43,
       "duration": 120.83,
       "pred": [
         [
           0.0,
-          17.5,
+          18.0,
           "wipe_countertop"
         ],
         [
-          17.5,
-          43.0,
+          18.0,
+          20.0,
+          "wipe_stovetop"
+        ],
+        [
+          20.0,
+          42.5,
           "wipe_table"
         ],
         [
-          43.0,
+          42.5,
           46.5,
-          "move_placemat"
+          "wipe_under_placemat"
         ],
         [
           46.5,
@@ -2118,13 +2071,12 @@
       ],
       "warnings": [],
       "usage": {
-        "calls": 9,
-        "prompt_tokens": 26546,
-        "output_tokens": 7698,
+        "calls": 3,
+        "prompt_tokens": 18135,
+        "output_tokens": 4363,
         "retries": 0,
         "calls_by_stage": {
-          "segment": 3,
-          "subdivide": 6
+          "segment": 3
         }
       }
     },
@@ -2132,141 +2084,71 @@
       "id": "homer_11",
       "family": "homer",
       "ok": true,
-      "elapsed": 129.05,
+      "elapsed": 61.57,
       "duration": 131.69,
       "pred": [
         [
           0.0,
-          3.0,
-          "pick_jar"
-        ],
-        [
-          3.0,
-          6.5,
+          7.0,
           "open_jar"
         ],
         [
-          6.5,
-          12.5,
+          7.0,
+          13.5,
           "close_jar"
         ],
         [
-          12.5,
-          14.0,
-          "place_jar"
-        ],
-        [
-          14.0,
-          15.5,
-          "pick_jar"
-        ],
-        [
-          15.5,
+          13.5,
           18.0,
           "open_jar"
         ],
         [
           18.0,
-          23.0,
+          23.5,
           "close_jar"
         ],
         [
-          23.0,
-          24.5,
-          "place_jar"
-        ],
-        [
-          24.5,
-          26.0,
-          "pick_jar"
-        ],
-        [
-          26.0,
+          23.5,
           28.5,
           "open_jar"
         ],
         [
           28.5,
-          33.5,
+          34.0,
           "close_jar"
         ],
         [
-          33.5,
-          35.0,
-          "place_jar"
-        ],
-        [
-          35.0,
-          37.0,
-          "pick_bottle"
-        ],
-        [
-          37.0,
-          41.75,
+          34.0,
+          42.5,
           "open_bottle"
         ],
         [
-          41.75,
-          43.0,
-          "inspect_bottle"
-        ],
-        [
-          43.0,
-          49.0,
+          42.5,
+          50.0,
           "close_bottle"
         ],
         [
-          49.0,
           50.0,
-          "place_bottle"
+          60.0,
+          "open_container"
         ],
         [
-          50.0,
-          51.5,
-          "open_jar"
-        ],
-        [
-          51.5,
-          53.5,
-          "close_jar"
-        ],
-        [
-          53.5,
-          54.5,
-          "pick_jar"
-        ],
-        [
-          54.5,
-          59.75,
-          "open_jar"
-        ],
-        [
-          59.75,
-          63.54,
-          "open_jar"
-        ],
-        [
-          63.54,
+          60.0,
           68.5,
-          "inspect_jar"
+          "inspect_container"
         ],
         [
           68.5,
-          76.0,
-          "close_jar"
+          75.5,
+          "close_container"
         ],
         [
-          76.0,
-          78.71,
+          75.5,
+          83.0,
           "open_jar"
         ],
         [
-          78.71,
-          82.5,
-          "open_jar"
-        ],
-        [
-          82.5,
+          83.0,
           89.0,
           "inspect_jar"
         ],
@@ -2287,16 +2169,11 @@
         ],
         [
           104.5,
-          108.5,
+          109.5,
           "close_jar"
         ],
         [
-          108.5,
-          110.0,
-          "place_jar"
-        ],
-        [
-          110.0,
+          109.5,
           112.5,
           "open_jar"
         ],
@@ -2307,16 +2184,11 @@
         ],
         [
           115.0,
-          118.0,
+          118.5,
           "close_jar"
         ],
         [
-          118.0,
-          119.0,
-          "place_jar"
-        ],
-        [
-          119.0,
+          118.5,
           121.5,
           "open_jar"
         ],
@@ -2327,13 +2199,8 @@
         ],
         [
           124.5,
-          128.5,
+          130.0,
           "close_jar"
-        ],
-        [
-          128.5,
-          130.5,
-          "place_jar"
         ]
       ],
       "gold": [
@@ -2544,19 +2411,16 @@
         ]
       ],
       "warnings": [
-        "trimmed 1.50s overlap between 'place_bottle' and 'open_jar'",
-        "trimmed 8.50s overlap between 'open_jar' and 'close_jar'",
-        "trimmed 0.50s overlap between 'inspect_jar' and 'close_jar'",
-        "trimmed 0.50s overlap between 'close_jar' and 'place_jar'"
+        "trimmed 1.00s overlap between 'close_bottle' and 'open_container'",
+        "trimmed 0.50s overlap between 'inspect_jar' and 'close_jar'"
       ],
       "usage": {
-        "calls": 24,
-        "prompt_tokens": 49204,
-        "output_tokens": 28256,
+        "calls": 3,
+        "prompt_tokens": 19597,
+        "output_tokens": 7010,
         "retries": 0,
         "calls_by_stage": {
-          "segment": 3,
-          "subdivide": 21
+          "segment": 3
         }
       }
     },
@@ -2564,178 +2428,163 @@
       "id": "homer_12",
       "family": "homer",
       "ok": true,
-      "elapsed": 136.93,
+      "elapsed": 48.29,
       "duration": 124.66,
       "pred": [
         [
           0.0,
-          4.5,
+          4.0,
           "open_blue_container"
         ],
         [
-          4.5,
-          5.85,
+          4.0,
+          6.0,
           "close_blue_container"
         ],
         [
-          5.85,
-          8.29,
+          6.0,
+          8.0,
           "open_blue_container"
         ],
         [
-          8.29,
-          9.92,
+          8.0,
+          10.5,
           "close_blue_container"
         ],
         [
-          9.92,
-          11.0,
-          "move_blue_container"
-        ],
-        [
-          11.0,
-          16.0,
+          10.5,
+          15.5,
           "open_coffee_jar"
         ],
         [
-          16.0,
-          20.0,
+          15.5,
+          20.5,
           "close_coffee_jar"
         ],
         [
-          20.0,
-          21.5,
-          "place_coffee_jar"
-        ],
-        [
-          21.5,
-          25.5,
+          20.5,
+          25.0,
           "open_glass_jar"
         ],
         [
-          25.5,
-          29.0,
+          25.0,
+          28.5,
           "close_glass_jar"
         ],
         [
-          29.0,
-          34.0,
-          "open_orange_container"
+          28.5,
+          33.5,
+          "open_plastic_jar"
         ],
         [
-          34.0,
-          38.5,
-          "close_orange_container"
+          33.5,
+          38.0,
+          "close_plastic_jar"
         ],
         [
-          38.5,
-          42.0,
-          "open_plastic_box"
+          38.0,
+          41.5,
+          "open_blue_lid_container"
         ],
         [
-          42.0,
+          41.5,
+          45.5,
+          "close_blue_lid_container"
+        ],
+        [
+          45.5,
+          47.0,
+          "open_blue_lid_container"
+        ],
+        [
+          47.0,
           50.0,
-          "close_plastic_box"
+          "close_blue_lid_container"
         ],
         [
           50.0,
-          50.75,
-          "close_blue_container"
-        ],
-        [
-          50.75,
           53.5,
-          "open_metal_container"
+          "open_steel_container"
         ],
         [
           53.5,
-          57.0,
-          "close_metal_container"
+          57.5,
+          "close_steel_container"
         ],
         [
-          57.0,
-          58.5,
-          "open_metal_container"
-        ],
-        [
-          58.5,
+          57.5,
           60.5,
-          "close_metal_container"
+          "open_steel_container"
         ],
         [
           60.5,
           67.5,
-          "open_bottle"
+          "open_clear_bottle"
         ],
         [
           67.5,
-          72.5,
-          "close_bottle"
+          72.0,
+          "close_clear_bottle"
         ],
         [
-          72.5,
-          77.5,
+          72.0,
+          78.0,
           "open_green_bottle"
         ],
         [
-          77.5,
-          78.5,
-          "inspect_green_bottle"
-        ],
-        [
-          78.5,
-          83.5,
+          78.0,
+          83.0,
           "close_green_bottle"
         ],
         [
-          83.5,
+          83.0,
           87.0,
           "open_blue_container"
         ],
         [
           87.0,
-          90.5,
+          89.5,
           "close_blue_container"
         ],
         [
-          90.5,
+          89.5,
           94.0,
           "open_plastic_container"
         ],
         [
           94.0,
-          98.5,
+          98.0,
           "close_plastic_container"
         ],
         [
-          98.5,
+          98.0,
           104.5,
-          "open_jar"
+          "open_glass_jar"
         ],
         [
           104.5,
-          109.5,
-          "close_jar"
+          108.5,
+          "close_glass_jar"
         ],
         [
-          109.5,
+          108.5,
           114.0,
-          "open_jar"
+          "open_coffee_jar"
         ],
         [
           114.0,
-          119.5,
-          "close_jar"
+          118.0,
+          "close_coffee_jar"
         ],
         [
-          119.5,
+          118.0,
           121.5,
-          "open_container"
+          "open_metal_container"
         ],
         [
           121.5,
           124.0,
-          "close_container"
+          "close_metal_container"
         ]
       ],
       "gold": [
@@ -3031,18 +2880,17 @@
         ]
       ],
       "warnings": [
-        "trimmed 0.50s overlap between 'close_plastic_box' and 'close_blue_container'",
-        "trimmed 4.50s overlap between 'close_metal_container' and 'open_metal_container'",
-        "trimmed 0.50s overlap between 'open_jar' and 'close_jar'"
+        "trimmed 0.50s overlap between 'close_blue_lid_container' and 'open_steel_container'",
+        "trimmed 4.00s overlap between 'close_steel_container' and 'open_steel_container'",
+        "trimmed 0.50s overlap between 'close_glass_jar' and 'open_coffee_jar'"
       ],
       "usage": {
-        "calls": 27,
-        "prompt_tokens": 52257,
-        "output_tokens": 30586,
+        "calls": 3,
+        "prompt_tokens": 18498,
+        "output_tokens": 9675,
         "retries": 0,
         "calls_by_stage": {
-          "segment": 3,
-          "subdivide": 24
+          "segment": 3
         }
       }
     },
@@ -3050,13 +2898,13 @@
       "id": "homer_15",
       "family": "homer",
       "ok": true,
-      "elapsed": 98.35,
+      "elapsed": 44.67,
       "duration": 132.3,
       "pred": [
         [
           0.0,
           7.0,
-          "spread_cloth"
+          "unfold_cloth"
         ],
         [
           7.0,
@@ -3071,22 +2919,57 @@
         [
           29.5,
           39.5,
-          "spread_cloth"
+          "unfold_cloth"
         ],
         [
           39.5,
-          58.04,
-          "fold_patterned_cloth"
+          46.5,
+          "fold_cloth"
         ],
         [
-          58.04,
-          95.12,
-          "fold_blue_towel"
+          46.5,
+          50.0,
+          "unfold_cloth"
         ],
         [
-          95.12,
-          128.5,
-          "fold_striped_towel"
+          50.0,
+          58.0,
+          "fold_cloth"
+        ],
+        [
+          58.0,
+          61.5,
+          "place_cloth"
+        ],
+        [
+          61.5,
+          69.5,
+          "unfold_cloth"
+        ],
+        [
+          69.5,
+          92.5,
+          "fold_cloth"
+        ],
+        [
+          92.5,
+          98.0,
+          "place_cloth"
+        ],
+        [
+          98.0,
+          103.0,
+          "place_cloth"
+        ],
+        [
+          103.0,
+          111.0,
+          "spread_cloth"
+        ],
+        [
+          111.0,
+          122.0,
+          "fold_cloth"
         ]
       ],
       "gold": [
@@ -3221,15 +3104,17 @@
           "lift the folded green striped cloth and move it to the right"
         ]
       ],
-      "warnings": [],
+      "warnings": [
+        "trimmed 0.50s overlap between 'unfold_cloth' and 'fold_cloth'",
+        "trimmed 0.50s overlap between 'fold_cloth' and 'place_cloth'"
+      ],
       "usage": {
-        "calls": 8,
-        "prompt_tokens": 26455,
-        "output_tokens": 13982,
+        "calls": 3,
+        "prompt_tokens": 19567,
+        "output_tokens": 7170,
         "retries": 0,
         "calls_by_stage": {
-          "segment": 3,
-          "subdivide": 5
+          "segment": 3
         }
       }
     },
@@ -3237,7 +3122,7 @@
       "id": "homer_2",
       "family": "homer",
       "ok": true,
-      "elapsed": 116.12,
+      "elapsed": 60.86,
       "duration": 154.2,
       "pred": [
         [
@@ -3247,118 +3132,98 @@
         ],
         [
           2.5,
-          6.85,
-          "wet_sponge"
-        ],
-        [
-          6.85,
           12.0,
           "apply_soap_to_sponge"
         ],
         [
           12.0,
-          20.0,
+          19.5,
           "lather_sponge"
         ],
         [
-          20.0,
+          19.5,
           30.5,
-          "wash_cutlery"
+          "wash_spoon"
         ],
         [
           30.5,
-          34.56,
-          "scrub_glass_cup"
-        ],
-        [
-          34.56,
-          37.38,
-          "rinse_sponge"
-        ],
-        [
-          37.38,
           38.0,
-          "scrub_glass_cup"
+          "scrub_glass"
         ],
         [
           38.0,
+          44.5,
+          "rinse_glass"
+        ],
+        [
+          44.5,
           47.0,
-          "rinse_glass_cup"
+          "place_glass_on_rack"
         ],
         [
           47.0,
           56.0,
-          "scrub_black_mug"
+          "scrub_mug"
         ],
         [
           56.0,
-          60.5,
-          "rinse_black_mug"
+          61.5,
+          "rinse_mug"
         ],
         [
-          60.5,
-          62.5,
-          "place_black_mug"
+          61.5,
+          69.5,
+          "scrub_glass"
         ],
         [
-          62.5,
-          71.0,
-          "scrub_glass_cup"
+          69.5,
+          82.5,
+          "rinse_glass"
         ],
         [
-          71.0,
-          81.0,
-          "rinse_glass_cup"
+          82.5,
+          98.5,
+          "scrub_saucer"
         ],
         [
-          81.0,
-          83.0,
-          "place_glass_cup"
+          98.5,
+          110.5,
+          "scrub_bowl"
         ],
         [
-          83.0,
-          89.5,
-          "scrub_small_plate"
-        ],
-        [
-          89.5,
-          98.0,
-          "rinse_small_plate"
-        ],
-        [
-          98.0,
-          99.5,
-          "place_small_plate"
-        ],
-        [
-          99.5,
+          110.5,
           116.0,
-          "scrub_glass_bowl"
+          "rinse_bowl"
         ],
         [
           116.0,
-          134.0,
-          "scrub_rice_paddle"
+          124.0,
+          "scrub_spoon"
         ],
         [
-          134.0,
-          141.0,
+          124.0,
+          134.5,
+          "rinse_spoon"
+        ],
+        [
+          134.5,
+          141.5,
           "scrub_sink"
         ],
         [
-          141.0,
-          145.6,
+          141.5,
+          145.0,
           "rinse_sponge"
         ],
         [
-          145.6,
-          149.5,
-          "rinse_hands"
+          145.0,
+          151.0,
+          "wash_hands"
         ],
         [
-          149.5,
+          151.0,
           151.5,
-          "turn_off_tap"
+          "turn_off_faucet"
         ]
       ],
       "gold": [
@@ -3515,13 +3380,12 @@
       ],
       "warnings": [],
       "usage": {
-        "calls": 18,
-        "prompt_tokens": 42856,
-        "output_tokens": 16788,
+        "calls": 3,
+        "prompt_tokens": 21781,
+        "output_tokens": 9259,
         "retries": 0,
         "calls_by_stage": {
-          "segment": 3,
-          "subdivide": 15
+          "segment": 3
         }
       }
     },
@@ -3529,53 +3393,43 @@
       "id": "homer_29",
       "family": "homer",
       "ok": true,
-      "elapsed": 34.18,
+      "elapsed": 31.59,
       "duration": 84.93,
       "pred": [
         [
           0.0,
-          2.0,
-          "adjust_cutting_board"
+          1.5,
+          "place_cutting_board"
         ],
         [
-          2.0,
-          29.5,
+          1.5,
+          2.5,
+          "pick_onion_and_knife"
+        ],
+        [
+          2.5,
+          30.0,
           "peel_onion"
         ],
         [
-          29.5,
-          31.0,
-          "place_onion_on_cutting_board"
-        ],
-        [
-          31.0,
+          30.0,
           37.0,
-          "dispose_onion_peel"
+          "throw_onion_peels_in_trash"
         ],
         [
           37.0,
-          39.75,
-          "pick_onion"
+          40.0,
+          "no_completed_subtask"
         ],
         [
-          39.75,
-          40.5,
-          "pick_knife"
-        ],
-        [
-          40.5,
+          40.0,
           74.0,
-          "cut_onion"
+          "dice_onion"
         ],
         [
           74.0,
-          77.0,
-          "lift_cutting_board"
-        ],
-        [
-          77.0,
           82.0,
-          "scrape_onion_into_bowl"
+          "transfer_onion_to_bowl"
         ],
         [
           82.0,
@@ -3652,13 +3506,12 @@
       ],
       "warnings": [],
       "usage": {
-        "calls": 8,
-        "prompt_tokens": 20618,
-        "output_tokens": 7022,
+        "calls": 2,
+        "prompt_tokens": 12277,
+        "output_tokens": 4918,
         "retries": 0,
         "calls_by_stage": {
-          "segment": 2,
-          "subdivide": 6
+          "segment": 2
         }
       }
     },
@@ -3666,11 +3519,16 @@
       "id": "homer_3",
       "family": "homer",
       "ok": true,
-      "elapsed": 32.92,
+      "elapsed": 26.08,
       "duration": 137.49,
       "pred": [
         [
           0.0,
+          2.0,
+          "adjust_bowl"
+        ],
+        [
+          2.0,
           9.0,
           "pour_powder_into_bowl"
         ],
@@ -3682,12 +3540,12 @@
         [
           18.0,
           20.5,
-          "pick_up_spoon"
+          "pick_spoon"
         ],
         [
           20.5,
           133.0,
-          "stir_contents_in_bowl"
+          "stir_contents"
         ]
       ],
       "gold": [
@@ -3739,13 +3597,12 @@
       ],
       "warnings": [],
       "usage": {
-        "calls": 6,
-        "prompt_tokens": 23161,
-        "output_tokens": 5586,
+        "calls": 3,
+        "prompt_tokens": 19042,
+        "output_tokens": 3384,
         "retries": 0,
         "calls_by_stage": {
-          "segment": 3,
-          "subdivide": 3
+          "segment": 3
         }
       }
     },
@@ -3753,33 +3610,38 @@
       "id": "homer_33",
       "family": "homer",
       "ok": true,
-      "elapsed": 52.55,
+      "elapsed": 26.32,
       "duration": 72.23,
       "pred": [
         [
           0.0,
-          3.75,
+          3.5,
           "pick_knife"
         ],
         [
-          3.75,
-          5.0,
+          3.5,
+          5.5,
           "pick_onion"
         ],
         [
-          5.0,
-          42.0,
+          5.5,
+          17.5,
+          "cut_onion_end"
+        ],
+        [
+          17.5,
+          41.5,
           "peel_onion"
         ],
         [
-          42.0,
+          41.5,
           48.0,
           "cut_onion_in_half"
         ],
         [
           48.0,
           50.0,
-          "position_onion_half"
+          "place_onion_half"
         ],
         [
           50.0,
@@ -3835,16 +3697,15 @@
         ]
       ],
       "warnings": [
-        "trimmed 0.50s overlap between 'position_onion_half' and 'slice_onion'"
+        "trimmed 0.50s overlap between 'place_onion_half' and 'slice_onion'"
       ],
       "usage": {
-        "calls": 7,
-        "prompt_tokens": 18120,
-        "output_tokens": 4805,
+        "calls": 2,
+        "prompt_tokens": 11178,
+        "output_tokens": 3444,
         "retries": 0,
         "calls_by_stage": {
-          "segment": 2,
-          "subdivide": 5
+          "segment": 2
         }
       }
     },
@@ -3852,31 +3713,21 @@
       "id": "homer_37",
       "family": "homer",
       "ok": true,
-      "elapsed": 43.18,
+      "elapsed": 22.14,
       "duration": 66.13,
       "pred": [
         [
           0.0,
-          11.0,
+          15.0,
           "slice_tomato"
         ],
         [
-          11.0,
-          24.5,
-          "dice_tomato"
+          15.0,
+          62.0,
+          "dice_tomato_slice"
         ],
         [
-          24.5,
-          33.0,
-          "slice_tomato"
-        ],
-        [
-          33.0,
-          62.5,
-          "dice_tomato"
-        ],
-        [
-          62.5,
+          62.0,
           64.0,
           "place_tomato_in_bowl"
         ]
@@ -3915,13 +3766,12 @@
       ],
       "warnings": [],
       "usage": {
-        "calls": 6,
-        "prompt_tokens": 15607,
-        "output_tokens": 3971,
+        "calls": 2,
+        "prompt_tokens": 10040,
+        "output_tokens": 2782,
         "retries": 0,
         "calls_by_stage": {
-          "segment": 2,
-          "subdivide": 4
+          "segment": 2
         }
       }
     },
@@ -3929,7 +3779,7 @@
       "id": "homer_38",
       "family": "homer",
       "ok": true,
-      "elapsed": 71.85,
+      "elapsed": 42.65,
       "duration": 90.79,
       "pred": [
         [
@@ -3939,58 +3789,28 @@
         ],
         [
           1.5,
-          8.58,
-          "place_plate"
+          18.0,
+          "place_plates_on_table"
         ],
         [
-          8.58,
-          12.12,
-          "place_plate"
-        ],
-        [
-          12.12,
-          15.67,
-          "place_plate"
-        ],
-        [
-          15.67,
-          18.5,
-          "place_plate"
-        ],
-        [
-          18.5,
-          25.0,
+          18.0,
+          25.5,
           "pick_glasses"
         ],
         [
-          25.0,
-          34.62,
-          "place_glass"
-        ],
-        [
-          34.62,
+          25.5,
           41.5,
-          "place_glass"
+          "place_glasses_on_table"
         ],
         [
           41.5,
-          49.5,
+          50.0,
           "open_drawer"
         ],
         [
-          49.5,
-          51.44,
-          "open_drawer"
-        ],
-        [
-          51.44,
-          58.54,
-          "pick_knife"
-        ],
-        [
-          58.54,
+          50.0,
           65.0,
-          "pick_fork"
+          "pick_cutlery"
         ],
         [
           65.0,
@@ -3999,21 +3819,6 @@
         ],
         [
           66.5,
-          75.88,
-          "place_cutlery"
-        ],
-        [
-          75.88,
-          80.56,
-          "place_cutlery"
-        ],
-        [
-          80.56,
-          84.31,
-          "place_cutlery"
-        ],
-        [
-          84.31,
           89.0,
           "place_cutlery"
         ]
@@ -4117,13 +3922,12 @@
       ],
       "warnings": [],
       "usage": {
-        "calls": 8,
-        "prompt_tokens": 21742,
-        "output_tokens": 13776,
+        "calls": 2,
+        "prompt_tokens": 13381,
+        "output_tokens": 4815,
         "retries": 0,
         "calls_by_stage": {
-          "segment": 2,
-          "subdivide": 6
+          "segment": 2
         }
       }
     },
@@ -4131,26 +3935,16 @@
       "id": "homer_39",
       "family": "homer",
       "ok": true,
-      "elapsed": 59.86,
+      "elapsed": 34.34,
       "duration": 61.13,
       "pred": [
         [
           0.0,
-          43.5,
+          52.0,
           "wipe_countertop"
         ],
         [
-          43.5,
-          50.0,
-          "wipe_stovetop"
-        ],
-        [
-          50.0,
-          52.5,
-          "wipe_countertop"
-        ],
-        [
-          52.5,
+          52.0,
           56.5,
           "fold_cloth"
         ],
@@ -4343,17 +4137,15 @@
         ]
       ],
       "warnings": [
-        "trimmed 2.50s overlap between 'wipe_stovetop' and 'wipe_countertop'",
-        "trimmed 8.00s overlap between 'wipe_countertop' and 'fold_cloth'"
+        "trimmed 8.50s overlap between 'wipe_countertop' and 'fold_cloth'"
       ],
       "usage": {
-        "calls": 7,
-        "prompt_tokens": 17040,
-        "output_tokens": 5291,
+        "calls": 2,
+        "prompt_tokens": 10087,
+        "output_tokens": 4267,
         "retries": 0,
         "calls_by_stage": {
-          "segment": 2,
-          "subdivide": 5
+          "segment": 2
         }
       }
     },
@@ -4361,28 +4153,28 @@
       "id": "homer_4",
       "family": "homer",
       "ok": true,
-      "elapsed": 94.63,
+      "elapsed": 42.3,
       "duration": 130.03,
       "pred": [
         [
           0.0,
-          10.0,
+          9.0,
           "wipe_table_top"
         ],
         [
-          10.0,
+          9.0,
           23.5,
-          "wipe_drawer_front"
+          "wipe_table_front"
         ],
         [
           23.5,
-          26.0,
+          25.5,
           "open_drawer"
         ],
         [
-          26.0,
+          25.5,
           45.0,
-          "wipe_drawer_interior"
+          "wipe_inside_drawer"
         ],
         [
           45.0,
@@ -4396,31 +4188,36 @@
         ],
         [
           50.0,
-          53.56,
-          "wipe_table"
-        ],
-        [
-          53.56,
-          59.5,
+          60.0,
           "fold_cloth"
         ],
         [
-          59.5,
+          60.0,
           65.0,
           "wipe_table"
         ],
         [
           65.0,
-          87.0,
+          78.5,
           "wipe_drawer"
         ],
         [
+          78.5,
           87.0,
-          99.5,
+          "wipe_handle"
+        ],
+        [
+          87.0,
+          95.0,
+          "wipe_table"
+        ],
+        [
+          95.0,
+          100.0,
           "fold_cloth"
         ],
         [
-          99.5,
+          100.0,
           129.5,
           "wipe_table"
         ]
@@ -4503,16 +4300,15 @@
         ]
       ],
       "warnings": [
-        "trimmed 4.00s overlap between 'wipe_table_top' and 'wipe_table'"
+        "trimmed 4.00s overlap between 'wipe_table_top' and 'fold_cloth'"
       ],
       "usage": {
-        "calls": 12,
-        "prompt_tokens": 31076,
-        "output_tokens": 9607,
+        "calls": 3,
+        "prompt_tokens": 18478,
+        "output_tokens": 6485,
         "retries": 0,
         "calls_by_stage": {
-          "segment": 3,
-          "subdivide": 9
+          "segment": 3
         }
       }
     },
@@ -4520,38 +4316,23 @@
       "id": "homer_40",
       "family": "homer",
       "ok": true,
-      "elapsed": 39.41,
+      "elapsed": 22.44,
       "duration": 61.51,
       "pred": [
         [
           0.0,
-          1.25,
-          "pick_spray_bottle"
-        ],
-        [
-          1.25,
-          3.0,
+          3.5,
           "spray_table"
         ],
         [
-          3.0,
-          28.5,
+          3.5,
+          28.0,
           "wipe_table"
         ],
         [
-          28.5,
-          30.75,
-          "pick_spray_bottle_and_cloth"
-        ],
-        [
-          30.75,
-          33.25,
-          "spray_table"
-        ],
-        [
-          33.25,
+          28.0,
           34.0,
-          "wipe_table"
+          "spray_table"
         ],
         [
           34.0,
@@ -4560,18 +4341,13 @@
         ],
         [
           56.5,
-          57.0,
+          57.5,
           "place_spray_bottle"
         ],
         [
-          57.0,
           57.5,
-          "place_cloth"
-        ],
-        [
-          57.5,
-          59.0,
-          "wipe_table"
+          59.5,
+          "fold_cloth"
         ]
       ],
       "gold": [
@@ -4642,18 +4418,15 @@
         ]
       ],
       "warnings": [
-        "trimmed 0.50s overlap between 'wipe_table' and 'place_spray_bottle'",
-        "trimmed 0.50s overlap between 'place_spray_bottle' and 'place_cloth'",
-        "trimmed 2.00s overlap between 'place_cloth' and 'wipe_table'"
+        "trimmed 1.50s overlap between 'wipe_table' and 'fold_cloth'"
       ],
       "usage": {
-        "calls": 6,
-        "prompt_tokens": 15638,
-        "output_tokens": 7323,
+        "calls": 2,
+        "prompt_tokens": 10086,
+        "output_tokens": 2428,
         "retries": 0,
         "calls_by_stage": {
-          "segment": 2,
-          "subdivide": 4
+          "segment": 2
         }
       }
     },
@@ -4661,7 +4434,7 @@
       "id": "homer_41",
       "family": "homer",
       "ok": true,
-      "elapsed": 56.24,
+      "elapsed": 15.55,
       "duration": 54.3,
       "pred": [
         [
@@ -4676,11 +4449,11 @@
         ],
         [
           15.0,
-          20.5,
+          20.0,
           "pick_bottle"
         ],
         [
-          20.5,
+          20.0,
           26.0,
           "place_bottle_on_stove"
         ],
@@ -4734,13 +4507,12 @@
       ],
       "warnings": [],
       "usage": {
-        "calls": 7,
-        "prompt_tokens": 15610,
-        "output_tokens": 5576,
+        "calls": 1,
+        "prompt_tokens": 7149,
+        "output_tokens": 2153,
         "retries": 0,
         "calls_by_stage": {
-          "segment": 1,
-          "subdivide": 6
+          "segment": 1
         }
       }
     },
@@ -4748,48 +4520,38 @@
       "id": "homer_48",
       "family": "homer",
       "ok": true,
-      "elapsed": 62.37,
+      "elapsed": 16.9,
       "duration": 55.99,
       "pred": [
         [
           0.0,
-          2.25,
-          "pick_green_container"
-        ],
-        [
-          2.25,
           4.5,
           "place_green_container"
         ],
         [
           4.5,
-          8.5,
-          "stack_green_container"
-        ],
-        [
-          8.5,
           9.0,
           "stack_green_container"
         ],
         [
           9.0,
-          13.5,
+          14.0,
           "stack_green_container"
         ],
         [
-          13.5,
+          14.0,
           18.0,
-          "place_clear_container"
+          "place_plastic_container"
         ],
         [
           18.0,
           22.0,
-          "stack_clear_container"
+          "stack_plastic_container"
         ],
         [
           22.0,
           27.5,
-          "stack_clear_container"
+          "stack_plastic_container"
         ],
         [
           27.5,
@@ -4798,43 +4560,23 @@
         ],
         [
           33.0,
-          35.25,
-          "pick_clear_container"
+          38.0,
+          "place_plastic_container"
         ],
         [
-          35.25,
-          38.5,
-          "place_clear_container"
+          38.0,
+          46.5,
+          "place_round_container"
         ],
         [
-          38.5,
-          44.44,
-          "open_round_container"
-        ],
-        [
-          44.44,
-          46.0,
-          "pick_plastic_container"
-        ],
-        [
-          46.0,
-          49.5,
-          "stack_orange_container"
-        ],
-        [
-          49.5,
+          46.5,
           50.0,
-          "stack_jar"
+          "stack_round_container"
         ],
         [
           50.0,
-          52.0,
-          "pick_jar"
-        ],
-        [
-          52.0,
           54.0,
-          "stack_jar"
+          "stack_round_container"
         ]
       ],
       "gold": [
@@ -4976,13 +4718,12 @@
       ],
       "warnings": [],
       "usage": {
-        "calls": 12,
-        "prompt_tokens": 22504,
-        "output_tokens": 14824,
+        "calls": 1,
+        "prompt_tokens": 7104,
+        "output_tokens": 2197,
         "retries": 0,
         "calls_by_stage": {
-          "segment": 1,
-          "subdivide": 11
+          "segment": 1
         }
       }
     },
@@ -4990,73 +4731,53 @@
       "id": "homer_5",
       "family": "homer",
       "ok": true,
-      "elapsed": 216.19,
+      "elapsed": 68.82,
       "duration": 129.47,
       "pred": [
         [
           0.0,
           5.0,
-          "dust_top_shelf"
+          "wipe_top_shelf"
         ],
         [
           5.0,
           13.0,
-          "dust_bottom_shelf"
+          "wipe_lower_shelf"
         ],
         [
           13.0,
-          26.0,
-          "dust_top_shelf"
+          29.0,
+          "wipe_top_shelf"
         ],
         [
-          26.0,
-          27.88,
-          "dust_top_shelf"
+          29.0,
+          45.0,
+          "wipe_lower_shelf"
         ],
         [
-          27.88,
-          48.5,
-          "dust_bottom_shelf"
+          45.0,
+          68.5,
+          "wipe_top_shelf"
         ],
         [
-          48.5,
-          65.58,
-          "dust_top_shelf"
-        ],
-        [
-          65.58,
-          69.0,
-          "dust_middle_shelf"
-        ],
-        [
-          69.0,
+          68.5,
           74.0,
-          "dust_bottom_shelf"
+          "wipe_middle_shelf"
         ],
         [
           74.0,
           91.5,
-          "dust_top_shelf"
+          "wipe_top_shelf"
         ],
         [
           91.5,
           100.0,
-          "dust_bottom_shelf"
+          "wipe_middle_shelf"
         ],
         [
           100.0,
-          107.12,
-          "dust_lower_shelf"
-        ],
-        [
-          107.12,
-          107.5,
-          "dust_top_shelf"
-        ],
-        [
-          107.5,
           129.0,
-          "dust_top_surface"
+          "wipe_top_shelf"
         ]
       ],
       "gold": [
@@ -5112,17 +4833,15 @@
         ]
       ],
       "warnings": [
-        "trimmed 7.50s overlap between 'dust_bottom_shelf' and 'dust_lower_shelf'",
-        "trimmed 2.00s overlap between 'dust_top_shelf' and 'dust_top_surface'"
+        "trimmed 7.50s overlap between 'wipe_middle_shelf' and 'wipe_top_shelf'"
       ],
       "usage": {
-        "calls": 13,
-        "prompt_tokens": 32523,
-        "output_tokens": 13257,
+        "calls": 3,
+        "prompt_tokens": 18113,
+        "output_tokens": 6769,
         "retries": 0,
         "calls_by_stage": {
-          "segment": 3,
-          "subdivide": 10
+          "segment": 3
         }
       }
     },
@@ -5130,7 +4849,7 @@
       "id": "homer_50",
       "family": "homer",
       "ok": true,
-      "elapsed": 50.1,
+      "elapsed": 14.18,
       "duration": 46.48,
       "pred": [
         [
@@ -5140,11 +4859,11 @@
         ],
         [
           4.0,
-          7.5,
+          8.0,
           "insert_screw"
         ],
         [
-          7.5,
+          8.0,
           15.0,
           "tighten_screw"
         ],
@@ -5165,11 +4884,16 @@
         ],
         [
           25.5,
-          29.0,
+          28.0,
+          "attach_excavator_arm"
+        ],
+        [
+          28.0,
+          29.5,
           "attach_wheel"
         ],
         [
-          29.0,
+          29.5,
           31.5,
           "insert_screw"
         ],
@@ -5190,11 +4914,6 @@
         ],
         [
           40.5,
-          43.0,
-          "tighten_screw"
-        ],
-        [
-          43.0,
           46.48,
           "tighten_screw"
         ]
@@ -5338,13 +5057,12 @@
       ],
       "warnings": [],
       "usage": {
-        "calls": 8,
-        "prompt_tokens": 15766,
-        "output_tokens": 6599,
+        "calls": 1,
+        "prompt_tokens": 6000,
+        "output_tokens": 2317,
         "retries": 0,
         "calls_by_stage": {
-          "segment": 1,
-          "subdivide": 7
+          "segment": 1
         }
       }
     },
@@ -5352,23 +5070,28 @@
       "id": "homer_52",
       "family": "homer",
       "ok": true,
-      "elapsed": 38.01,
+      "elapsed": 16.28,
       "duration": 37.99,
       "pred": [
         [
           0.0,
           7.0,
-          "tie_base_knot"
+          "tie_first_knot"
         ],
         [
           7.0,
-          26.0,
-          "tie_bow_knot"
+          12.0,
+          "tighten_laces"
         ],
         [
-          26.0,
+          12.0,
+          18.0,
+          "tie_second_knot"
+        ],
+        [
+          18.0,
           31.5,
-          "adjust_shoelace"
+          "tuck_laces_into_shoe"
         ]
       ],
       "gold": [
@@ -5405,13 +5128,12 @@
       ],
       "warnings": [],
       "usage": {
-        "calls": 7,
-        "prompt_tokens": 9085,
-        "output_tokens": 2784,
-        "retries": 3,
+        "calls": 1,
+        "prompt_tokens": 4940,
+        "output_tokens": 1565,
+        "retries": 0,
         "calls_by_stage": {
-          "segment": 1,
-          "subdivide": 6
+          "segment": 1
         }
       }
     },
@@ -5419,28 +5141,23 @@
       "id": "homer_53",
       "family": "homer",
       "ok": true,
-      "elapsed": 36.54,
+      "elapsed": 16.3,
       "duration": 47.11,
       "pred": [
         [
           0.0,
-          18.0,
+          17.5,
           "tie_right_shoe"
         ],
         [
-          18.0,
+          17.5,
           26.0,
           "put_on_left_shoe"
         ],
         [
           26.0,
-          32.5,
-          "tie_left_shoe"
-        ],
-        [
-          32.5,
           45.5,
-          "tie_right_shoe"
+          "tie_left_shoe"
         ]
       ],
       "gold": [
@@ -5507,13 +5224,12 @@
       ],
       "warnings": [],
       "usage": {
-        "calls": 4,
-        "prompt_tokens": 10196,
-        "output_tokens": 3270,
+        "calls": 1,
+        "prompt_tokens": 6000,
+        "output_tokens": 943,
         "retries": 0,
         "calls_by_stage": {
-          "segment": 1,
-          "subdivide": 3
+          "segment": 1
         }
       }
     },
@@ -5521,43 +5237,28 @@
       "id": "homer_56",
       "family": "homer",
       "ok": true,
-      "elapsed": 29.94,
+      "elapsed": 10.59,
       "duration": 55.17,
       "pred": [
         [
           0.0,
-          13.12,
-          "spread_towel"
+          13.5,
+          "fold_towel_in_half"
         ],
         [
-          13.12,
-          15.0,
-          "fold_towel"
+          13.5,
+          25.0,
+          "fold_towel_lengthwise"
         ],
         [
-          15.0,
-          21.25,
-          "fold_towel"
-        ],
-        [
-          21.25,
-          22.81,
-          "unfold_towel"
-        ],
-        [
-          22.81,
-          27.5,
-          "fold_towel"
-        ],
-        [
-          27.5,
-          50.0,
+          25.0,
+          50.5,
           "roll_towel"
         ],
         [
-          50.0,
+          50.5,
           52.5,
-          "reorient_rolled_towel"
+          "rotate_towel"
         ]
       ],
       "gold": [
@@ -5609,13 +5310,12 @@
       ],
       "warnings": [],
       "usage": {
-        "calls": 4,
-        "prompt_tokens": 11341,
-        "output_tokens": 4589,
+        "calls": 1,
+        "prompt_tokens": 7149,
+        "output_tokens": 1449,
         "retries": 0,
         "calls_by_stage": {
-          "segment": 1,
-          "subdivide": 3
+          "segment": 1
         }
       }
     },
@@ -5623,106 +5323,21 @@
       "id": "homer_59",
       "family": "homer",
       "ok": true,
-      "elapsed": 61.05,
+      "elapsed": 42.76,
       "duration": 60.67,
       "pred": [
         [
           0.0,
-          1.5,
-          "pick_book"
-        ],
-        [
-          1.5,
-          4.0,
-          "place_book_on_shelf"
-        ],
-        [
-          4.0,
-          8.5,
-          "pick_book"
-        ],
-        [
-          8.5,
-          11.0,
-          "place_book_on_shelf"
-        ],
-        [
-          11.0,
-          15.0,
-          "pick_book"
-        ],
-        [
-          15.0,
-          17.5,
-          "place_book_on_shelf"
-        ],
-        [
-          17.5,
-          21.5,
-          "pick_book"
-        ],
-        [
-          21.5,
-          25.0,
-          "place_book_on_shelf"
-        ],
-        [
-          25.0,
-          29.0,
-          "pick_book"
-        ],
-        [
-          29.0,
-          32.0,
-          "place_book_on_shelf"
-        ],
-        [
-          32.0,
-          35.5,
-          "pick_book"
-        ],
-        [
-          35.5,
-          37.5,
-          "place_book_on_shelf"
-        ],
-        [
-          37.5,
-          41.0,
-          "pick_book"
-        ],
-        [
-          41.0,
-          43.5,
-          "place_book_on_shelf"
-        ],
-        [
-          43.5,
-          46.0,
-          "pick_book"
-        ],
-        [
-          46.0,
-          48.0,
-          "place_book_on_shelf"
-        ],
-        [
-          48.0,
-          50.0,
-          "pick_book"
-        ],
-        [
-          50.0,
           53.0,
           "place_book_on_shelf"
         ],
         [
           53.0,
-          55.0,
+          53.5,
           "pick_book"
         ],
         [
-          55.0,
+          53.5,
           58.0,
           "place_book_on_shelf"
         ]
@@ -5830,17 +5445,16 @@
         ]
       ],
       "warnings": [
-        "trimmed 1.00s overlap between 'pick_book' and 'place_book_on_shelf'",
-        "trimmed 1.00s overlap between 'pick_book' and 'place_book_on_shelf'"
+        "trimmed 0.50s overlap between 'place_book_on_shelf' and 'pick_book'",
+        "trimmed 1.50s overlap between 'pick_book' and 'place_book_on_shelf'"
       ],
       "usage": {
-        "calls": 14,
-        "prompt_tokens": 27150,
-        "output_tokens": 12426,
+        "calls": 2,
+        "prompt_tokens": 10126,
+        "output_tokens": 5133,
         "retries": 0,
         "calls_by_stage": {
-          "segment": 2,
-          "subdivide": 12
+          "segment": 2
         }
       }
     },
@@ -5848,93 +5462,103 @@
       "id": "homer_60",
       "family": "homer",
       "ok": true,
-      "elapsed": 76.12,
+      "elapsed": 56.87,
       "duration": 71.23,
       "pred": [
         [
           0.0,
+          2.0,
+          "pick_books"
+        ],
+        [
+          2.0,
           5.5,
-          "place_book_on_shelf"
+          "place_books_on_shelf"
         ],
         [
           5.5,
-          8.5,
-          "pick_book"
+          9.5,
+          "pick_books"
         ],
         [
-          8.5,
+          9.5,
           14.0,
-          "place_book_on_shelf"
+          "place_books_on_shelf"
         ],
         [
           14.0,
-          17.0,
-          "pick_book"
+          17.5,
+          "pick_books"
         ],
         [
-          17.0,
+          17.5,
           21.5,
-          "place_book_on_shelf"
+          "place_books_on_shelf"
         ],
         [
           21.5,
-          26.0,
-          "pick_book"
+          26.5,
+          "pick_books"
         ],
         [
-          26.0,
+          26.5,
           31.0,
-          "place_book_on_shelf"
+          "place_books_on_shelf"
         ],
         [
           31.0,
-          34.0,
-          "pick_book"
+          34.5,
+          "pick_books"
         ],
         [
-          34.0,
+          34.5,
           40.5,
-          "place_book_on_shelf"
+          "place_books_on_shelf"
         ],
         [
           40.5,
-          43.0,
-          "pick_book"
+          43.5,
+          "pick_books"
         ],
         [
-          43.0,
+          43.5,
           45.5,
-          "place_book_on_shelf"
+          "place_books_on_shelf"
         ],
         [
           45.5,
-          48.0,
-          "pick_book"
+          48.5,
+          "pick_books"
         ],
         [
-          48.0,
+          48.5,
           50.0,
-          "place_book_on_shelf"
+          "place_books_on_shelf"
         ],
         [
           50.0,
           53.0,
-          "pick_book"
+          "pick_books"
         ],
         [
           53.0,
+          53.5,
+          "place_books"
+        ],
+        [
+          53.5,
           55.0,
-          "place_book_on_shelf"
+          "place_books_on_shelf"
         ],
         [
           55.0,
-          59.0,
-          "pick_book"
+          59.5,
+          "pick_books"
         ],
         [
-          59.0,
-          67.0,
-          "place_book"
+          59.5,
+          68.0,
+          "place_books"
         ]
       ],
       "gold": [
@@ -6030,18 +5654,18 @@
         ]
       ],
       "warnings": [
-        "trimmed 1.00s overlap between 'place_book_on_shelf' and 'pick_book'",
-        "trimmed 2.00s overlap between 'place_book' and 'place_book_on_shelf'",
-        "trimmed 0.50s overlap between 'place_book_on_shelf' and 'pick_book'"
+        "trimmed 1.00s overlap between 'place_books_on_shelf' and 'pick_books'",
+        "trimmed 0.50s overlap between 'pick_books' and 'place_books'",
+        "trimmed 1.50s overlap between 'place_books' and 'place_books_on_shelf'",
+        "trimmed 0.50s overlap between 'place_books_on_shelf' and 'pick_books'"
       ],
       "usage": {
-        "calls": 15,
-        "prompt_tokens": 29621,
-        "output_tokens": 15037,
+        "calls": 2,
+        "prompt_tokens": 11210,
+        "output_tokens": 6102,
         "retries": 0,
         "calls_by_stage": {
-          "segment": 2,
-          "subdivide": 13
+          "segment": 2
         }
       }
     },
@@ -6049,81 +5673,61 @@
       "id": "homer_7",
       "family": "homer",
       "ok": true,
-      "elapsed": 101.41,
+      "elapsed": 53.55,
       "duration": 143.81,
       "pred": [
         [
           0.0,
-          8.5,
-          "draw_sun_circle"
-        ],
-        [
-          8.5,
-          19.88,
-          "draw_sun_rays"
-        ],
-        [
-          19.88,
           21.5,
-          "draw_horizon"
+          "draw_sun"
         ],
         [
           21.5,
-          33.38,
+          39.5,
           "draw_clouds"
         ],
         [
-          33.38,
-          40.5,
-          "draw_birds"
-        ],
-        [
-          40.5,
+          39.5,
           45.0,
           "draw_birds"
         ],
         [
           45.0,
           50.0,
-          "draw_dune"
+          "draw_beach_line"
         ],
         [
           50.0,
-          86.5,
-          "draw_palm_tree"
+          61.0,
+          "draw_palm_tree_trunk"
         ],
         [
-          86.5,
-          87.5,
-          "draw_bird"
+          61.0,
+          87.0,
+          "draw_palm_tree_leaves"
         ],
         [
-          87.5,
-          90.0,
-          "draw_bird"
+          87.0,
+          95.5,
+          "draw_island_details"
         ],
         [
-          90.0,
-          94.88,
-          "draw_seashells"
-        ],
-        [
-          94.88,
+          95.5,
           100.0,
-          "draw_waves"
+          "draw_horizon_line"
         ],
         [
           100.0,
           117.5,
-          "draw_waves"
+          "draw_ocean_waves"
         ],
         [
           117.5,
-          131.5,
+          131.0,
           "draw_clouds"
         ],
         [
-          131.5,
+          131.0,
           136.5,
           "draw_birds"
         ]
@@ -6181,17 +5785,16 @@
         ]
       ],
       "warnings": [
-        "trimmed 2.50s overlap between 'draw_dune' and 'draw_palm_tree'",
-        "trimmed 3.00s overlap between 'draw_waves' and 'draw_waves'"
+        "trimmed 2.50s overlap between 'draw_beach_line' and 'draw_palm_tree_trunk'",
+        "trimmed 3.00s overlap between 'draw_horizon_line' and 'draw_ocean_waves'"
       ],
       "usage": {
-        "calls": 14,
-        "prompt_tokens": 36045,
-        "output_tokens": 15571,
+        "calls": 3,
+        "prompt_tokens": 20625,
+        "output_tokens": 6065,
         "retries": 0,
         "calls_by_stage": {
-          "segment": 3,
-          "subdivide": 11
+          "segment": 3
         }
       }
     },
@@ -6199,78 +5802,43 @@
       "id": "homer_9",
       "family": "homer",
       "ok": true,
-      "elapsed": 121.6,
+      "elapsed": 69.63,
       "duration": 171.06,
       "pred": [
         [
           0.0,
-          3.5,
+          2.5,
+          "apply_soap"
+        ],
+        [
+          2.5,
+          100.0,
+          "wash_glass"
+        ],
+        [
+          100.0,
+          131.5,
+          "rinse_glass"
+        ],
+        [
+          131.5,
+          133.0,
+          "place_glass_in_rack"
+        ],
+        [
+          133.0,
+          135.0,
           "pick_glass"
         ],
         [
-          3.5,
-          62.71,
-          "wash_first_glass"
-        ],
-        [
-          62.71,
-          100.0,
-          "wash_second_glass"
-        ],
-        [
-          100.0,
-          105.0,
-          "scrub_glass"
-        ],
-        [
-          105.0,
-          105.25,
-          "turn_on_faucet"
-        ],
-        [
-          105.25,
-          106.5,
-          "rinse_glass"
-        ],
-        [
-          106.5,
-          108.0,
-          "rinse_hands"
-        ],
-        [
-          108.0,
-          120.5,
-          "rinse_glass"
-        ],
-        [
-          120.5,
-          133.0,
-          "place_glass_on_rack"
-        ],
-        [
-          133.0,
-          149.0,
-          "scrub_glass"
-        ],
-        [
-          149.0,
-          163.0,
-          "rinse_glass"
-        ],
-        [
-          163.0,
+          135.0,
           163.5,
-          "turn_off_tap"
+          "rinse_glass"
         ],
         [
           163.5,
-          166.75,
+          167.0,
           "place_glass"
-        ],
-        [
-          166.75,
-          168.0,
-          "turn_off_faucet"
         ]
       ],
       "gold": [
@@ -6376,19 +5944,15 @@
         ]
       ],
       "warnings": [
-        "trimmed 5.00s overlap between 'wash_second_glass' and 'scrub_glass'",
-        "trimmed 0.25s overlap between 'scrub_glass' and 'turn_on_faucet'",
-        "trimmed 1.25s overlap between 'turn_on_faucet' and 'rinse_glass'",
-        "trimmed 25.00s overlap between 'rinse_glass' and 'rinse_hands'"
+        "trimmed 5.00s overlap between 'wash_glass' and 'rinse_glass'"
       ],
       "usage": {
-        "calls": 11,
-        "prompt_tokens": 35441,
-        "output_tokens": 18921,
+        "calls": 4,
+        "prompt_tokens": 25752,
+        "output_tokens": 12273,
         "retries": 0,
         "calls_by_stage": {
-          "segment": 4,
-          "subdivide": 7
+          "segment": 4
         }
       }
     },
@@ -6396,17 +5960,17 @@
       "id": "robointer_droid_000001",
       "family": "droid",
       "ok": true,
-      "elapsed": 13.77,
+      "elapsed": 10.93,
       "duration": 10.4,
       "pred": [
         [
           0.0,
-          6.0,
+          6.5,
           "pick_bowl"
         ],
         [
-          6.0,
-          8.0,
+          6.5,
+          9.0,
           "place_bowl"
         ]
       ],
@@ -6424,13 +5988,12 @@
       ],
       "warnings": [],
       "usage": {
-        "calls": 2,
-        "prompt_tokens": 4073,
-        "output_tokens": 1552,
+        "calls": 1,
+        "prompt_tokens": 2727,
+        "output_tokens": 1364,
         "retries": 0,
         "calls_by_stage": {
-          "segment": 1,
-          "subdivide": 1
+          "segment": 1
         }
       }
     },
@@ -6438,13 +6001,13 @@
       "id": "robointer_droid_000002",
       "family": "droid",
       "ok": true,
-      "elapsed": 16.28,
+      "elapsed": 5.73,
       "duration": 11.3,
       "pred": [
         [
           0.0,
           9.0,
-          "pick_lid"
+          "remove_lid"
         ],
         [
           9.0,
@@ -6466,13 +6029,12 @@
       ],
       "warnings": [],
       "usage": {
-        "calls": 2,
-        "prompt_tokens": 4094,
-        "output_tokens": 1158,
+        "calls": 1,
+        "prompt_tokens": 2737,
+        "output_tokens": 789,
         "retries": 0,
         "calls_by_stage": {
-          "segment": 1,
-          "subdivide": 1
+          "segment": 1
         }
       }
     },
@@ -6480,18 +6042,18 @@
       "id": "robointer_droid_000003",
       "family": "droid",
       "ok": true,
-      "elapsed": 15.2,
+      "elapsed": 7.95,
       "duration": 10.4,
       "pred": [
         [
           0.0,
           4.0,
-          "grasp_bowl"
+          "pick_bowl"
         ],
         [
           4.0,
-          9.0,
-          "move_bowl_to_right"
+          8.5,
+          "place_bowl"
         ]
       ],
       "gold": [
@@ -6508,13 +6070,12 @@
       ],
       "warnings": [],
       "usage": {
-        "calls": 3,
-        "prompt_tokens": 5466,
-        "output_tokens": 1835,
+        "calls": 1,
+        "prompt_tokens": 2727,
+        "output_tokens": 992,
         "retries": 0,
         "calls_by_stage": {
-          "segment": 1,
-          "subdivide": 2
+          "segment": 1
         }
       }
     },
@@ -6522,16 +6083,16 @@
       "id": "robointer_droid_000004",
       "family": "droid",
       "ok": true,
-      "elapsed": 9.8,
+      "elapsed": 9.24,
       "duration": 11.3,
       "pred": [
         [
           0.0,
-          8.5,
+          6.5,
           "pick_lid"
         ],
         [
-          8.5,
+          6.5,
           10.5,
           "place_lid_on_table"
         ]
@@ -6550,13 +6111,12 @@
       ],
       "warnings": [],
       "usage": {
-        "calls": 2,
-        "prompt_tokens": 4107,
-        "output_tokens": 1194,
+        "calls": 1,
+        "prompt_tokens": 2737,
+        "output_tokens": 958,
         "retries": 0,
         "calls_by_stage": {
-          "segment": 1,
-          "subdivide": 1
+          "segment": 1
         }
       }
     },
@@ -6564,7 +6124,7 @@
       "id": "robointer_droid_000005",
       "family": "droid",
       "ok": true,
-      "elapsed": 13.68,
+      "elapsed": 3.87,
       "duration": 12.6,
       "pred": [
         [
@@ -6592,13 +6152,12 @@
       ],
       "warnings": [],
       "usage": {
-        "calls": 3,
-        "prompt_tokens": 5489,
-        "output_tokens": 1355,
+        "calls": 1,
+        "prompt_tokens": 2733,
+        "output_tokens": 475,
         "retries": 0,
         "calls_by_stage": {
-          "segment": 1,
-          "subdivide": 2
+          "segment": 1
         }
       }
     },
@@ -6606,17 +6165,17 @@
       "id": "robointer_droid_000006",
       "family": "droid",
       "ok": true,
-      "elapsed": 13.77,
+      "elapsed": 4.4,
       "duration": 12.6,
       "pred": [
         [
           0.0,
-          7.5,
+          8.0,
           "pick_pen"
         ],
         [
-          7.5,
-          11.5,
+          8.0,
+          11.0,
           "place_pen_on_table"
         ]
       ],
@@ -6634,22 +6193,33 @@
       ],
       "warnings": [],
       "usage": {
-        "calls": 3,
-        "prompt_tokens": 5489,
-        "output_tokens": 2928,
+        "calls": 1,
+        "prompt_tokens": 2733,
+        "output_tokens": 1019,
         "retries": 0,
         "calls_by_stage": {
-          "segment": 1,
-          "subdivide": 2
+          "segment": 1
         }
       }
     },
     {
       "id": "robointer_droid_000007",
       "family": "droid",
-      "ok": false,
-      "error": "LLMError: segment failed after 4 attempts: [Errno 54] Connection reset by peer",
-      "trace": "nt\", prompt, CoarseSegments,\n             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/Users/finnmetz/Documents/rando_projects/Manda/robot-episode-labeler/src/rel/annotation/llm.py\", line 189, in json\n    raise LLMError(f\"{stage} failed after {self.max_retries} attempts: {last}\") from last\nrel.annotation.llm.LLMError: segment failed after 4 attempts: [Errno 54] Connection reset by peer\n",
+      "ok": true,
+      "elapsed": 4.5,
+      "duration": 13.8,
+      "pred": [
+        [
+          0.0,
+          8.5,
+          "pick_bottle"
+        ],
+        [
+          8.5,
+          12.5,
+          "place_bottle_in_mug"
+        ]
+      ],
       "gold": [
         [
           0.0,
@@ -6662,29 +6232,32 @@
           "place the solid glue in the yellow cup"
         ]
       ],
+      "warnings": [],
       "usage": {
-        "calls": 0,
-        "prompt_tokens": 0,
-        "output_tokens": 0,
+        "calls": 1,
+        "prompt_tokens": 2734,
+        "output_tokens": 671,
         "retries": 0,
-        "calls_by_stage": {}
+        "calls_by_stage": {
+          "segment": 1
+        }
       }
     },
     {
       "id": "robointer_droid_000008",
       "family": "droid",
       "ok": true,
-      "elapsed": 12.9,
+      "elapsed": 4.12,
       "duration": 13.8,
       "pred": [
         [
           0.0,
-          8.5,
+          9.0,
           "pick_bottle"
         ],
         [
-          8.5,
-          11.5,
+          9.0,
+          12.0,
           "place_bottle_in_mug"
         ]
       ],
@@ -6702,13 +6275,12 @@
       ],
       "warnings": [],
       "usage": {
-        "calls": 3,
-        "prompt_tokens": 5520,
-        "output_tokens": 1234,
+        "calls": 1,
+        "prompt_tokens": 2734,
+        "output_tokens": 614,
         "retries": 0,
         "calls_by_stage": {
-          "segment": 1,
-          "subdivide": 2
+          "segment": 1
         }
       }
     },
@@ -6716,16 +6288,16 @@
       "id": "robointer_droid_000009",
       "family": "droid",
       "ok": true,
-      "elapsed": 28.17,
+      "elapsed": 5.03,
       "duration": 15.4,
       "pred": [
         [
           0.0,
-          6.5,
+          7.0,
           "pick_cloth"
         ],
         [
-          6.5,
+          7.0,
           13.5,
           "place_cloth_on_shield"
         ]
@@ -6744,13 +6316,12 @@
       ],
       "warnings": [],
       "usage": {
-        "calls": 3,
-        "prompt_tokens": 5465,
-        "output_tokens": 2107,
+        "calls": 1,
+        "prompt_tokens": 2684,
+        "output_tokens": 523,
         "retries": 0,
         "calls_by_stage": {
-          "segment": 1,
-          "subdivide": 2
+          "segment": 1
         }
       }
     },
@@ -6758,23 +6329,18 @@
       "id": "robointer_droid_000010",
       "family": "droid",
       "ok": true,
-      "elapsed": 27.42,
+      "elapsed": 3.96,
       "duration": 15.2,
       "pred": [
         [
           0.0,
-          8.0,
+          8.5,
           "pick_blue_object"
         ],
         [
-          8.0,
-          8.75,
+          8.5,
+          11.0,
           "place_blue_object_in_drawer"
-        ],
-        [
-          8.75,
-          11.5,
-          "close_drawer"
         ]
       ],
       "gold": [
@@ -6796,13 +6362,12 @@
       ],
       "warnings": [],
       "usage": {
-        "calls": 3,
-        "prompt_tokens": 5494,
-        "output_tokens": 2412,
+        "calls": 1,
+        "prompt_tokens": 2730,
+        "output_tokens": 752,
         "retries": 0,
         "calls_by_stage": {
-          "segment": 1,
-          "subdivide": 2
+          "segment": 1
         }
       }
     },
@@ -6810,7 +6375,7 @@
       "id": "robointer_droid_000011",
       "family": "droid",
       "ok": true,
-      "elapsed": 19.8,
+      "elapsed": 5.16,
       "duration": 16.5,
       "pred": [
         [
@@ -6833,13 +6398,12 @@
       ],
       "warnings": [],
       "usage": {
-        "calls": 2,
-        "prompt_tokens": 4056,
-        "output_tokens": 1141,
+        "calls": 1,
+        "prompt_tokens": 2685,
+        "output_tokens": 841,
         "retries": 0,
         "calls_by_stage": {
-          "segment": 1,
-          "subdivide": 1
+          "segment": 1
         }
       }
     },
@@ -6847,16 +6411,16 @@
       "id": "robointer_droid_000012",
       "family": "droid",
       "ok": true,
-      "elapsed": 28.03,
+      "elapsed": 9.41,
       "duration": 15.2,
       "pred": [
         [
           0.0,
-          4.5,
+          6.0,
           "pick_blue_object"
         ],
         [
-          4.5,
+          6.0,
           9.0,
           "place_blue_object_in_drawer"
         ],
@@ -6885,13 +6449,12 @@
       ],
       "warnings": [],
       "usage": {
-        "calls": 3,
-        "prompt_tokens": 5468,
-        "output_tokens": 2242,
+        "calls": 1,
+        "prompt_tokens": 2730,
+        "output_tokens": 860,
         "retries": 0,
         "calls_by_stage": {
-          "segment": 1,
-          "subdivide": 2
+          "segment": 1
         }
       }
     },
@@ -6899,18 +6462,18 @@
       "id": "robointer_droid_000013",
       "family": "droid",
       "ok": true,
-      "elapsed": 26.17,
+      "elapsed": 6.55,
       "duration": 16.4,
       "pred": [
         [
           0.0,
-          5.5,
-          "pick_silver_cup"
+          8.0,
+          "pick_cup"
         ],
         [
-          5.5,
-          15.5,
-          "place_silver_cup"
+          8.0,
+          14.5,
+          "place_cup"
         ]
       ],
       "gold": [
@@ -6927,13 +6490,12 @@
       ],
       "warnings": [],
       "usage": {
-        "calls": 3,
-        "prompt_tokens": 5451,
-        "output_tokens": 2009,
+        "calls": 1,
+        "prompt_tokens": 2684,
+        "output_tokens": 1155,
         "retries": 0,
         "calls_by_stage": {
-          "segment": 1,
-          "subdivide": 2
+          "segment": 1
         }
       }
     },
@@ -6941,7 +6503,7 @@
       "id": "robointer_droid_000014",
       "family": "droid",
       "ok": true,
-      "elapsed": 24.76,
+      "elapsed": 8.18,
       "duration": 15.4,
       "pred": [
         [
@@ -6951,7 +6513,7 @@
         ],
         [
           7.0,
-          14.5,
+          15.0,
           "place_cloth_on_shield"
         ]
       ],
@@ -6969,13 +6531,12 @@
       ],
       "warnings": [],
       "usage": {
-        "calls": 3,
-        "prompt_tokens": 5453,
-        "output_tokens": 1480,
+        "calls": 1,
+        "prompt_tokens": 2684,
+        "output_tokens": 674,
         "retries": 0,
         "calls_by_stage": {
-          "segment": 1,
-          "subdivide": 2
+          "segment": 1
         }
       }
     },
@@ -6983,18 +6544,13 @@
       "id": "robointer_droid_000015",
       "family": "droid",
       "ok": true,
-      "elapsed": 14.79,
+      "elapsed": 7.76,
       "duration": 16.4,
       "pred": [
         [
           0.0,
-          14.5,
-          "pick_silver_cup"
-        ],
-        [
-          14.5,
-          15.5,
-          "place_silver_cup"
+          14.0,
+          "grasp_cup"
         ]
       ],
       "gold": [
@@ -7011,13 +6567,12 @@
       ],
       "warnings": [],
       "usage": {
-        "calls": 2,
-        "prompt_tokens": 4050,
-        "output_tokens": 1877,
+        "calls": 1,
+        "prompt_tokens": 2684,
+        "output_tokens": 1691,
         "retries": 0,
         "calls_by_stage": {
-          "segment": 1,
-          "subdivide": 1
+          "segment": 1
         }
       }
     },
@@ -7025,12 +6580,12 @@
       "id": "robointer_droid_000016",
       "family": "droid",
       "ok": true,
-      "elapsed": 15.01,
+      "elapsed": 5.42,
       "duration": 16.5,
       "pred": [
         [
           0.0,
-          15.5,
+          15.0,
           "put_rubber_band_around_jar"
         ]
       ],
@@ -7048,13 +6603,12 @@
       ],
       "warnings": [],
       "usage": {
-        "calls": 2,
-        "prompt_tokens": 4056,
-        "output_tokens": 1566,
+        "calls": 1,
+        "prompt_tokens": 2685,
+        "output_tokens": 1111,
         "retries": 0,
         "calls_by_stage": {
-          "segment": 1,
-          "subdivide": 1
+          "segment": 1
         }
       }
     },
@@ -7062,7 +6616,7 @@
       "id": "robointer_droid_000017",
       "family": "droid",
       "ok": true,
-      "elapsed": 18.41,
+      "elapsed": 5.53,
       "duration": 17.2,
       "pred": [
         [
@@ -7072,7 +6626,7 @@
         ],
         [
           8.5,
-          10.0,
+          12.0,
           "place_marker_on_table"
         ]
       ],
@@ -7090,13 +6644,12 @@
       ],
       "warnings": [],
       "usage": {
-        "calls": 2,
-        "prompt_tokens": 4055,
-        "output_tokens": 2597,
+        "calls": 1,
+        "prompt_tokens": 2689,
+        "output_tokens": 1189,
         "retries": 0,
         "calls_by_stage": {
-          "segment": 1,
-          "subdivide": 1
+          "segment": 1
         }
       }
     },
@@ -7104,7 +6657,7 @@
       "id": "robointer_droid_000019",
       "family": "droid",
       "ok": true,
-      "elapsed": 23.03,
+      "elapsed": 5.77,
       "duration": 17.2,
       "pred": [
         [
@@ -7114,7 +6667,7 @@
         ],
         [
           8.5,
-          15.0,
+          15.5,
           "place_marker_on_table"
         ]
       ],
@@ -7132,13 +6685,12 @@
       ],
       "warnings": [],
       "usage": {
-        "calls": 3,
-        "prompt_tokens": 5480,
-        "output_tokens": 1707,
+        "calls": 1,
+        "prompt_tokens": 2689,
+        "output_tokens": 678,
         "retries": 0,
         "calls_by_stage": {
-          "segment": 1,
-          "subdivide": 2
+          "segment": 1
         }
       }
     },
@@ -7146,7 +6698,7 @@
       "id": "robointer_droid_000021",
       "family": "droid",
       "ok": true,
-      "elapsed": 20.62,
+      "elapsed": 12.43,
       "duration": 18.0,
       "pred": [
         [
@@ -7156,8 +6708,8 @@
         ],
         [
           8.5,
-          13.5,
-          "place_tomato_in_bowl"
+          11.0,
+          "place_tomato_in_silver_bowl"
         ]
       ],
       "gold": [
@@ -7174,13 +6726,12 @@
       ],
       "warnings": [],
       "usage": {
-        "calls": 3,
-        "prompt_tokens": 5495,
-        "output_tokens": 2114,
+        "calls": 1,
+        "prompt_tokens": 2728,
+        "output_tokens": 2089,
         "retries": 0,
         "calls_by_stage": {
-          "segment": 1,
-          "subdivide": 2
+          "segment": 1
         }
       }
     },
@@ -7188,18 +6739,18 @@
       "id": "robointer_droid_000022",
       "family": "droid",
       "ok": true,
-      "elapsed": 25.36,
+      "elapsed": 6.51,
       "duration": 18.7,
       "pred": [
         [
           0.0,
-          9.0,
-          "pick_pineapple"
+          10.5,
+          "pick_stuffed_pineapple"
         ],
         [
-          9.0,
-          15.0,
-          "place_pineapple_beside_oven"
+          10.5,
+          15.5,
+          "place_stuffed_pineapple_beside_oven"
         ]
       ],
       "gold": [
@@ -7216,13 +6767,12 @@
       ],
       "warnings": [],
       "usage": {
-        "calls": 3,
-        "prompt_tokens": 5492,
-        "output_tokens": 3652,
+        "calls": 1,
+        "prompt_tokens": 2731,
+        "output_tokens": 1092,
         "retries": 0,
         "calls_by_stage": {
-          "segment": 1,
-          "subdivide": 2
+          "segment": 1
         }
       }
     },
@@ -7230,17 +6780,17 @@
       "id": "robointer_droid_000023",
       "family": "droid",
       "ok": true,
-      "elapsed": 14.03,
+      "elapsed": 7.93,
       "duration": 18.1,
       "pred": [
         [
           0.0,
-          13.5,
+          13.0,
           "pick_cup_lid"
         ],
         [
-          13.5,
-          16.5,
+          13.0,
+          16.0,
           "place_cup_lid"
         ]
       ],
@@ -7258,13 +6808,12 @@
       ],
       "warnings": [],
       "usage": {
-        "calls": 3,
-        "prompt_tokens": 5498,
-        "output_tokens": 1340,
+        "calls": 1,
+        "prompt_tokens": 2728,
+        "output_tokens": 962,
         "retries": 0,
         "calls_by_stage": {
-          "segment": 1,
-          "subdivide": 2
+          "segment": 1
         }
       }
     },
@@ -7272,7 +6821,7 @@
       "id": "robointer_droid_000024",
       "family": "droid",
       "ok": true,
-      "elapsed": 23.54,
+      "elapsed": 5.93,
       "duration": 18.0,
       "pred": [
         [
@@ -7282,8 +6831,8 @@
         ],
         [
           5.0,
-          16.0,
-          "place_tomato_in_silver_bowl"
+          17.0,
+          "place_tomato_in_bowl"
         ]
       ],
       "gold": [
@@ -7300,13 +6849,12 @@
       ],
       "warnings": [],
       "usage": {
-        "calls": 3,
-        "prompt_tokens": 5497,
-        "output_tokens": 2661,
+        "calls": 1,
+        "prompt_tokens": 2728,
+        "output_tokens": 1155,
         "retries": 0,
         "calls_by_stage": {
-          "segment": 1,
-          "subdivide": 2
+          "segment": 1
         }
       }
     },
@@ -7314,17 +6862,17 @@
       "id": "robointer_droid_000025",
       "family": "droid",
       "ok": true,
-      "elapsed": 16.51,
+      "elapsed": 7.28,
       "duration": 18.1,
       "pred": [
         [
           0.0,
-          9.5,
+          10.5,
           "pick_cup_lid"
         ],
         [
-          9.5,
-          16.0,
+          10.5,
+          15.5,
           "place_cup_lid"
         ]
       ],
@@ -7342,13 +6890,12 @@
       ],
       "warnings": [],
       "usage": {
-        "calls": 3,
-        "prompt_tokens": 5509,
-        "output_tokens": 2034,
+        "calls": 1,
+        "prompt_tokens": 2728,
+        "output_tokens": 1029,
         "retries": 0,
         "calls_by_stage": {
-          "segment": 1,
-          "subdivide": 2
+          "segment": 1
         }
       }
     },
@@ -7356,18 +6903,18 @@
       "id": "robointer_droid_000027",
       "family": "droid",
       "ok": true,
-      "elapsed": 17.23,
+      "elapsed": 8.12,
       "duration": 18.7,
       "pred": [
         [
           0.0,
           11.0,
-          "pick_pineapple"
+          "pick_stuffed_pineapple"
         ],
         [
           11.0,
           15.5,
-          "place_pineapple_beside_oven"
+          "place_stuffed_pineapple_beside_oven"
         ]
       ],
       "gold": [
@@ -7384,13 +6931,12 @@
       ],
       "warnings": [],
       "usage": {
-        "calls": 3,
-        "prompt_tokens": 5502,
-        "output_tokens": 2253,
+        "calls": 1,
+        "prompt_tokens": 2731,
+        "output_tokens": 1133,
         "retries": 0,
         "calls_by_stage": {
-          "segment": 1,
-          "subdivide": 2
+          "segment": 1
         }
       }
     },
@@ -7398,22 +6944,22 @@
       "id": "robointer_droid_000028",
       "family": "droid",
       "ok": true,
-      "elapsed": 22.96,
+      "elapsed": 10.36,
       "duration": 19.4,
       "pred": [
         [
           0.0,
-          5.81,
+          11.0,
+          "no_completed_subtask"
+        ],
+        [
+          11.0,
+          13.5,
           "pick_paper"
         ],
         [
-          5.81,
-          15.5,
-          "pick_paper"
-        ],
-        [
-          15.5,
-          18.0,
+          13.5,
+          17.5,
           "place_paper"
         ]
       ],
@@ -7431,13 +6977,12 @@
       ],
       "warnings": [],
       "usage": {
-        "calls": 2,
-        "prompt_tokens": 4112,
-        "output_tokens": 3433,
+        "calls": 1,
+        "prompt_tokens": 2738,
+        "output_tokens": 2087,
         "retries": 0,
         "calls_by_stage": {
-          "segment": 1,
-          "subdivide": 1
+          "segment": 1
         }
       }
     },
@@ -7445,7 +6990,7 @@
       "id": "robointer_droid_000029",
       "family": "droid",
       "ok": true,
-      "elapsed": 30.08,
+      "elapsed": 11.57,
       "duration": 23.2,
       "pred": [
         [
@@ -7473,13 +7018,12 @@
       ],
       "warnings": [],
       "usage": {
-        "calls": 3,
-        "prompt_tokens": 6625,
-        "output_tokens": 1937,
+        "calls": 1,
+        "prompt_tokens": 3839,
+        "output_tokens": 995,
         "retries": 0,
         "calls_by_stage": {
-          "segment": 1,
-          "subdivide": 2
+          "segment": 1
         }
       }
     },
@@ -7487,23 +7031,18 @@
       "id": "robointer_droid_000030",
       "family": "droid",
       "ok": true,
-      "elapsed": 23.33,
+      "elapsed": 7.79,
       "duration": 23.2,
       "pred": [
         [
           0.0,
-          14.5,
+          15.0,
           "pick_bottle"
         ],
         [
-          14.5,
-          15.75,
-          "place_bottle"
-        ],
-        [
-          15.75,
+          15.0,
           22.0,
-          "pick_bottle"
+          "place_bottle"
         ]
       ],
       "gold": [
@@ -7520,13 +7059,12 @@
       ],
       "warnings": [],
       "usage": {
-        "calls": 3,
-        "prompt_tokens": 6622,
-        "output_tokens": 3050,
+        "calls": 1,
+        "prompt_tokens": 3839,
+        "output_tokens": 1082,
         "retries": 0,
         "calls_by_stage": {
-          "segment": 1,
-          "subdivide": 2
+          "segment": 1
         }
       }
     },
@@ -7534,16 +7072,16 @@
       "id": "robointer_droid_000032",
       "family": "droid",
       "ok": true,
-      "elapsed": 22.41,
+      "elapsed": 6.87,
       "duration": 27.7,
       "pred": [
         [
           0.0,
-          19.5,
+          20.5,
           "pick_measuring_spoon"
         ],
         [
-          19.5,
+          20.5,
           25.5,
           "place_measuring_spoon_on_counter"
         ]
@@ -7562,13 +7100,12 @@
       ],
       "warnings": [],
       "usage": {
-        "calls": 3,
-        "prompt_tokens": 6591,
-        "output_tokens": 1344,
+        "calls": 1,
+        "prompt_tokens": 3800,
+        "output_tokens": 957,
         "retries": 0,
         "calls_by_stage": {
-          "segment": 1,
-          "subdivide": 2
+          "segment": 1
         }
       }
     },
@@ -7576,7 +7113,7 @@
       "id": "robointer_droid_000033",
       "family": "droid",
       "ok": true,
-      "elapsed": 20.21,
+      "elapsed": 6.6,
       "duration": 27.7,
       "pred": [
         [
@@ -7586,7 +7123,7 @@
         ],
         [
           18.5,
-          26.5,
+          26.0,
           "place_measuring_spoon_on_counter"
         ]
       ],
@@ -7604,13 +7141,12 @@
       ],
       "warnings": [],
       "usage": {
-        "calls": 3,
-        "prompt_tokens": 6617,
-        "output_tokens": 2126,
+        "calls": 1,
+        "prompt_tokens": 3800,
+        "output_tokens": 1183,
         "retries": 0,
         "calls_by_stage": {
-          "segment": 1,
-          "subdivide": 2
+          "segment": 1
         }
       }
     },
@@ -7618,7 +7154,7 @@
       "id": "robointer_droid_000034",
       "family": "droid",
       "ok": true,
-      "elapsed": 28.78,
+      "elapsed": 6.16,
       "duration": 28.6,
       "pred": [
         [
@@ -7646,13 +7182,12 @@
       ],
       "warnings": [],
       "usage": {
-        "calls": 3,
-        "prompt_tokens": 6612,
-        "output_tokens": 1778,
+        "calls": 1,
+        "prompt_tokens": 3840,
+        "output_tokens": 826,
         "retries": 0,
         "calls_by_stage": {
-          "segment": 1,
-          "subdivide": 2
+          "segment": 1
         }
       }
     },
@@ -7660,9 +7195,15 @@
       "id": "robointer_droid_000035",
       "family": "droid",
       "ok": true,
-      "elapsed": 15.43,
+      "elapsed": 5.14,
       "duration": 28.6,
-      "pred": [],
+      "pred": [
+        [
+          0.0,
+          28.6,
+          "no_completed_subtask"
+        ]
+      ],
       "gold": [
         [
           0.0,
@@ -7675,12 +7216,10 @@
           "drop the gray toy in the toy sink"
         ]
       ],
-      "warnings": [
-        "no segments were produced for this episode"
-      ],
+      "warnings": [],
       "usage": {
         "calls": 1,
-        "prompt_tokens": 3788,
+        "prompt_tokens": 3840,
         "output_tokens": 644,
         "retries": 0,
         "calls_by_stage": {
@@ -7692,27 +7231,17 @@
       "id": "robointer_droid_000036",
       "family": "droid",
       "ok": true,
-      "elapsed": 27.7,
+      "elapsed": 8.21,
       "duration": 27.7,
       "pred": [
         [
           0.0,
-          4.88,
-          "pick_wipe"
-        ],
-        [
-          4.88,
           9.0,
-          "wipe_lid"
+          "pull_wipe"
         ],
         [
           9.0,
-          22.46,
-          "pick_tissue"
-        ],
-        [
-          22.46,
-          26.0,
+          25.0,
           "wipe_lid"
         ]
       ],
@@ -7735,13 +7264,12 @@
       ],
       "warnings": [],
       "usage": {
-        "calls": 3,
-        "prompt_tokens": 6543,
-        "output_tokens": 3737,
+        "calls": 1,
+        "prompt_tokens": 3785,
+        "output_tokens": 658,
         "retries": 0,
         "calls_by_stage": {
-          "segment": 1,
-          "subdivide": 2
+          "segment": 1
         }
       }
     },
@@ -7749,26 +7277,21 @@
       "id": "robointer_droid_000037",
       "family": "droid",
       "ok": true,
-      "elapsed": 45.47,
+      "elapsed": 8.7,
       "duration": 28.5,
       "pred": [
         [
           0.0,
           12.0,
-          "pick_small_drawer"
+          "pick_small_white_drawer"
         ],
         [
           12.0,
-          17.0,
-          "place_small_drawer_in_top_drawer"
+          17.5,
+          "place_small_white_drawer_in_drawer"
         ],
         [
-          17.0,
-          18.88,
-          "place_small_drawer"
-        ],
-        [
-          18.88,
+          17.5,
           26.0,
           "close_drawer"
         ]
@@ -7792,13 +7315,12 @@
       ],
       "warnings": [],
       "usage": {
-        "calls": 4,
-        "prompt_tokens": 8030,
-        "output_tokens": 3354,
+        "calls": 1,
+        "prompt_tokens": 3839,
+        "output_tokens": 1302,
         "retries": 0,
         "calls_by_stage": {
-          "segment": 1,
-          "subdivide": 3
+          "segment": 1
         }
       }
     },
@@ -7806,7 +7328,7 @@
       "id": "robointer_droid_000038",
       "family": "droid",
       "ok": true,
-      "elapsed": 21.6,
+      "elapsed": 7.68,
       "duration": 27.7,
       "pred": [
         [
@@ -7816,7 +7338,7 @@
         ],
         [
           5.0,
-          27.0,
+          24.0,
           "wipe_lid"
         ]
       ],
@@ -7839,13 +7361,12 @@
       ],
       "warnings": [],
       "usage": {
-        "calls": 3,
-        "prompt_tokens": 6542,
-        "output_tokens": 2494,
+        "calls": 1,
+        "prompt_tokens": 3785,
+        "output_tokens": 697,
         "retries": 0,
         "calls_by_stage": {
-          "segment": 1,
-          "subdivide": 2
+          "segment": 1
         }
       }
     },
@@ -7853,31 +7374,21 @@
       "id": "robointer_droid_000039",
       "family": "droid",
       "ok": true,
-      "elapsed": 26.24,
+      "elapsed": 12.55,
       "duration": 28.5,
       "pred": [
         [
           0.0,
-          5.06,
-          "pick_white_drawer"
+          14.5,
+          "pick_small_white_drawer"
         ],
         [
-          5.06,
-          13.5,
-          "place_white_drawer_in_top_drawer"
+          14.5,
+          20.0,
+          "place_small_white_drawer_in_top_drawer"
         ],
         [
-          13.5,
-          15.5,
-          "place_white_drawer_in_drawer"
-        ],
-        [
-          15.5,
-          19.5,
-          "close_drawer"
-        ],
-        [
-          19.5,
+          20.0,
           26.5,
           "close_drawer"
         ]
@@ -7901,13 +7412,12 @@
       ],
       "warnings": [],
       "usage": {
-        "calls": 4,
-        "prompt_tokens": 8044,
-        "output_tokens": 3721,
+        "calls": 1,
+        "prompt_tokens": 3839,
+        "output_tokens": 1406,
         "retries": 0,
         "calls_by_stage": {
-          "segment": 1,
-          "subdivide": 3
+          "segment": 1
         }
       }
     },
@@ -7915,18 +7425,18 @@
       "id": "robointer_droid_000042",
       "family": "droid",
       "ok": true,
-      "elapsed": 20.67,
+      "elapsed": 8.03,
       "duration": 31.2,
       "pred": [
         [
           0.0,
-          20.0,
+          21.5,
           "pick_cup"
         ],
         [
-          20.0,
-          28.0,
-          "place_cup_on_table"
+          21.5,
+          28.5,
+          "place_cup"
         ]
       ],
       "gold": [
@@ -7943,13 +7453,12 @@
       ],
       "warnings": [],
       "usage": {
-        "calls": 3,
-        "prompt_tokens": 7729,
-        "output_tokens": 1800,
+        "calls": 1,
+        "prompt_tokens": 4938,
+        "output_tokens": 1126,
         "retries": 0,
         "calls_by_stage": {
-          "segment": 1,
-          "subdivide": 2
+          "segment": 1
         }
       }
     },
@@ -7957,7 +7466,7 @@
       "id": "robointer_droid_000043",
       "family": "droid",
       "ok": true,
-      "elapsed": 24.58,
+      "elapsed": 5.89,
       "duration": 32.2,
       "pred": [
         [
@@ -7967,7 +7476,7 @@
         ],
         [
           11.5,
-          30.0,
+          20.0,
           "cover_pot"
         ]
       ],
@@ -7985,13 +7494,12 @@
       ],
       "warnings": [],
       "usage": {
-        "calls": 3,
-        "prompt_tokens": 7707,
-        "output_tokens": 1458,
+        "calls": 1,
+        "prompt_tokens": 4932,
+        "output_tokens": 941,
         "retries": 0,
         "calls_by_stage": {
-          "segment": 1,
-          "subdivide": 2
+          "segment": 1
         }
       }
     },
@@ -7999,7 +7507,7 @@
       "id": "robointer_droid_000044",
       "family": "droid",
       "ok": true,
-      "elapsed": 28.56,
+      "elapsed": 5.98,
       "duration": 32.2,
       "pred": [
         [
@@ -8009,7 +7517,7 @@
         ],
         [
           11.0,
-          16.0,
+          15.5,
           "place_lid_on_pot"
         ]
       ],
@@ -8027,13 +7535,12 @@
       ],
       "warnings": [],
       "usage": {
-        "calls": 3,
-        "prompt_tokens": 7697,
-        "output_tokens": 2087,
+        "calls": 1,
+        "prompt_tokens": 4932,
+        "output_tokens": 612,
         "retries": 0,
         "calls_by_stage": {
-          "segment": 1,
-          "subdivide": 2
+          "segment": 1
         }
       }
     },
@@ -8041,57 +7548,32 @@
       "id": "robointer_droid_000045",
       "family": "droid",
       "ok": true,
-      "elapsed": 41.39,
+      "elapsed": 13.87,
       "duration": 36.5,
       "pred": [
         [
           0.0,
-          1.75,
-          "open_drawer"
-        ],
-        [
-          1.75,
-          3.5,
+          11.0,
           "pick_knife"
         ],
         [
-          3.5,
-          7.85,
-          "open_drawer"
+          11.0,
+          17.5,
+          "place_knife_in_drawer"
         ],
         [
-          7.85,
-          13.0,
+          17.5,
+          25.5,
           "pick_item"
         ],
         [
-          13.0,
-          16.44,
+          25.5,
+          29.5,
           "place_item_in_drawer"
         ],
         [
-          16.44,
-          20.5,
-          "pick_desktop_item"
-        ],
-        [
-          20.5,
-          26.0,
-          "pick_item"
-        ],
-        [
-          26.0,
-          27.25,
-          "place_item_in_drawer"
-        ],
-        [
-          27.25,
-          30.5,
-          "close_drawer"
-        ],
-        [
-          30.5,
-          35.5,
+          29.5,
+          35.0,
           "close_drawer"
         ]
       ],
@@ -8124,13 +7606,12 @@
       ],
       "warnings": [],
       "usage": {
-        "calls": 7,
-        "prompt_tokens": 13295,
-        "output_tokens": 7377,
+        "calls": 1,
+        "prompt_tokens": 4896,
+        "output_tokens": 2638,
         "retries": 0,
         "calls_by_stage": {
-          "segment": 1,
-          "subdivide": 6
+          "segment": 1
         }
       }
     },
@@ -8138,37 +7619,42 @@
       "id": "robointer_droid_000046",
       "family": "droid",
       "ok": true,
-      "elapsed": 34.66,
+      "elapsed": 11.06,
       "duration": 36.5,
       "pred": [
         [
           0.0,
           5.0,
-          "pick_peeler"
-        ],
-        [
-          5.0,
-          6.25,
-          "place_peeler_in_drawer"
-        ],
-        [
-          6.25,
-          9.5,
-          "close_drawer"
-        ],
-        [
-          9.5,
-          14.5,
           "pick_bottle"
         ],
         [
-          14.5,
-          17.5,
+          5.0,
+          9.0,
           "place_bottle_in_drawer"
         ],
         [
-          17.5,
-          34.5,
+          9.0,
+          15.5,
+          "pick_spoon"
+        ],
+        [
+          15.5,
+          20.0,
+          "place_spoon_in_drawer"
+        ],
+        [
+          20.0,
+          24.5,
+          "pick_coaster"
+        ],
+        [
+          24.5,
+          27.0,
+          "place_coaster_in_drawer"
+        ],
+        [
+          27.0,
+          35.0,
           "close_drawer"
         ]
       ],
@@ -8201,13 +7687,12 @@
       ],
       "warnings": [],
       "usage": {
-        "calls": 6,
-        "prompt_tokens": 11898,
-        "output_tokens": 5368,
+        "calls": 1,
+        "prompt_tokens": 4896,
+        "output_tokens": 1839,
         "retries": 0,
         "calls_by_stage": {
-          "segment": 1,
-          "subdivide": 5
+          "segment": 1
         }
       }
     },
@@ -8215,51 +7700,46 @@
       "id": "robointer_droid_000047",
       "family": "droid",
       "ok": true,
-      "elapsed": 41.89,
+      "elapsed": 12.71,
       "duration": 43.1,
       "pred": [
         [
           0.0,
-          5.5,
+          6.5,
           "pick_blue_block"
         ],
         [
-          5.5,
-          7.0,
+          6.5,
+          10.5,
           "place_blue_block_in_bowl"
         ],
         [
-          7.0,
           10.5,
+          14.0,
           "pick_green_block"
         ],
         [
-          10.5,
-          15.5,
-          "pick_green_block"
-        ],
-        [
-          15.5,
-          18.5,
+          14.0,
+          17.5,
           "place_green_block_in_bowl"
         ],
         [
-          18.5,
-          27.5,
+          17.5,
+          27.0,
           "pick_red_block"
         ],
         [
-          27.5,
+          27.0,
           29.5,
           "place_red_block_in_bowl"
         ],
         [
           29.5,
-          38.5,
+          38.0,
           "pick_yellow_block"
         ],
         [
-          38.5,
+          38.0,
           41.5,
           "place_yellow_block_in_bowl"
         ]
@@ -8308,13 +7788,12 @@
       ],
       "warnings": [],
       "usage": {
-        "calls": 8,
-        "prompt_tokens": 15965,
-        "output_tokens": 8812,
+        "calls": 1,
+        "prompt_tokens": 6054,
+        "output_tokens": 1810,
         "retries": 0,
         "calls_by_stage": {
-          "segment": 1,
-          "subdivide": 7
+          "segment": 1
         }
       }
     },
@@ -8322,46 +7801,46 @@
       "id": "robointer_droid_000050",
       "family": "droid",
       "ok": true,
-      "elapsed": 38.92,
+      "elapsed": 13.17,
       "duration": 43.1,
       "pred": [
         [
           0.0,
-          8.0,
+          7.5,
           "pick_blue_block"
         ],
         [
-          8.0,
-          10.5,
+          7.5,
+          10.0,
           "place_blue_block_in_bowl"
         ],
         [
-          10.5,
-          16.0,
+          10.0,
+          15.5,
           "pick_green_block"
         ],
         [
-          16.0,
-          19.5,
+          15.5,
+          18.0,
           "place_green_block_in_bowl"
         ],
         [
-          19.5,
-          27.0,
+          18.0,
+          26.0,
           "pick_red_block"
         ],
         [
-          27.0,
-          29.5,
+          26.0,
+          28.5,
           "place_red_block_in_bowl"
         ],
         [
-          29.5,
-          38.5,
+          28.5,
+          39.0,
           "pick_yellow_block"
         ],
         [
-          38.5,
+          39.0,
           41.5,
           "place_yellow_block_in_bowl"
         ]
@@ -8410,13 +7889,12 @@
       ],
       "warnings": [],
       "usage": {
-        "calls": 7,
-        "prompt_tokens": 14541,
-        "output_tokens": 4555,
+        "calls": 1,
+        "prompt_tokens": 6054,
+        "output_tokens": 1966,
         "retries": 0,
         "calls_by_stage": {
-          "segment": 1,
-          "subdivide": 6
+          "segment": 1
         }
       }
     },
@@ -8424,33 +7902,23 @@
       "id": "robointer_droid_000055",
       "family": "droid",
       "ok": true,
-      "elapsed": 55.98,
+      "elapsed": 18.52,
       "duration": 64.7,
       "pred": [
         [
           0.0,
-          7.79,
+          17.5,
           "pick_spoon"
         ],
         [
-          7.79,
-          17.0,
-          "scoop_from_blue_bowl"
+          17.5,
+          45.0,
+          "scoop_bowl_contents"
         ],
         [
-          17.0,
-          39.0,
-          "scoop_contents"
-        ],
-        [
-          39.0,
+          45.0,
           57.5,
-          "dump_contents_in_crate"
-        ],
-        [
-          57.5,
-          61.5,
-          "place_spoon_in_bowl"
+          "pour_contents_into_crate"
         ]
       ],
       "gold": [
@@ -8477,13 +7945,12 @@
       ],
       "warnings": [],
       "usage": {
-        "calls": 6,
-        "prompt_tokens": 15684,
-        "output_tokens": 6863,
+        "calls": 2,
+        "prompt_tokens": 10097,
+        "output_tokens": 2096,
         "retries": 0,
         "calls_by_stage": {
-          "segment": 2,
-          "subdivide": 4
+          "segment": 2
         }
       }
     },
@@ -8491,23 +7958,23 @@
       "id": "robointer_droid_000056",
       "family": "droid",
       "ok": true,
-      "elapsed": 55.98,
+      "elapsed": 19.99,
       "duration": 64.7,
       "pred": [
         [
           0.0,
-          8.5,
+          12.5,
           "pick_spoon"
         ],
         [
-          8.5,
-          43.0,
-          "scoop_contents"
+          12.5,
+          41.0,
+          "scoop_contents_from_bowl"
         ],
         [
-          43.0,
+          41.0,
           57.0,
-          "dump_contents_into_crate"
+          "pour_contents_into_crate"
         ],
         [
           57.0,
@@ -8537,15 +8004,16 @@
           "place the spoon in the bowl"
         ]
       ],
-      "warnings": [],
+      "warnings": [
+        "trimmed 0.50s overlap between 'pour_contents_into_crate' and 'place_spoon_in_bowl'"
+      ],
       "usage": {
-        "calls": 6,
-        "prompt_tokens": 15689,
-        "output_tokens": 4871,
+        "calls": 2,
+        "prompt_tokens": 10097,
+        "output_tokens": 3067,
         "retries": 0,
         "calls_by_stage": {
-          "segment": 2,
-          "subdivide": 4
+          "segment": 2
         }
       }
     },
@@ -8553,51 +8021,21 @@
       "id": "robointer_droid_000057",
       "family": "droid",
       "ok": true,
-      "elapsed": 64.21,
+      "elapsed": 21.18,
       "duration": 74.5,
       "pred": [
         [
           0.0,
-          19.0,
-          "grasp_cloth"
-        ],
-        [
-          19.0,
-          24.5,
+          57.5,
           "fold_cloth"
         ],
         [
-          24.5,
-          28.5,
-          "grasp_cloth"
-        ],
-        [
-          28.5,
-          35.0,
-          "fold_cloth"
-        ],
-        [
-          35.0,
-          44.0,
-          "grasp_cloth"
-        ],
-        [
-          44.0,
-          54.0,
-          "fold_cloth"
-        ],
-        [
-          54.0,
-          54.27,
+          57.5,
+          65.5,
           "pick_cloth"
         ],
         [
-          54.27,
-          62.0,
-          "pick_cloth"
-        ],
-        [
-          62.0,
+          65.5,
           71.5,
           "place_cloth_in_box"
         ]
@@ -8644,18 +8082,14 @@
           "place the yellow cloth inside the cardboard box"
         ]
       ],
-      "warnings": [
-        "trimmed 0.27s overlap between 'fold_cloth' and 'pick_cloth'",
-        "trimmed 11.23s overlap between 'pick_cloth' and 'pick_cloth'"
-      ],
+      "warnings": [],
       "usage": {
-        "calls": 10,
-        "prompt_tokens": 22356,
-        "output_tokens": 11590,
+        "calls": 2,
+        "prompt_tokens": 11179,
+        "output_tokens": 3696,
         "retries": 0,
         "calls_by_stage": {
-          "segment": 2,
-          "subdivide": 8
+          "segment": 2
         }
       }
     },
@@ -8663,46 +8097,31 @@
       "id": "robointer_droid_000058",
       "family": "droid",
       "ok": true,
-      "elapsed": 57.3,
+      "elapsed": 24.37,
       "duration": 74.5,
       "pred": [
         [
           0.0,
-          8.17,
+          11.5,
           "pick_object"
         ],
         [
-          8.17,
-          14.0,
-          "place_object_in_box"
+          11.5,
+          22.0,
+          "place_object"
         ],
         [
-          14.0,
-          20.88,
-          "place_object_on_cloth"
+          22.0,
+          64.5,
+          "no_completed_subtask"
         ],
         [
-          20.88,
-          25.0,
-          "pick_object"
-        ],
-        [
-          25.0,
-          38.0,
+          64.5,
+          67.0,
           "pick_cloth"
         ],
         [
-          38.0,
-          59.0,
-          "place_cloth"
-        ],
-        [
-          59.0,
-          68.0,
-          "pick_cloth"
-        ],
-        [
-          68.0,
+          67.0,
           71.5,
           "place_cloth_in_box"
         ]
@@ -8751,13 +8170,12 @@
       ],
       "warnings": [],
       "usage": {
-        "calls": 8,
-        "prompt_tokens": 19539,
-        "output_tokens": 9701,
+        "calls": 2,
+        "prompt_tokens": 11182,
+        "output_tokens": 4604,
         "retries": 0,
         "calls_by_stage": {
-          "segment": 2,
-          "subdivide": 6
+          "segment": 2
         }
       }
     },
@@ -8765,22 +8183,22 @@
       "id": "robointer_droid_000059",
       "family": "droid",
       "ok": true,
-      "elapsed": 38.97,
+      "elapsed": 22.75,
       "duration": 75.9,
       "pred": [
         [
           0.0,
-          13.5,
-          "pick_plug"
+          14.0,
+          "no_completed_subtask"
         ],
         [
-          13.5,
-          46.75,
-          "insert_plug_into_power_strip"
+          14.0,
+          27.0,
+          "reposition_plug"
         ],
         [
-          46.75,
-          64.0,
+          27.0,
+          64.5,
           "insert_plug_into_power_strip"
         ]
       ],
@@ -8803,13 +8221,12 @@
       ],
       "warnings": [],
       "usage": {
-        "calls": 5,
-        "prompt_tokens": 15308,
-        "output_tokens": 5028,
+        "calls": 2,
+        "prompt_tokens": 11154,
+        "output_tokens": 4151,
         "retries": 0,
         "calls_by_stage": {
-          "segment": 2,
-          "subdivide": 3
+          "segment": 2
         }
       }
     },
@@ -8817,33 +8234,23 @@
       "id": "robointer_droid_000060",
       "family": "droid",
       "ok": true,
-      "elapsed": 45.5,
+      "elapsed": 24.79,
       "duration": 75.9,
       "pred": [
         [
           0.0,
-          11.08,
+          13.5,
           "pick_plug"
         ],
         [
-          11.08,
-          14.0,
-          "insert_plug"
-        ],
-        [
-          14.0,
-          24.52,
-          "pick_plug"
-        ],
-        [
-          24.52,
-          64.5,
+          13.5,
+          45.5,
           "insert_plug_into_power_strip"
         ],
         [
+          45.5,
           64.5,
-          75.5,
-          "push_plug_into_power_strip"
+          "insert_plug_into_power_strip"
         ]
       ],
       "gold": [
@@ -8865,13 +8272,12 @@
       ],
       "warnings": [],
       "usage": {
-        "calls": 5,
-        "prompt_tokens": 15334,
-        "output_tokens": 7923,
+        "calls": 2,
+        "prompt_tokens": 11154,
+        "output_tokens": 3247,
         "retries": 0,
         "calls_by_stage": {
-          "segment": 2,
-          "subdivide": 3
+          "segment": 2
         }
       }
     },
@@ -8879,58 +8285,38 @@
       "id": "robointer_droid_000061",
       "family": "droid",
       "ok": true,
-      "elapsed": 44.19,
+      "elapsed": 26.03,
       "duration": 107.3,
       "pred": [
         [
           0.0,
-          14.0,
+          16.5,
           "pick_spoon"
         ],
         [
-          14.0,
-          27.12,
-          "scoop_contents_from_white_bowl"
+          16.5,
+          35.5,
+          "scoop_from_white_bowl"
         ],
         [
-          27.12,
-          35.0,
-          "pour_contents_into_green_bowl"
+          35.5,
+          58.0,
+          "pour_into_green_bowl"
         ],
         [
-          35.0,
-          43.75,
-          "pour_contents_into_green_bowl"
+          58.0,
+          76.5,
+          "scoop_from_white_bowl"
         ],
         [
-          43.75,
-          56.0,
-          "spoon_contents_from_white_bowl"
+          76.5,
+          96.0,
+          "pour_into_green_bowl"
         ],
         [
-          56.0,
-          68.83,
-          "scoop_contents_from_white_bowl"
-        ],
-        [
-          68.83,
-          78.0,
-          "pour_contents_into_green_bowl"
-        ],
-        [
-          78.0,
-          85.08,
-          "pour_contents_into_green_bowl"
-        ],
-        [
-          85.08,
-          95.0,
-          "scoop_contents_from_white_bowl"
-        ],
-        [
-          95.0,
+          96.0,
           105.5,
-          "place_spoon_on_table"
+          "place_spoon_in_white_bowl"
         ]
       ],
       "gold": [
@@ -8967,13 +8353,12 @@
       ],
       "warnings": [],
       "usage": {
-        "calls": 8,
-        "prompt_tokens": 22904,
-        "output_tokens": 10746,
+        "calls": 2,
+        "prompt_tokens": 14470,
+        "output_tokens": 4500,
         "retries": 0,
         "calls_by_stage": {
-          "segment": 2,
-          "subdivide": 6
+          "segment": 2
         }
       }
     },
@@ -8981,66 +8366,41 @@
       "id": "robointer_droid_000062",
       "family": "droid",
       "ok": true,
-      "elapsed": 58.82,
+      "elapsed": 22.78,
       "duration": 107.3,
       "pred": [
         [
           0.0,
-          5.67,
+          9.0,
           "pick_spoon"
         ],
         [
-          5.67,
-          8.5,
-          "scoop_contents"
-        ],
-        [
-          8.5,
-          10.4,
-          "spoon_contents_into_green_bowl"
-        ],
-        [
-          10.4,
-          13.38,
-          "scoop_contents_from_white_bowl"
-        ],
-        [
-          13.38,
-          15.0,
-          "spoon_contents_into_green_bowl"
-        ],
-        [
-          15.0,
-          28.5,
-          "pick_spoon"
-        ],
-        [
-          28.5,
-          42.25,
-          "spoon_contents_into_green_bowl"
-        ],
-        [
-          42.25,
-          56.0,
-          "spoon_contents_into_green_bowl"
-        ],
-        [
-          56.0,
-          75.79,
-          "scoop_contents_from_white_bowl"
-        ],
-        [
-          75.79,
-          81.0,
+          9.0,
+          14.5,
           "pour_contents_into_green_bowl"
         ],
         [
-          81.0,
-          93.5,
-          "spoon_contents_into_green_bowl"
+          14.5,
+          39.0,
+          "scoop_contents_from_white_bowl"
         ],
         [
-          93.5,
+          39.0,
+          56.0,
+          "pour_contents_into_green_bowl"
+        ],
+        [
+          56.0,
+          80.0,
+          "scoop_contents_from_white_bowl"
+        ],
+        [
+          80.0,
+          94.0,
+          "pour_contents_into_green_bowl"
+        ],
+        [
+          94.0,
           105.0,
           "place_spoon_in_white_bowl"
         ]
@@ -9079,13 +8439,12 @@
       ],
       "warnings": [],
       "usage": {
-        "calls": 9,
-        "prompt_tokens": 24349,
-        "output_tokens": 14026,
+        "calls": 2,
+        "prompt_tokens": 14472,
+        "output_tokens": 3521,
         "retries": 0,
         "calls_by_stage": {
-          "segment": 2,
-          "subdivide": 7
+          "segment": 2
         }
       }
     }

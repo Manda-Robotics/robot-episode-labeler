@@ -20,7 +20,8 @@ from pathlib import Path
 from PIL import Image
 from pydantic import BaseModel
 
-DEFAULT_MODEL = "gemini-3.7-flash"
+from ..config import DEFAULT_MODEL  # noqa: E402  (re-exported for callers)
+
 # gemini-3.5-flash is kept only to replicate earlier recorded runs; it costs
 # materially more than 3.7 for this workload.
 REPLICATION_MODEL = "gemini-3.5-flash"
@@ -94,6 +95,15 @@ class LLMError(RuntimeError):
     pass
 
 
+@dataclass(frozen=True)
+class VideoClip:
+    """A video part for the model: encoded bytes plus the frame rate to sample at."""
+
+    data: bytes
+    fps: float
+    mime_type: str = "video/mp4"
+
+
 class _Transient(LLMError):
     """Retryable regardless of message; see _RETRY_MARKERS for the rest."""
 
@@ -109,9 +119,13 @@ class GeminiClient:
         self,
         model: str = DEFAULT_MODEL,
         api_key: str | None = None,
-        temperature: float = 0.0,
+        temperature: float | None = 0.0,
         max_retries: int = 4,
         timeout_s: float = REQUEST_TIMEOUT_S,
+        thinking_level: str | None = None,
+        thinking_budget: int | None = None,
+        media_resolution: str | None = None,
+        media_processing: str | None = None,
     ) -> None:
         key = api_key or os.environ.get("GEMINI_API_KEY")
         if not key:
@@ -130,6 +144,12 @@ class GeminiClient:
         self.model = model
         self.temperature = temperature
         self.max_retries = max_retries
+        self.thinking_level = thinking_level
+        self.thinking_budget = thinking_budget
+        # "low" | "medium" | "high": token budget per frame / image.
+        self.media_resolution = media_resolution
+        # "static" (fixed-rate frame extraction) | "agentic" (model-driven). Video only.
+        self.media_processing = media_processing
         self.usage = Usage()
 
     def json(
@@ -138,18 +158,46 @@ class GeminiClient:
         text: str,
         schema: type[BaseModel],
         images: list[Image.Image] | None = None,
+        videos: list[VideoClip] | None = None,
     ) -> BaseModel:
-        """One structured-output call. Returns a validated pydantic model."""
+        """One structured-output call. Returns a validated pydantic model.
+
+        Images follow the text (the measured contact-sheet layout). Video goes
+        before the text, which is Google's documented best practice for long
+        media: instructions last, after the data.
+        """
         from google.genai import types
 
-        parts: list = [types.Part.from_text(text=text)]
+        parts: list = []
+        for clip in videos or []:
+            kw = {}
+            if self.media_processing:
+                kw["media_processing"] = types.MediaProcessing(self.media_processing.upper())
+            parts.append(types.Part(
+                inline_data=types.Blob(data=clip.data, mime_type=clip.mime_type),
+                video_metadata=types.VideoMetadata(fps=clip.fps),
+                **kw,
+            ))
+        parts.append(types.Part.from_text(text=text))
         for img in images or []:
             parts.append(types.Part.from_bytes(data=png_bytes(img), mime_type="image/png"))
 
+        thinking = None
+        if self.thinking_level is not None or self.thinking_budget is not None:
+            thinking = types.ThinkingConfig(
+                thinking_level=self.thinking_level, thinking_budget=self.thinking_budget,
+            )
         config = types.GenerateContentConfig(
             response_mime_type="application/json",
             response_schema=schema,
+            # None leaves the API default (recommended for gemini-3.x, where the
+            # parameter is deprecated and values below 1.0 are discouraged).
             temperature=self.temperature,
+            thinking_config=thinking,
+            media_resolution=(
+                types.MediaResolution(f"MEDIA_RESOLUTION_{self.media_resolution.upper()}")
+                if self.media_resolution else None
+            ),
             http_options=types.HttpOptions(timeout=int(self.timeout_s * 1000)),
         )
 

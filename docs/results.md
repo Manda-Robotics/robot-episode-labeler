@@ -19,12 +19,59 @@ Read this before comparing our numbers to anyone else's.
   naming is measured separately from segmentation. Gold labels are free-text
   descriptions, so string equality would score a correct system at zero.
 
-**This is our protocol, not WGO-Bench's.** Macrodata report 0.306 segmentation F1
-for their best configuration. We do not know their matching rule, IoU threshold or
-pooling, and their published repository contains no scoring code, so **our numbers
-are not a head-to-head comparison** and must not be presented as beating theirs.
-What is comparable is the pipeline: their sampling parameters (0.5 s, 224 px,
-20 frames per sheet, 5 columns) are the ones we use.
+**F1@0.5 is our protocol, not WGO-Bench's.** Macrodata report 0.306 segmentation
+F1 for their best configuration, matched one-to-one at **IoU ≥ 0.75** with the
+first start and last end snapped to gold (their blog, "Annotating robot video
+subtasks"). We now compute that number too, as **`f1_wgo`**; our matching is
+greedy by descending IoU, which may differ in detail from theirs, so treat it as
+approximately comparable rather than head-to-head. Their sampling parameters
+(0.5 s, 224 px, 20 frames per sheet, 5 columns) are the ones we use.
+
+## Second pass (2026-08-28): segmentation
+
+Full detail, including every negative result, is in `research-log.md`. All runs
+are `fast` (segmentation only) on `gemini-3.7-flash`, 100 episodes, paired
+bootstrap against `g37_base`. `f1_wgo` is F1 at IoU 0.75 with the outer
+boundaries snapped to gold — Macrodata's protocol, so it is the number
+comparable to their published 0.306.
+
+| run | change | F1@0.5 | f1_wgo | ±0.25 s | ±0.5 s | ±1.0 s | median err | recall 1–2 s | $/vid-h |
+|---|---|---:|---:|---:|---:|---:|---:|---:|---:|
+| `g37_base` | first-pass baseline (sheets) | 0.598 | 0.385 | 0.173 | 0.329 | 0.491 | 1.04 s | 0.18 | 1.08 |
+| `s_v2prompt` | + pick/place decomposition prompt | **0.695** | 0.434 | **0.272** | **0.508** | **0.699** | **0.49 s** | 0.65 | 1.24 |
+| `v_fps2_v2` | native video 2 fps + same prompt | **0.720** | **0.469** | 0.268 | 0.488 | 0.676 | 0.52 s | **0.69** | **0.81** |
+| `s_state` | per-frame state, boundaries in code | 0.660 | 0.351 | 0.236 | 0.442 | 0.615 | 0.58 s | 0.58 | 2.32 |
+
+**The decomposition prompt is now the default** (`segment_v2.md`). Against the
+baseline: F1 +0.097 [+0.025, +0.156]; ±0.25 s +0.098 [+0.045, +0.142]; ±0.5 s
++0.178 [+0.109, +0.235]; ±1.0 s +0.207 [+0.129, +0.274] — all significant, and
+the same prompt applied to native video gives +0.071 [+0.026, +0.118] over
+video without it, so the effect holds across two input modalities. The
+failure taxonomy (`scripts/errors.py`) explains why: 52% of HomER gold segments
+and 74% of sub-2 s events were being *merged* into a neighbour; splits and
+shifts were near zero. Under-segmentation was the whole problem.
+
+**Withdrawn:** native video by itself. A first run scored +0.048 (CI lower
+bound +0.001); its replication scored +0.009. With the decomposition prompt,
+video and sheets are statistically equivalent; video costs ~35% less and has
+higher precision (0.785 vs 0.730), sheets slightly higher boundary recall.
+
+**Measured and not adopted:** 4 fps (no gain, 1.9× tokens); temperature 1.0
+(no difference); `thinking_level=low` (F1 unchanged, `f1_wgo` −0.050
+significant, 40% cheaper); one call per episode instead of windows (no
+reliable difference); pixel motion-energy boundary priors (worse than a uniform
+grid).
+
+**Not yet measured:** the `balanced` path (subdivision + labeling) on top of the
+new prompt; the `label_v2.md` fix for DROID's goal-named labels; native-video
+boundary refinement; the four additional datasets. The queue is in
+`scripts/resume_queue.sh`.
+
+**Cost correction.** The figures in the sections below were computed at
+$0.30 / $2.50 per M tokens, which is the pre-2026 flash price. At the current
+list price for `gemini-3.7-flash` ($0.75 / $3.75) they are 2.5× higher:
+`balanced` as recorded costs **$4.12** per video-hour, not $2.39; `fast`
+$1.08. `scripts/compare.py` now prices per model.
 
 ## The noise floor comes first
 

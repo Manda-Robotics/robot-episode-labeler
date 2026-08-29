@@ -287,3 +287,37 @@ moves do not improve accuracy on aggregate.
 Worth noting which bet paid: refinement, the expected win, did nothing, while
 subdivision — which came out of measuring recall against event duration — was the
 largest gain in the project. The measurement chose, not the plan.
+
+---
+
+## ADR-014 — Diagnose before optimising: the failure was merging, not placement (2026-08-28)
+
+**Context.** The first pass treated boundary accuracy as the problem and spent
+its effort on localisation (dense sampling, refinement windows). A failure
+taxonomy over the recorded predictions (`scripts/errors.py`) classed every
+missed gold segment as merged / split / shifted / missing: 52% of HomER gold
+segments and 74% of sub-2 s events were *merged* into a neighbour; splits and
+shifts were near zero. The model was treating pick-and-place as one event named
+after the goal — which also explained DROID's label accuracy of 0.46.
+
+**Measured.** Three added sentences in the segmentation prompt (a pick and the
+following place are two subtasks; every object gets its own; do not cap the
+count): F1 0.598 → 0.695 [+0.025, +0.156], ±0.5 s boundary recall 0.33 → 0.51
+[+0.109, +0.235], median boundary error 1.04 → 0.49 s, sub-2 s recall 0.18 →
+0.65; the same effect on native video input (+0.071 [+0.026, +0.118]). Native
+video alone, 4 fps, temperature, low thinking, single-call episodes and pixel
+motion priors were each measured and gave nothing reliable; native video's
+first apparent gain failed replication and was withdrawn.
+
+**Decision.** `segment_v2.md` is the default prompt. Every knob now lives in
+`PipelineConfig`, stamped into results, so a change is a recorded configuration
+rather than an edit. No change is adopted without a paired bootstrap whose
+interval excludes zero *and* a replication; a lower CI bound of +0.001 is not
+evidence.
+
+**Consequences.** The largest gain in the project cost nothing at inference
+time and came from reading the errors rather than from the expected lever.
+Boundary *placement* is now the residual problem (`f1_wgo` 0.43–0.47 against
+Macrodata's 0.306 at the same protocol), and the queued work — subdivision and
+native-video refinement on top of the new prompt, the label-prompt fix, and
+four further datasets — targets that. See `docs/research-log.md`.

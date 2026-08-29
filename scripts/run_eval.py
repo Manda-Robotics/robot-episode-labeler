@@ -8,20 +8,20 @@ from pathlib import Path
 
 sys.path.insert(0, str(Path(__file__).resolve().parents[1] / "src"))
 
-from rel.annotation.llm import DEFAULT_MODEL, GeminiClient
-from rel.eval import wgo
+from rel.config import DEFAULT_MODEL, PipelineConfig, config_for, parse_overrides
+from rel.eval import datasets, wgo
 from rel.eval.metrics import Aggregate, TOLERANCES
-from rel.pipeline import annotate
+from rel.pipeline import annotate, client_for
 from rel.schemas import AnnotateRequest, Quality
 
 
-def run_one(ep: wgo.Episode, model: str, quality: Quality, subdivide: bool | None) -> dict:
-    client = GeminiClient(model=model)
+def run_one(ep: wgo.Episode, cfg: PipelineConfig, quality: Quality) -> dict:
+    client = client_for(cfg)
     t0 = time.time()
     try:
         resp = annotate(
             AnnotateRequest(video=str(ep.video), prompt=ep.instruction, quality=quality),
-            client=client, subdivide=subdivide,
+            client=client, config=cfg,
         )
         return {
             "id": ep.id, "family": ep.family, "ok": True,
@@ -70,10 +70,21 @@ def main() -> None:
                     help="force the subdivision pass on")
     ap.add_argument("--no-subdivide", dest="subdivide", action="store_false",
                     help="force the subdivision pass off")
+    ap.add_argument("--dataset", default="wgo", help=f"one of data/*: {datasets.available()}")
+    ap.add_argument("--config", default=None,
+                    help="pipeline overrides as key=value,key=value (see rel/config.py)")
     args = ap.parse_args()
 
-    eps = wgo.load(limit=args.limit, family=args.family)
-    print(f"{args.tag}: {len(eps)} episodes | model={args.model} quality={args.quality}", flush=True)
+    quality = Quality(args.quality)
+    overrides = parse_overrides(args.config)
+    overrides.setdefault("model", args.model)
+    if args.subdivide is not None:
+        overrides["subdivide"] = args.subdivide
+    cfg = config_for(quality, **overrides)
+
+    eps = datasets.load(args.dataset, limit=args.limit, family=args.family)
+    print(f"{args.tag}: {len(eps)} episodes from {args.dataset} | model={cfg.model} quality={args.quality}"
+          f" | overrides={overrides}", flush=True)
 
     rows: list[dict] = []
     # Episodes are appended as they complete: a run killed part way through still
@@ -91,7 +102,7 @@ def main() -> None:
 
     t0 = time.time()
     with ThreadPoolExecutor(max_workers=args.workers) as pool:
-        futures = {pool.submit(run_one, e, args.model, Quality(args.quality), args.subdivide): e for e in eps}
+        futures = {pool.submit(run_one, e, cfg, quality): e for e in eps}
         for i, fut in enumerate(as_completed(futures), 1):
             r = fut.result()
             rows.append(r)
@@ -106,8 +117,8 @@ def main() -> None:
     tokens_out = sum(r["usage"]["output_tokens"] for r in rows)
     video_sec = sum(r.get("duration", 0) for r in rows if r.get("ok"))
     out = {
-        "tag": args.tag, "model": args.model, "quality": args.quality,
-        "subdivide": args.subdivide,
+        "tag": args.tag, "dataset": args.dataset, "model": cfg.model, "quality": args.quality,
+        "subdivide": cfg.subdivide, "config": cfg.to_dict(),
         "episodes": len(rows), "failed": sum(1 for r in rows if not r.get("ok")),
         "wall_seconds": round(time.time() - t0, 1),
         "video_seconds": round(video_sec, 1),
