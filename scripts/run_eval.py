@@ -15,12 +15,24 @@ from rel.pipeline import annotate, client_for
 from rel.schemas import AnnotateRequest, Quality
 
 
-def run_one(ep: wgo.Episode, cfg: PipelineConfig, quality: Quality) -> dict:
+def run_one(ep: wgo.Episode, cfg: PipelineConfig, quality: Quality,
+            schema_mode: bool = False) -> dict:
     client = client_for(cfg)
     t0 = time.time()
     try:
+        # Schema mode uses the episode's own gold subtask strings as the closed
+        # vocabulary. Labels become directly comparable to gold, and the
+        # reserved no-event label is exercised, which discovery mode never does.
+        subtasks = []
+        if schema_mode:
+            seen = set()
+            for g in ep.segments:
+                if g.subtask.lower() not in seen:
+                    seen.add(g.subtask.lower())
+                    subtasks.append(g.subtask)
         resp = annotate(
-            AnnotateRequest(video=str(ep.video), prompt=ep.instruction, quality=quality),
+            AnnotateRequest(video=str(ep.video), prompt=ep.instruction, quality=quality,
+                            subtasks=subtasks),
             client=client, config=cfg,
         )
         return {
@@ -73,6 +85,8 @@ def main() -> None:
     ap.add_argument("--dataset", default="wgo", help=f"one of data/*: {datasets.available()}")
     ap.add_argument("--config", default=None,
                     help="pipeline overrides as key=value,key=value (see rel/config.py)")
+    ap.add_argument("--schema-mode", action="store_true",
+                    help="use each episode's gold subtask strings as the closed vocabulary")
     args = ap.parse_args()
 
     quality = Quality(args.quality)
@@ -102,7 +116,7 @@ def main() -> None:
 
     t0 = time.time()
     with ThreadPoolExecutor(max_workers=args.workers) as pool:
-        futures = {pool.submit(run_one, e, cfg, quality): e for e in eps}
+        futures = {pool.submit(run_one, e, cfg, quality, args.schema_mode): e for e in eps}
         for i, fut in enumerate(as_completed(futures), 1):
             r = fut.result()
             rows.append(r)
@@ -118,7 +132,7 @@ def main() -> None:
     video_sec = sum(r.get("duration", 0) for r in rows if r.get("ok"))
     out = {
         "tag": args.tag, "dataset": args.dataset, "model": cfg.model, "quality": args.quality,
-        "subdivide": cfg.subdivide, "config": cfg.to_dict(),
+        "subdivide": cfg.subdivide, "schema_mode": args.schema_mode, "config": cfg.to_dict(),
         "episodes": len(rows), "failed": sum(1 for r in rows if not r.get("ok")),
         "wall_seconds": round(time.time() - t0, 1),
         "video_seconds": round(video_sec, 1),
