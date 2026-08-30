@@ -20,45 +20,49 @@ tags:
 
 # Robot Episode Labeler
 
-Turn a robot manipulation video into timestamped subtask annotations:
+Robot Episode Labeler turns a robot manipulation video into timestamped subtask annotations.
 
 ```
 video + task description  ->  [{start, end, label, result, attributes, description}, ...]
 ```
 
-Upload an episode, describe the task in a sentence, add your Gemini API key,
-and get back structured, queryable labels. Supplying a **subtask vocabulary**
-switches on schema mode: labels are constrained to your list and snapped to it
-in code, which is what robotics teams with an existing SOP usually want.
+Upload an episode, describe the task in one sentence, paste a Gemini API key,
+and the app returns structured labels you can query. Supplying a **subtask
+vocabulary** switches on schema mode: labels are constrained to your list and
+snapped to it in code. Teams with an existing SOP usually want this mode.
 
-**Bring your own key.** This Space calls the Gemini API under the key you paste
-in; it is used for that call only and never stored. Get one at
-[aistudio.google.com/apikey](https://aistudio.google.com/apikey). Typical cost on
-your account at 2026 list prices: about $1.25 per hour of video for segmentation
-only (`fast`), about $4 per hour for `balanced`.
+## Bring your own key
 
-**Limits of this demo:** episodes up to 5 minutes and 200 MB, free CPU hardware
-(the work happens in Gemini, not here). For batch use, run the package locally
-or call the [Replicate model](https://replicate.com/mandarobotics/robot-episode-labeler).
+The Space calls the Gemini API with the key you paste in. The key is used for
+that call only and is never stored. Get one at
+[aistudio.google.com/apikey](https://aistudio.google.com/apikey). At 2026 list
+prices, expect about $1.25 per hour of video for segmentation only (`fast`)
+and about $4 per hour for `balanced`, charged to your Gemini account.
+
+## Limits of this demo
+
+- Episodes up to 5 minutes and 200 MB.
+- Free CPU hardware. The model calls run in Gemini, so the Space does no heavy work itself.
+- For batch use, run the package locally or call the
+  [Replicate model](https://replicate.com/mandarobotics/robot-episode-labeler).
 
 ## How it works
 
-1. Frames are sampled on a grid we control (0.5 s, 224 px) and tiled into
-   contact sheets with the timestamp burned into each tile.
-2. One model call per 60 s window proposes segments, with a prompt that defines
-   boundaries as *completed world-state changes* and states that a pick and the
-   following place are two subtasks — the rule that produced the largest
-   measured improvement.
-3. Segments longer than 3 s are re-read at 0.25 s to find short events that
-   hide at coarse sampling (`balanced` and `strict`).
-4. Each segment is named and judged pass/fail with its neighbours as context.
-5. Ordering, bounds, contiguity and closed vocabularies are enforced in code,
-   and every correction is reported as a warning.
+1. Frames are sampled on a fixed grid (0.5 s, 224 px) and tiled into contact
+   sheets with the timestamp burned into each tile.
+2. One model call per 60 s window proposes segments. The prompt defines a
+   boundary as a completed world-state change and states that a pick and the
+   following place are two subtasks. That rule produced the largest measured
+   improvement.
+3. In `balanced` and `strict`, segments longer than 3 s are re-read at 0.25 s
+   to find short events that coarse sampling hides.
+4. Each segment is named and judged pass or fail with its neighbours as context.
+5. Ordering, bounds, contiguity and closed vocabularies are enforced in code.
+   Every correction is reported as a warning.
 
 Accuracy, known failure modes and data handling are described below the form
 in the app, and in full in the
 [repository](https://github.com/Manda-Robotics/robot-episode-labeler)
 (`docs/results.md`, `docs/research-log.md`).
 
-Built by [Manda](https://github.com/Manda-Robotics), a public benefit corporation
-building evaluation infrastructure for robot learning. Apache-2.0.
+Built by [Manda Robotics](https://github.com/Manda-Robotics). Apache-2.0.

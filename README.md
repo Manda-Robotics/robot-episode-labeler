@@ -1,43 +1,50 @@
 # robot-episode-labeler
 
-Turn a robot manipulation video into timestamped subtask annotations, through one
+Turns a robot manipulation video into timestamped subtask annotations through one
 inference endpoint.
 
 ```
 video + task description  ->  [{start, end, label, result, attributes, description}, ...]
 ```
 
-No onboarding, no ontology workshop, no annotation contract. You send an episode
-and a sentence describing it; you get back structured, queryable labels.
-
-## Why this exists
-
-Robot teams sit on thousands of teleoperation episodes that are effectively
-opaque: to find "every failed grasp of the yellow block" you have to watch them.
-Making episodes temporally and semantically searchable is the useful part of
-what dedicated annotation vendors sell, and most of it can now be produced
-automatically. This packages that as a primitive rather than a service.
-
-Deliberately **not** in scope: object masks, 6D pose, 3D reconstruction, dense
-captioning, or a human-in-the-loop review operation. The bottleneck in public
-benchmarks is temporal boundaries, so that is what the engineering effort goes to.
+You send an episode and a sentence describing it. You get back structured,
+queryable labels. Object masks, 6D pose, 3D reconstruction, dense captioning and
+human review are out of scope. Temporal boundaries are the bottleneck on public
+benchmarks, so that is where the engineering effort goes.
 
 ## Status
 
-Alpha. Automatically generated labels, no human review.
+Alpha. Labels are generated automatically, with no human review.
 
-Timestamps have sub-second *resolution*. Their *accuracy* is a different and
-weaker claim. On the development benchmark the segmentation pass currently finds
-**51% of true boundaries within half a second** (median boundary error 0.49 s),
-segmentation F1 0.70 at IoU 0.5, and 65% of events shorter than two seconds
-(previously 18%). Those are segmentation-only numbers; the end-to-end `balanced`
-path with the new segmentation has not been re-measured yet. Measured numbers,
-the scoring protocol, and what is not yet measured are in
-[`docs/results.md`](docs/results.md); the working notes, including what did not
-work, are in [`docs/research-log.md`](docs/research-log.md). Do not describe this
-as "sub-second accurate".
+Timestamps have sub-second resolution. Their accuracy is a weaker claim. On the
+development benchmark the current segmentation pass (`fast` mode, default prompt)
+measures:
 
-## Interface
+| metric | value |
+|---|---:|
+| true boundaries within 0.5 s | 51% |
+| median boundary error | 0.49 s |
+| segmentation F1 at IoU 0.5 | 0.70 |
+| events lasting 1–2 s found | 65% (previously 18%) |
+| events under 1 s found | 19% (previously 0%) |
+
+These are segmentation-only numbers. The end-to-end `balanced` path (segmentation,
+subdivision, labeling) was last measured on the previous prompt: F1 0.629, 40.5%
+of boundaries within 0.5 s, label accuracy 0.72 on matched segments. It has not
+been re-measured with the new segmentation. The scoring protocol and what is not
+yet measured are in [`docs/results.md`](docs/results.md); working notes, including
+what did not work, are in [`docs/research-log.md`](docs/research-log.md). Do not
+describe this as "sub-second accurate".
+
+## Install
+
+```bash
+uv sync --extra dev
+cp .env.example .env        # add a Gemini key from https://aistudio.google.com/apikey
+uv run pytest -q
+```
+
+## Usage
 
 ```python
 from rel.schemas import AnnotateRequest
@@ -52,11 +59,23 @@ resp = annotate(AnnotateRequest(
 ))
 ```
 
-Supplying `subtasks` switches on **schema mode**: labels are constrained to your
-vocabulary and snapped to it in code, not merely requested in a prompt. Without
-it the model discovers its own labels. Schema mode is the mode robotics teams
-actually want, because they know their SOP; the hard part is applying it
-consistently across thousands of episodes.
+From the command line, run the module directly:
+
+```bash
+PYTHONPATH=src uv run python -m rel.cli annotate episode.mp4 "A robot folds a box." \
+    --subtasks "Pick Box,Fold Left,Fold Right,Stack" --quality balanced
+```
+
+The installed `rel` entry point also works, but this venv intermittently stops
+processing `.pth` files, which leaves the console script unable to import `rel`.
+`rm -rf .venv && uv sync --extra dev` fixes it; invoking the module avoids it.
+
+### Schema mode
+
+Supplying `subtasks` switches on schema mode: labels are constrained to your
+vocabulary and snapped to it in code, not only requested in the prompt. Without
+`subtasks` the model discovers its own labels. Most robotics teams know their
+SOP; the hard part is applying it consistently across thousands of episodes.
 
 ### Quality modes
 
@@ -64,99 +83,89 @@ consistently across thousands of episodes.
 |---|---|---|
 | `fast` | windowed coarse segmentation | dataset browsing, prototyping |
 | `balanced` | + subdivision of long segments + context labeling | default |
-| `strict` | + boundary refinement, repeat pass, disagreement flags | curation / QA |
+| `strict` | + boundary refinement, repeat pass, disagreement flags | curation, QA |
 
-Each mode is a preset over `rel.config.PipelineConfig`; every knob (sampling
+Each mode is a preset over `rel.config.PipelineConfig`. Every knob (sampling
 interval, tile size, prompts, model, thinking level, input modality) is a field,
-and the full config is stamped into each response's metadata. Pass
-`config=PipelineConfig(...)` to `annotate` to override a preset.
+the full config is stamped into each response's metadata, and
+`config=PipelineConfig(...)` overrides a preset.
 
-Boundary refinement sits in `strict` rather than `balanced` because it was measured
-and did not earn its cost: 31% of all model calls for no significant movement in
-any boundary metric. See [`docs/results.md`](docs/results.md).
+Boundary refinement is in `strict` rather than `balanced` because it was measured
+at 31% of all model calls for no significant movement in any boundary metric
+([`docs/results.md`](docs/results.md)).
 
 ## How it works
 
-1. **Sample.** ffmpeg pulls frames on a grid we control (0.5 s), scaled to 224 px.
-   We do not hand the raw MP4 to a video model, because the default there is
-   ~1 fps and manipulation boundaries routinely happen inside one such frame.
-2. **Contact sheets.** Frames are tiled 20 per sheet, 5 columns, each stamped with
-   its episode time. Burned-in stamps are the only channel a model reliably reads
-   a timestamp from.
-3. **Segment.** One call per 60 s window, with a prompt that defines
-   boundaries as *completed world-state changes*, rules out approach, retreat,
-   hesitation and regrasping, and — the single largest measured improvement —
-   states that a pick and the following place are two subtasks, never one.
-   Before that rule the model merged them into one segment named after the
-   goal, which was most of what the benchmark counted as missed events.
-   Two alternative segmentation inputs are implemented and measured:
+1. **Sample.** ffmpeg pulls frames on a 0.5 s grid, scaled to 224 px. Video
+   models default to about 1 fps, and manipulation boundaries routinely fall
+   inside one such frame, so the raw MP4 is not handed over.
+2. **Contact sheets.** Frames are tiled 20 per sheet, 5 columns, each stamped
+   with its episode time. Burned-in stamps are the only channel a model reliably
+   reads a timestamp from.
+3. **Segment.** One call per 60 s window. The prompt defines a boundary as a
+   completed world-state change, excludes approach, retreat, hesitation and
+   regrasping, and states that a pick and the following place are two subtasks.
+   That last rule is the largest measured gain in the project: before it, the
+   model merged pick and place into one segment named after the goal, which was
+   most of the missed events. Two other inputs are implemented and measured:
    native video at a controlled frame rate (`segment_input="video"`, equal
-   accuracy at ~35% lower cost) and per-frame state classification with
-   boundaries derived in code (`segment_input="state"`, finds more short events,
-   places their edges less precisely).
+   accuracy at about 35% lower cost) and per-frame state classification with
+   boundaries derived in code (`segment_input="state"`, more short events found,
+   edges placed less precisely).
 4. **Subdivide.** Any segment longer than 3 s is re-read at 0.25 s sampling and
-   split where a second completed event is visible. Recall is otherwise a function
-   of event duration — measured at 0.00 below one second — because at coarse
-   sampling a short event is only a frame or two. This is the single largest
-   measured improvement in the pipeline.
+   split where a second completed event is visible. Without this, recall is a
+   function of event duration (0.00 below one second at coarse sampling). This
+   was the first pass's largest gain.
 5. **Label.** Each segment is named and judged pass/fail with its neighbours as
    context.
 6. **Refine** (`strict` only). Each boundary is re-placed from a dense window
-   around it. Measured as not earning its cost, so it is off by default.
-7. **Validate.** Ordering, bounds, contiguity, closed vocabularies and rubrics are
-   enforced in code. The model proposes; `annotation/validate.py` decides.
+   around it. Measured as not earning its cost.
+7. **Validate.** Ordering, bounds, contiguity, closed vocabularies and rubrics
+   are enforced in `annotation/validate.py`. The model proposes; the code decides.
 
-Confidence is derived from observable disagreement between stages, not from
-asking the model how sure it is.
+Confidence is derived from observable disagreement between stages, not from the
+model's self-report.
 
-## Development
+## Evaluation
 
-```bash
-uv sync --extra dev
-cp .env.example .env        # add a Gemini key from https://aistudio.google.com/apikey
-uv run pytest -q
-```
-
-Run the CLI as a module rather than through the console script:
-
-```bash
-PYTHONPATH=src uv run python -m rel.cli annotate episode.mp4 "A robot folds a box."
-```
-
-The installed `rel` entry point works, but this venv intermittently stops
-processing `.pth` files, which leaves the editable install invisible and the
-console script unable to import `rel`. Recreating the venv (`rm -rf .venv &&
-uv sync --extra dev`) fixes it; invoking the module directly avoids it entirely.
-
-### Evaluation
-
-Development benchmark is [WGO-Bench](https://huggingface.co/datasets/macrodata/WGO-Bench):
-100 episodes, 743 gold segments, across DROID, Galaxea and HomER egocentric video.
+The development benchmark is [WGO-Bench](https://huggingface.co/datasets/macrodata/WGO-Bench):
+100 episodes and 743 gold segments across DROID, Galaxea and HomER egocentric
+video. The scoring protocol is in [`docs/results.md`](docs/results.md).
 
 ```bash
 uv run python scripts/fetch_eval.py                       # downloads + unpacks (1.3 GB)
 uv run python scripts/run_eval.py --tag mine --quality balanced
 uv run python scripts/score_labels.py --tag mine
-uv run python scripts/variance.py g37_base mine           # paired bootstrap: is the change real?
+uv run python scripts/variance.py g37_base mine           # paired bootstrap on the delta
 uv run python scripts/errors.py mine                      # why each gold segment was missed
 uv run python scripts/run_eval.py --tag exp --quality fast --config segment_input=video,video_fps=2
 ```
 
-A single 100-episode run cannot resolve a change smaller than about 0.05 F1
-(identical configurations differ by that much run to run), so no change is
-adopted without `variance.py` and a replication. Four further benchmarks —
-RoboCerebra and BEHAVIOR-1K (sim, human-teleop boundaries), AgiBotWorld (real
-bimanual robot), HoloAssist (egocentric human) — are fetched by
-`scripts/fetch_<name>.py` into the same layout and selected with `--dataset`.
+Identical configurations differ by up to about 0.05 F1 run to run, so a single
+100-episode run cannot resolve a smaller change. No change is adopted without
+`variance.py` and a replication.
 
-Segmentation and labeling are scored separately: a system can find the right
-moments and name them badly, or name well having cut in the wrong places, and
-those need different fixes. The headline number for a robotics user is the
-**boundary tolerance curve** — what fraction of true boundaries we land within
-±0.25 / 0.5 / 1 / 2 s.
+Segmentation and labeling are scored separately: finding the right moments and
+naming them are different failures with different fixes. The headline number for
+a robotics user is the boundary tolerance curve, the fraction of true boundaries
+with a prediction within ±0.25 / 0.5 / 1 / 2 s.
 
-> WGO-Bench is CC-BY-NC-SA-4.0. It is a development benchmark only: not
-> redistributed, not shipped in any commercial artifact. Reporting scores is fine.
+Four further benchmarks, fetched by `scripts/fetch_<name>.py` into the same
+layout and selected with `--dataset`: RoboCerebra and BEHAVIOR-1K (sim,
+human-teleop boundaries), AgiBotWorld (real bimanual robot), HoloAssist
+(egocentric human).
+
+WGO-Bench is CC-BY-NC-SA-4.0. It is a development benchmark only, not
+redistributed and not shipped in any commercial artifact. Reporting scores is fine.
+
+## Deployment
+
+All targets wrap the same `rel.pipeline.annotate`. Details, including the
+bring-your-own-key model and open blockers, are in [`deploy/README.md`](deploy/README.md).
+
+- **Replicate.** Live (private) at [replicate.com/mandarobotics/robot-episode-labeler](https://replicate.com/mandarobotics/robot-episode-labeler).
+- **Hugging Face Space.** Gradio front end in `deploy/hf_space/`, prepared, not yet pushed.
+- **fal.** `deploy/fal/app.py`, validated as far as possible without deploying; blocked on serverless access for the account.
 
 ## Layout
 
@@ -168,8 +177,16 @@ src/rel/
   video/            frame sampling, timestamped contact sheets, window clips
   annotation/       segment (sheets / video / state), subdivide, refine, label, validate, llm client
   eval/             dataset loaders, temporal metrics, label judge
-  prompts/          the annotation philosophy, as prompt text (v2 = current)
+  prompts/          annotation rules as prompt text (v2 = current)
 scripts/            eval runners, paired bootstrap, failure taxonomy, dataset fetchers
 results/            measured runs, committed as evidence
 docs/               results (claims), research-log (what was tried), decisions (ADRs)
+deploy/             Replicate, Hugging Face Space and fal wrappers
+examples/           licensed demo clips and their inputs
 ```
+
+## Licence
+
+Apache-2.0. See `LICENSE` and `NOTICE`.
+
+Built by [Manda Robotics](https://github.com/Manda-Robotics).
