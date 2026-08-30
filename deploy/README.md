@@ -81,6 +81,14 @@ Two account quirks:
 
 ## Hugging Face Space
 
+Live (private) at https://huggingface.co/spaces/mandarobotics/robot-episode-labeler,
+pushed 2026-08-29. Two account facts learned on the way: a Gradio Space under an
+**organization** requires a Team or Enterprise plan even on free `cpu-basic`
+hardware (the first push returned `402 Payment Required`; `mandarobotics` is now
+on Team), and the Space card's `short_description` is capped at 60 characters
+(upload validation rejects the README otherwise). Visibility is changed in the
+Space settings; no re-upload is needed to go public.
+
 `deploy/hf_space/` is a Gradio front end over the same `annotate()`:
 bring-your-own Gemini key (passed per call, never through the shared process
 environment), episodes capped at 5 min / 200 MB for the free CPU tier, the two

@@ -9,7 +9,7 @@ python_version: "3.12"
 app_file: app.py
 pinned: false
 license: apache-2.0
-short_description: Robot video → timestamped subtasks with pass/fail. Bring your own Gemini key.
+short_description: Robot video → timestamped subtasks with pass/fail
 tags:
   - robotics
   - video-understanding

@@ -164,7 +164,7 @@ All targets wrap the same `rel.pipeline.annotate`. Details, including the
 bring-your-own-key model and open blockers, are in [`deploy/README.md`](deploy/README.md).
 
 - **Replicate.** Live (private) at [replicate.com/mandarobotics/robot-episode-labeler](https://replicate.com/mandarobotics/robot-episode-labeler).
-- **Hugging Face Space.** Gradio front end in `deploy/hf_space/`, prepared, not yet pushed.
+- **Hugging Face Space.** Live (private) at [huggingface.co/spaces/mandarobotics/robot-episode-labeler](https://huggingface.co/spaces/mandarobotics/robot-episode-labeler); source in `deploy/hf_space/`.
 - **fal.** `deploy/fal/app.py`, validated as far as possible without deploying; blocked on serverless access for the account.
 
 ## Layout
