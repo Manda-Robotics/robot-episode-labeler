@@ -70,25 +70,28 @@ This is the mode most robotics teams want. You already know your SOP. The hard p
 
 ## How accurate is it
 
-Measured on [WGO-Bench](https://huggingface.co/datasets/macrodata/WGO-Bench), a public benchmark of 100 manually annotated robot and egocentric episodes with 743 gold subtask segments, using `balanced`:
+Measured on [WGO-Bench](https://huggingface.co/datasets/macrodata/WGO-Bench), a public benchmark of 100 manually annotated robot and egocentric episodes with 743 gold subtask segments.
+
+Segmentation pass (the current default prompt, `fast` mode):
 
 | Metric | Value |
 |---|---|
-| Segmentation F1 | 0.629 |
-| True boundaries found within 0.5 s | 40.5% |
-| True boundaries found within 1.0 s | 60.9% |
-| Median boundary error | 0.70 s |
-| Label accuracy on matched segments | 0.72 |
+| Segmentation F1 (IoU 0.5) | 0.695 |
+| Segmentation F1 at WGO-Bench's own protocol (IoU 0.75; the benchmark authors publish 0.306) | 0.434 |
+| True boundaries found within 0.5 s | 51% |
+| True boundaries found within 1.0 s | 70% |
+| Median boundary error | 0.49 s |
+| Events shorter than 2 s found | 65% |
 
-Scoring protocol: greedy one to one matching at IoU 0.5 or above, pooled across the corpus. Boundary recall counts interior boundaries only, since the first start and last end are dictated by the episode rather than discovered.
+The end-to-end `balanced` path (segmentation plus subdivision plus labeling) was last measured on the previous prompt: F1 0.629, 40.5% of boundaries within 0.5 s, label accuracy 0.72 on matched segments. It has not yet been re-measured on the current default, so treat the table above as the segmentation ceiling and those as the floor.
+
+Scoring protocol: greedy one to one matching, pooled across the corpus. Boundary recall counts interior boundaries only, since the first start and last end are dictated by the episode rather than discovered. Every number was checked against the run to run noise with a paired bootstrap; details and negative results are in the repository's `docs/`.
 
 ## What it gets wrong
 
 Read this before depending on it.
 
-**Events under one second are close to invisible.** Recall below one second is 0.038. Timestamps have sub second resolution, but that is not the same as sub second accuracy, and we do not claim the latter.
-
-**Recall depends strongly on event duration.** Roughly 0.75 for events over eight seconds, 0.37 between one and two seconds. At coarse sampling a short event is only a frame or two, so it is a visibility limit rather than a reasoning one.
+**Short events are the weak spot.** Events under two seconds are found about 65% of the time, longer ones about 80%. When one is missed it is almost always merged into its neighbour rather than misplaced. Timestamps have sub second resolution, but that is not the same as sub second accuracy, and we do not claim the latter.
 
 **It over splits.** Precision is 0.68. Finding more real events costs some spurious boundaries. For search that is usually the right trade, and low confidence splits carry flags you can filter on.
 
@@ -113,7 +116,7 @@ Filter to unflagged segments when you need higher precision.
 
 This model calls the Gemini API and Replicate has no model level secret store, so you supply `gemini_api_key` yourself. Get one at [aistudio.google.com/apikey](https://aistudio.google.com/apikey). The key is write only, scoped to your call, and never written into the response.
 
-Typical cost on your Gemini account is about 2.40 USD per hour of video in `balanced` mode.
+Typical cost on your Gemini account at 2026 list prices is about 1.25 USD per hour of video for segmentation only (`fast`) and about 4 USD per hour in `balanced` mode.
 
 ## Data handling
 
