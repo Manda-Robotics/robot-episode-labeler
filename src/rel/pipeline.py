@@ -143,9 +143,12 @@ def _segment(
     )
 
 
-def client_for(cfg: PipelineConfig) -> GeminiClient:
+def client_for(cfg: PipelineConfig, api_key: str | None = None) -> GeminiClient:
+    """`api_key` overrides GEMINI_API_KEY; hosted front ends pass the caller's own
+    key here rather than through the process environment, which is shared
+    between concurrent requests."""
     return GeminiClient(
-        model=cfg.model, temperature=cfg.temperature,
+        model=cfg.model, api_key=api_key, temperature=cfg.temperature,
         thinking_level=cfg.thinking_level, thinking_budget=cfg.thinking_budget,
         media_resolution=cfg.media_resolution, media_processing=cfg.media_processing,
     )

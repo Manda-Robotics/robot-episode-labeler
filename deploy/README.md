@@ -124,6 +124,31 @@ Two account quirks worth recording:
   a minimal payload under a throwaway name, while reads on the same token
   succeeded. The model had to be created through the web UI.
 
+## Hugging Face Space — prepared, not yet pushed
+
+`deploy/hf_space/` is a Gradio front end over the same `annotate()`:
+bring-your-own Gemini key (passed per call, never through the shared process
+environment), episodes capped at 5 min / 200 MB for the free CPU tier, the two
+public DROID clips as examples, and `ABOUT.md` (accuracy, failure modes, data
+handling) rendered under the form. `README.md` is the Space card.
+
+```bash
+uv run python scripts/publish_hf_space.py            # dry run: stages and lists files
+uv run python scripts/publish_hf_space.py --push     # creates/updates mandarobotics/robot-episode-labeler
+```
+
+The script copies `src/rel` and the example clips into a staging directory, so
+the Space is self-contained and does not depend on the GitHub repository being
+public. It authenticates with `HF_KEY` from `.env` **explicitly** and refuses
+any target outside `mandarobotics/` or any token that is not a member of that
+org — a cached `huggingface-cli login` for another account was found on this
+machine and must never be used by accident. Verified locally from the staged
+directory: the UI serves, a missing key and an exhausted-credit key both
+produce specific errors rather than tracebacks.
+
+Because the app is copied at publish time, changes to `src/rel` reach the Space
+only on the next `--push`.
+
 ## Before either goes public
 
 - [ ] Set `GEMINI_API_KEY` as a platform secret, never baked into the image.

@@ -26,6 +26,9 @@ dev = [
     "mcap>=1.4",
     "huggingface-hub>=0.30",
 ]
+hf = [
+    "gradio>=5",
+]
 
 [build-system]
 requires = ["hatchling"]
