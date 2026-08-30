@@ -204,3 +204,44 @@ RoboInter need an HF account with accepted terms).
 Planned use: run the final `fast` and `balanced` presets over all four with
 `run_eval.py --dataset <name>`, report per-dataset F1@0.5 / boundary recall /
 `errors.py` taxonomy, and inspect the worst episodes by eye.
+
+## Replications (2026-08-30, after the credit top-up)
+
+| run | F1@0.5 | f1_wgo | ±0.5 | med err | $/vid-h |
+|---|---:|---:|---:|---:|---:|
+| `s_v2_rep` (sheets + decomposition, repeat) | 0.684 | 0.398 | 0.495 | 0.50 | 1.30 |
+| `v_v2_rep` (video 2 fps + decomposition, repeat) | **0.734** | **0.476** | 0.491 | 0.53 | **0.80** |
+
+- Decomposition prompt on sheets: +0.085 over `g37_base`, CI [+0.023, +0.142]. Replicated.
+- Decomposition prompt on video: +0.124 over `v_fps2_rep`, CI [+0.057, +0.189]. Replicated.
+- Video+v2 vs sheets+v2, replication pair: F1 +0.051 [+0.012, +0.088], `f1_wgo`
+  +0.073 [+0.018, +0.125], boundary recall no difference. First pair showed the
+  same direction (+0.025 F1, n.s.). Native video with the decomposition prompt
+  is the best coarse pass: better tight-IoU F1 at 40% lower cost.
+- Default flip to `segment_input=video` is deferred until `s_v2_sub` (does
+  subdivision still pay on the new prompt?) and `sm_balanced` (end-to-end in
+  schema mode) land, so the `balanced` composition is decided on measurements,
+  not assumption.
+
+## Schema mode, measured for the first time (`--schema-mode`: gold subtask strings as the vocabulary)
+
+| run | F1@0.5 | P | R | med err | per family F1 |
+|---|---:|---:|---:|---:|---|
+| `sm_fast` (sheets+v2, closed vocabulary) | **0.771** | 0.778 | 0.765 | **0.43** | droid 0.758 · galaxea 0.896 · homer 0.742 |
+
+Discovery mode on the same pipeline: 0.695. Giving the model the caller's
+vocabulary is worth ~+0.08 F1 and takes HomER from 0.64 to 0.74 - the
+vocabulary tells the model the decomposition granularity. This is the mode
+hosted callers use and the first time it has a number. Caveat: the vocabulary
+here is derived from each episode's own gold labels, which is the best case;
+a customer SOP list is coarser.
+
+## Label prompt A/B (fixed segments from `s_v2prompt`, judge gemini-3.1-pro-preview)
+
+`lbl_v1` (shipping label.md): 0.750 on 480 matched segments - droid 0.500,
+galaxea 0.802, homer 0.828. The v2 run initially "succeeded" with zero scored
+pairs: `label_v2.md` had never been written (its creation script crashed
+earlier on an assertion, unnoticed, and the credit outage masked the empty
+A/B). The file now exists; rerun in flight. Lesson recorded: a relabel run
+whose every episode errors still writes a results file - relabel.py should
+fail loudly instead.

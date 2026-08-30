@@ -22,7 +22,7 @@ from rel.schemas import AnnotateRequest, Quality, Segment
 from rel.video.decode import probe
 
 
-def main() -> None:
+def main() -> None:  # noqa: C901
     ap = argparse.ArgumentParser()
     ap.add_argument("--source", required=True, help="run tag whose segments are relabeled")
     ap.add_argument("--tag", required=True)
@@ -59,6 +59,13 @@ def main() -> None:
             r = f.result(); out_rows.append(r)
             print(f"  [{i:3d}/{len(rows)}] {'ok ' if r.get('ok') else 'ERR'} {r['id']}", flush=True)
     out_rows.sort(key=lambda r: r["id"])
+    n_err = sum(1 for r in out_rows if not r.get("ok", True))
+    if n_err == len(out_rows):
+        # A results file whose every row errored looks plausible downstream and
+        # scores as "no matched segments". Fail loudly instead; this happened
+        # once with a missing prompt file and cost a full silent A/B.
+        print(f"every episode failed; first error: {out_rows[0].get('error')}", file=sys.stderr)
+        return
     out = {**src, "tag": args.tag, "source": args.source, "label_config": cfg.to_dict(),
            "rows": out_rows, "failed": sum(1 for r in out_rows if not r.get("ok"))}
     out["scores"].pop("label_accuracy", None)
