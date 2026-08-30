@@ -40,7 +40,10 @@ def _split(value: str | None) -> list[str]:
 
 
 def run(video, prompt, subtasks, attributes, quality, gemini_api_key):
-    key = (gemini_api_key or "").strip() or os.environ.get("GEMINI_API_KEY", "")
+    # Bring-your-own-key only. There is deliberately no fallback to a server-side
+    # key: a public form backed by the operator's key would be an open tap on
+    # the operator's Gemini account.
+    key = (gemini_api_key or "").strip()
     if not key:
         raise gr.Error("A Gemini API key is required. Get one at https://aistudio.google.com/apikey")
     if not video:
@@ -155,4 +158,5 @@ with gr.Blocks(title="Robot Episode Labeler") as demo:
 if __name__ == "__main__":
     demo.queue(default_concurrency_limit=4).launch(
         server_name="0.0.0.0", server_port=int(os.environ.get("PORT", "7860")),
+        max_file_size=MAX_BYTES,   # refused at upload, before anything touches disk
     )
