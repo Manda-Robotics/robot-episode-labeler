@@ -255,3 +255,18 @@ vs 0.11 pre-v2, so there is little left for subdivision to discover). Cost
 2.6×, 3 episodes failed vs 0. The first pass's biggest lever is now a marginal
 boundary-recall refinement. Whether `balanced` keeps it is a cost call decided
 with `sm_balanced`.
+
+### Label prompt A/B, corrected run
+
+Same 480 matched segments from `s_v2prompt`, same judge (`gemini-3.1-pro-preview`):
+
+| prompt | overall | droid | galaxea | homer |
+|---|---:|---:|---:|---:|
+| `label.md` ("what event is this segment") | 0.750 | 0.500 | 0.802 | 0.828 |
+| `label_v2.md` ("the event that COMPLETES at the END; not the task goal") | **0.796** | **0.594** | **0.891** | 0.839 |
+
+Paired per-segment: 36 pairs v2-only-correct vs 14 v1-only-correct; bootstrap
+over episodes +0.046 [+0.020, +0.077], significant. Adopted as the default.
+DROID improves most, as predicted by the verdict analysis (pick segments named
+after the place goal), and remains the weakest family; the residual DROID gap
+is partly gold labels that read as task instructions.

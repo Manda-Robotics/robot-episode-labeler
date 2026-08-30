@@ -54,7 +54,10 @@ class PipelineConfig:
 
     # --- per-segment labeling -----------------------------------------------
     label: bool = True
-    label_prompt: str = "label.md"
+    # label_v2.md names the event that completes at the segment's END instead of
+    # the episode goal: 0.750 -> 0.796 on 480 identical matched segments,
+    # +0.046 [+0.020, +0.077]; DROID 0.500 -> 0.594. See docs/research-log.md.
+    label_prompt: str = "label_v2.md"
     label_context: float = 1.0          # seconds of video shown either side of the segment
     label_width: int = 256
     label_max_frames: int = 20
