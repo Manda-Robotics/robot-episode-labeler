@@ -245,3 +245,13 @@ earlier on an assertion, unnoticed, and the credit outage masked the empty
 A/B). The file now exists; rerun in flight. Lesson recorded: a relabel run
 whose every episode errors still writes a results file - relabel.py should
 fail loudly instead.
+
+### Subdivision on the decomposition prompt: mostly absorbed
+
+`s_v2_sub` vs `s_v2_rep` (paired): F1 −0.002 [−0.042, +0.037]; ±0.5 s +0.043
+[+0.010, +0.075] significant; ±2.0 s +0.058 [+0.023, +0.096] significant;
+short-event recall unchanged (the v2 prompt already finds 1–2 s events at 0.64
+vs 0.11 pre-v2, so there is little left for subdivision to discover). Cost
+2.6×, 3 episodes failed vs 0. The first pass's biggest lever is now a marginal
+boundary-recall refinement. Whether `balanced` keeps it is a cost call decided
+with `sm_balanced`.
