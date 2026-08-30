@@ -97,6 +97,19 @@ per call, fal is our key and billed by the video second.
 cog push r8.im/mandarobotics/robot-episode-labeler
 ```
 
+**2026-08-30: version `5e660f68…` pushed** with the segmentation rework
+(decomposition prompt default, `PipelineConfig`, video/state backends). The
+push failed twice on the same large layer with transient network errors
+(`write: broken pipe`, then `TLS handshake timeout`, both through Docker
+Desktop's proxy at 192.168.65.1:3128) and succeeded on the third attempt with
+no change; retry before debugging. The hosted smoke test reached the Gemini
+call and stopped there with `429 RESOURCE_EXHAUSTED` because the project's
+prepaid credits were exhausted at the time — which verifies the image boots,
+decodes and builds sheets, but not a full prediction; re-run
+`scripts/smoke_replicate.py` after topping up. `95b8c8d3…`, one minute
+earlier, is the identical image pushed twice by a retry loop and can be
+ignored.
+
 `cog.yaml` sits at the repository root so `src/rel` ships in the image, and
 `.dockerignore` keeps `data/` (1.3 GB of benchmark video) out of the build context.
 cog 0.22 renamed the entry point (`predict:` → `run:`, `Predictor.predict()` →
