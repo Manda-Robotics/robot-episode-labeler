@@ -18,7 +18,10 @@ import gradio as gr
 
 HERE = pathlib.Path(__file__).resolve().parent
 sys.path.insert(0, str(HERE))          # `rel/` is copied next to this file at publish time
-sys.path.insert(0, str(HERE.parents[1] / "src"))  # running from the repository checkout
+# Running from the repository checkout instead (deploy/hf_space/app.py): use src/.
+# On the Space the file sits at /app/app.py, where there is no such parent.
+if len(HERE.parents) >= 2 and (HERE.parents[1] / "src" / "rel").is_dir():
+    sys.path.insert(0, str(HERE.parents[1] / "src"))
 
 from rel.annotation.llm import LLMError  # noqa: E402
 from rel.config import config_for  # noqa: E402
