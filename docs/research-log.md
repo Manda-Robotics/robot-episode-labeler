@@ -270,3 +270,26 @@ over episodes +0.046 [+0.020, +0.077], significant. Adopted as the default.
 DROID improves most, as predicted by the verdict analysis (pick segments named
 after the place goal), and remains the weakest family; the residual DROID gap
 is partly gold labels that read as task instructions.
+
+## End-to-end schema mode, and the final `balanced` composition
+
+`sm_balanced` (sheets+v2 coarse, subdivision, labeling with the *old* label
+prompt, gold-derived vocabulary): F1 0.699 (P 0.664 / R 0.739), median boundary
+error 0.44 s. Cost: $6.23 for the corpus (~2.25 h of video) ≈ $2.75/video-hour,
+half of it the subdivision pass whose F1 contribution is now zero.
+
+Composition adopted without further runs: `balanced` = v2 segmentation +
+labeling (subdivision dropped; it moves to `strict` with refinement).
+Labeling does not move boundaries, so `balanced` boundary metrics equal the
+measured `fast` runs (F1 0.68–0.70 discovery, 0.77 schema-mode), and cost
+falls roughly 40%. Every stage that remains has a replicated, significant
+measurement behind it; everything dropped has a measured null.
+
+## Budget accounting (2026-08-30, the 200 DKK top-up)
+
+s_v2_rep $1.55 · v_v2_rep $1.00 · sm_fast $1.52 · s_v2_sub $3.31 · lbl_v2
+$1.96 · sm_balanced $6.23 = $15.57, plus judge calls (gemini-3.1-pro, two
+scoring passes) ~$2 and small demo reruns ≈ **$18–19 total** against an
+estimate of $12–13. The overrun is `sm_balanced` and `s_v2_sub`: schema-mode
+vocabularies and subdivision inflate prompt tokens, which the estimate took
+from discovery-mode runs. Lesson: estimate from the same mode being run.

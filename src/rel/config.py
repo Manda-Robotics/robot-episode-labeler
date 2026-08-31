@@ -88,9 +88,14 @@ class PipelineConfig:
         return asdict(self)
 
 
+# Subdivision moved from `balanced` to `strict` on 2026-08-30: on the
+# decomposition prompt its F1 contribution is zero (-0.002 [-0.042, +0.037])
+# and its boundary-recall gain modest (+0.043 at 0.5 s) for 2.6x the cost.
+# Labeling does not move boundaries, so `balanced` segmentation metrics equal
+# the measured `fast` runs. See docs/research-log.md.
 PRESETS: dict[Quality, PipelineConfig] = {
     Quality.fast: PipelineConfig(name="fast", subdivide=False, label=False),
-    Quality.balanced: PipelineConfig(name="balanced"),
+    Quality.balanced: PipelineConfig(name="balanced", subdivide=False),
     Quality.strict: PipelineConfig(name="strict", refine=True, repeat_pass=True),
 }
 
