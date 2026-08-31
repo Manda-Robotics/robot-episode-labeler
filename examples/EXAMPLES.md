@@ -4,7 +4,7 @@ Replicate shows a featured example's exact inputs, so these are the values to us
 Both were run against the deployed model; prediction ids are recorded so they can
 be featured in the web UI.
 
-## 1. Schema mode with a rubric — recommended featured example
+## 1. Schema mode with a rubric (recommended featured example)
 
 Prediction `ay37j0p579rmw0d08r0ajq72kw`
 
@@ -23,10 +23,10 @@ Output:
 11.00 - 15.50   pass   Place Block In Bowl
 ```
 
-Shows both things worth showing: labels constrained to the caller's own
-vocabulary, and a failed attempt located in time before the successful one.
+Shows labels constrained to the caller's own vocabulary, and a failed attempt
+located in time before the successful one.
 
-## 2. Discovery mode — no task hint needed
+## 2. Discovery mode (no vocabulary)
 
 Prediction `knxezbv0a9rmr0d08qntx272cr`
 
@@ -57,10 +57,10 @@ The model invents its own snake_case label instead of using a supplied vocabular
 | `attributes` | `retry,missed_grasp,dropped_object` |
 
 This one over-segments: eight subtasks with `Grasp Duvet` repeated, on a
-deformable object where "one completed event" is genuinely ambiguous. Honest, but
-a weaker showcase, so it is not the recommended feature.
+deformable object where "one completed event" is ambiguous. A weaker example, so
+not the recommended feature.
 
-## Note on repeatability
+## Repeatability
 
 The same inputs do not give byte-identical outputs. A local run of example 1
 returned both segments as `pass` with different labels; the hosted run above

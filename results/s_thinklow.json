@@ -1,0 +1,8485 @@
+{
+  "tag": "s_thinklow",
+  "dataset": "wgo",
+  "model": "gemini-3.7-flash",
+  "quality": "fast",
+  "subdivide": false,
+  "config": {
+    "name": "fast",
+    "model": "gemini-3.7-flash",
+    "coarse_interval": 0.5,
+    "tile_width": 224,
+    "frames_per_sheet": 20,
+    "sheet_columns": 5,
+    "max_sheets_per_call": 6,
+    "sheet_overlap": 1,
+    "segment_prompt": "segment.md",
+    "segment_input": "sheets",
+    "video_fps": 2.0,
+    "video_window": 60.0,
+    "video_overlap": 5.0,
+    "video_width": 480,
+    "segment_video_prompt": "segment_video.md",
+    "segment_state_prompt": "segment_state.md",
+    "subdivide": false,
+    "subdivide_min_duration": 3.0,
+    "subdivide_interval": 0.25,
+    "subdivide_width": 256,
+    "subdivide_max_frames": 168,
+    "subdivide_prompt": "subdivide.md",
+    "subdivide_input": "sheets",
+    "subdivide_fps": 4.0,
+    "label": false,
+    "label_prompt": "label.md",
+    "label_context": 1.0,
+    "label_width": 256,
+    "label_max_frames": 20,
+    "refine": false,
+    "refine_input": "sheets",
+    "refine_fps": 8.0,
+    "refine_half_window": 1.5,
+    "refine_width": 480,
+    "repeat_pass": false,
+    "temperature": 0.0,
+    "thinking_level": "low",
+    "thinking_budget": null,
+    "media_resolution": null,
+    "media_processing": null,
+    "max_parallel": 4
+  },
+  "episodes": 100,
+  "failed": 1,
+  "wall_seconds": 280.6,
+  "video_seconds": 4296.1,
+  "tokens": {
+    "prompt": 646956,
+    "output": 79103
+  },
+  "scores": {
+    "overall": {
+      "episodes": 99,
+      "segments_pred": 475,
+      "segments_gold": 723,
+      "segments_matched": 356,
+      "segmentation_precision": 0.7495,
+      "segmentation_recall": 0.4924,
+      "segmentation_f1": 0.5943,
+      "f1_at_iou": {
+        "0.1": 0.7629,
+        "0.25": 0.7496,
+        "0.5": 0.5943,
+        "0.75": 0.2988
+      },
+      "f1_wgo": 0.3372,
+      "recall_by_duration": {
+        "0-1": {
+          "recall": 0.0192,
+          "n": 52
+        },
+        "1-2": {
+          "recall": 0.2,
+          "n": 120
+        },
+        "2-4": {
+          "recall": 0.511,
+          "n": 227
+        },
+        "4-8": {
+          "recall": 0.5967,
+          "n": 181
+        },
+        "8-inf": {
+          "recall": 0.7483,
+          "n": 143
+        }
+      },
+      "boundary_recall_at": {
+        "0.25": 0.1619,
+        "0.5": 0.3173,
+        "1.0": 0.492,
+        "2.0": 0.6571
+      },
+      "boundary_precision_at": {
+        "0.25": 0.266,
+        "0.5": 0.492,
+        "1.0": 0.7261,
+        "2.0": 0.8617
+      },
+      "median_boundary_error_sec": 1.036
+    },
+    "by_family": {
+      "droid": {
+        "episodes": 50,
+        "segments_pred": 137,
+        "segments_gold": 150,
+        "segments_matched": 110,
+        "segmentation_precision": 0.8029,
+        "segmentation_recall": 0.7333,
+        "segmentation_f1": 0.7666,
+        "f1_at_iou": {
+          "0.1": 0.9129,
+          "0.25": 0.9129,
+          "0.5": 0.7666,
+          "0.75": 0.446
+        },
+        "f1_wgo": 0.5366,
+        "recall_by_duration": {
+          "2-4": {
+            "recall": 0.5556,
+            "n": 18
+          },
+          "4-8": {
+            "recall": 0.6552,
+            "n": 58
+          },
+          "8-inf": {
+            "recall": 0.8378,
+            "n": 74
+          }
+        },
+        "boundary_recall_at": {
+          "0.25": 0.15,
+          "0.5": 0.26,
+          "1.0": 0.43,
+          "2.0": 0.59
+        },
+        "boundary_precision_at": {
+          "0.25": 0.1724,
+          "0.5": 0.2989,
+          "1.0": 0.4943,
+          "2.0": 0.6667
+        },
+        "median_boundary_error_sec": 1.382
+      },
+      "galaxea": {
+        "episodes": 25,
+        "segments_pred": 96,
+        "segments_gold": 123,
+        "segments_matched": 86,
+        "segmentation_precision": 0.8958,
+        "segmentation_recall": 0.6992,
+        "segmentation_f1": 0.7854,
+        "f1_at_iou": {
+          "0.1": 0.8676,
+          "0.25": 0.8676,
+          "0.5": 0.7854,
+          "0.75": 0.5297
+        },
+        "f1_wgo": 0.5571,
+        "recall_by_duration": {
+          "0-1": {
+            "recall": 0.0,
+            "n": 1
+          },
+          "1-2": {
+            "recall": 0.2727,
+            "n": 22
+          },
+          "2-4": {
+            "recall": 0.697,
+            "n": 66
+          },
+          "4-8": {
+            "recall": 1.0,
+            "n": 27
+          },
+          "8-inf": {
+            "recall": 1.0,
+            "n": 7
+          }
+        },
+        "boundary_recall_at": {
+          "0.25": 0.2857,
+          "0.5": 0.551,
+          "1.0": 0.7041,
+          "2.0": 0.8163
+        },
+        "boundary_precision_at": {
+          "0.25": 0.3944,
+          "0.5": 0.7606,
+          "1.0": 0.9577,
+          "2.0": 1.0
+        },
+        "median_boundary_error_sec": 0.463
+      },
+      "homer": {
+        "episodes": 24,
+        "segments_pred": 242,
+        "segments_gold": 450,
+        "segments_matched": 160,
+        "segmentation_precision": 0.6612,
+        "segmentation_recall": 0.3556,
+        "segmentation_f1": 0.4624,
+        "f1_at_iou": {
+          "0.1": 0.6676,
+          "0.25": 0.6445,
+          "0.5": 0.4624,
+          "0.75": 0.1647
+        },
+        "f1_wgo": 0.185,
+        "recall_by_duration": {
+          "0-1": {
+            "recall": 0.0196,
+            "n": 51
+          },
+          "1-2": {
+            "recall": 0.1837,
+            "n": 98
+          },
+          "2-4": {
+            "recall": 0.4196,
+            "n": 143
+          },
+          "4-8": {
+            "recall": 0.4479,
+            "n": 96
+          },
+          "8-inf": {
+            "recall": 0.6129,
+            "n": 62
+          }
+        },
+        "boundary_recall_at": {
+          "0.25": 0.1362,
+          "0.5": 0.277,
+          "1.0": 0.4577,
+          "2.0": 0.6362
+        },
+        "boundary_precision_at": {
+          "0.25": 0.2615,
+          "0.5": 0.4817,
+          "1.0": 0.7431,
+          "2.0": 0.8945
+        },
+        "median_boundary_error_sec": 1.19
+      }
+    }
+  },
+  "rows": [
+    {
+      "id": "galaxea_002",
+      "family": "galaxea",
+      "ok": true,
+      "elapsed": 45.7,
+      "duration": 43.83,
+      "pred": [
+        [
+          0.0,
+          5.5,
+          "pick_red_curve"
+        ],
+        [
+          5.5,
+          11.5,
+          "place_red_curve_for_r"
+        ],
+        [
+          11.5,
+          18.0,
+          "pick_purple_stick"
+        ],
+        [
+          18.0,
+          26.5,
+          "place_purple_stick_for_r"
+        ],
+        [
+          26.5,
+          32.5,
+          "pick_pink_stick"
+        ],
+        [
+          32.5,
+          40.0,
+          "place_pink_stick_for_n"
+        ]
+      ],
+      "gold": [
+        [
+          0.0,
+          5.578,
+          "pick up the left-most pink plastic craft stick next to letter B"
+        ],
+        [
+          5.578,
+          6.905,
+          "place the pink plastic stick left next to the up most red curved stick"
+        ],
+        [
+          6.905,
+          8.234,
+          "pick up the left-most pink plastic craft stick next to letter B"
+        ],
+        [
+          8.234,
+          10.889,
+          "place the pink plastic stick under the sign brain left next to the blue stick"
+        ],
+        [
+          10.889,
+          13.282,
+          "pick up the left-top-most pink plastic craft stick"
+        ],
+        [
+          13.282,
+          15.14,
+          "place the pink plastic stick next to letter B vertically"
+        ],
+        [
+          15.14,
+          17.53,
+          "pick up the red curved stick from top of the table"
+        ],
+        [
+          17.53,
+          20.188,
+          "place the red curved stick next to the vertical pink stick to form a letter P"
+        ],
+        [
+          20.188,
+          23.859,
+          "pick up the purple stick from top of the table"
+        ],
+        [
+          23.859,
+          26.528,
+          "place the purple stick next to the pink stick to form and under the red curved stick to form letter R"
+        ],
+        [
+          26.528,
+          30.354,
+          "adjust the purple stick to better align with other sticks"
+        ],
+        [
+          30.354,
+          32.444,
+          "pick up the pink stick from the top center of the table"
+        ],
+        [
+          32.444,
+          34.037,
+          "place the pink stick verticaly right next to the blue stick (letter I) on the right side of the table"
+        ],
+        [
+          34.037,
+          35.341,
+          "pick up the blue stick from the top center of the table"
+        ],
+        [
+          35.341,
+          37.579,
+          "place the blue stick diagonally next to right most pink stick to prepare middle part of letter N"
+        ],
+        [
+          37.579,
+          38.916,
+          "pick up the pink stick from the top of the table"
+        ],
+        [
+          38.916,
+          42.22,
+          "place the pink stick vertically between t"
+        ]
+      ],
+      "warnings": [],
+      "usage": {
+        "calls": 1,
+        "prompt_tokens": 6042,
+        "output_tokens": 551,
+        "retries": 0,
+        "calls_by_stage": {
+          "segment": 1
+        }
+      }
+    },
+    {
+      "id": "galaxea_007",
+      "family": "galaxea",
+      "ok": true,
+      "elapsed": 41.92,
+      "duration": 35.53,
+      "pred": [
+        [
+          0.0,
+          4.0,
+          "pick_snack_bag"
+        ],
+        [
+          4.0,
+          6.5,
+          "place_snack_bag_in_right_basket"
+        ],
+        [
+          6.5,
+          11.0,
+          "pick_white_box"
+        ],
+        [
+          11.0,
+          13.0,
+          "place_white_box_in_left_basket"
+        ],
+        [
+          13.0,
+          18.0,
+          "pick_cosmetic_tube"
+        ],
+        [
+          18.0,
+          21.5,
+          "place_cosmetic_tube_in_left_basket"
+        ],
+        [
+          21.5,
+          27.0,
+          "pick_spoon"
+        ],
+        [
+          27.0,
+          31.5,
+          "place_spoon_in_left_basket"
+        ]
+      ],
+      "gold": [
+        [
+          0.0,
+          3.98,
+          "grasp the orange snack bag on the green tray"
+        ],
+        [
+          3.98,
+          6.372,
+          "place the orange bag of food into the right basket"
+        ],
+        [
+          6.372,
+          10.609,
+          "grasp the whiteboard eraser on the green tray"
+        ],
+        [
+          10.609,
+          12.735,
+          "place the whiteboard eraser into the left basket"
+        ],
+        [
+          12.735,
+          18.048,
+          "grasp the black tube on the green tray"
+        ],
+        [
+          18.048,
+          21.513,
+          "place the black tube into the left brown basket"
+        ],
+        [
+          21.513,
+          27.358,
+          "pick up the wooden spoon from the green tray"
+        ],
+        [
+          27.358,
+          31.076,
+          "place the wooden spoon into the left dark brown basket"
+        ]
+      ],
+      "warnings": [],
+      "usage": {
+        "calls": 1,
+        "prompt_tokens": 4912,
+        "output_tokens": 927,
+        "retries": 0,
+        "calls_by_stage": {
+          "segment": 1
+        }
+      }
+    },
+    {
+      "id": "galaxea_009",
+      "family": "galaxea",
+      "ok": true,
+      "elapsed": 60.33,
+      "duration": 40.17,
+      "pred": [
+        [
+          0.0,
+          5.0,
+          "place_bottle_in_basket"
+        ],
+        [
+          5.0,
+          10.5,
+          "place_can_in_basket"
+        ],
+        [
+          10.5,
+          15.5,
+          "place_lotion_bottle_in_basket"
+        ],
+        [
+          15.5,
+          21.5,
+          "place_spoon_in_basket"
+        ],
+        [
+          21.5,
+          26.0,
+          "place_cloth_in_basket"
+        ],
+        [
+          26.0,
+          32.0,
+          "no_completed_subtask"
+        ],
+        [
+          32.0,
+          36.5,
+          "place_lemon_in_basket"
+        ]
+      ],
+      "gold": [
+        [
+          0.0,
+          3.445,
+          "pick up plastic bottle"
+        ],
+        [
+          3.445,
+          4.773,
+          "place the plastic bottle into the right basket"
+        ],
+        [
+          4.773,
+          8.493,
+          "pick up red coke can"
+        ],
+        [
+          8.493,
+          10.085,
+          "place the red can into the right basket"
+        ],
+        [
+          10.085,
+          12.741,
+          "pick up pink bottle"
+        ],
+        [
+          12.741,
+          15.133,
+          "place the pink bottle into the left basket"
+        ],
+        [
+          15.133,
+          18.853,
+          "pick up the wooden spoon"
+        ],
+        [
+          18.853,
+          22.189,
+          "place the wooden spoon into the left basket"
+        ],
+        [
+          22.189,
+          24.586,
+          "pick up the blue cloth from the table"
+        ],
+        [
+          24.586,
+          26.435,
+          "place the blue cloth into the left basket"
+        ],
+        [
+          26.435,
+          29.091,
+          "pick up yellow lemon from the table"
+        ],
+        [
+          29.091,
+          31.447,
+          "place yellow lemon in front of the right basket"
+        ],
+        [
+          31.447,
+          32.432,
+          "pick up yellow lemon from the table"
+        ],
+        [
+          32.432,
+          38.573,
+          "place yellow lemon into right basket"
+        ]
+      ],
+      "warnings": [],
+      "usage": {
+        "calls": 1,
+        "prompt_tokens": 4961,
+        "output_tokens": 1180,
+        "retries": 0,
+        "calls_by_stage": {
+          "segment": 1
+        }
+      }
+    },
+    {
+      "id": "galaxea_011",
+      "family": "galaxea",
+      "ok": true,
+      "elapsed": 37.26,
+      "duration": 29.17,
+      "pred": [
+        [
+          0.0,
+          5.0,
+          "place_bread_in_basket"
+        ],
+        [
+          5.0,
+          9.0,
+          "place_milk_carton_in_basket"
+        ],
+        [
+          9.0,
+          13.0,
+          "place_cup_in_basket"
+        ],
+        [
+          13.0,
+          17.5,
+          "place_straw_in_basket"
+        ],
+        [
+          17.5,
+          26.0,
+          "place_spoon_in_basket"
+        ]
+      ],
+      "gold": [
+        [
+          0.0,
+          2.878,
+          "pick up the bread"
+        ],
+        [
+          2.878,
+          5.269,
+          "place the bread into the orange basket on the right"
+        ],
+        [
+          5.269,
+          7.394,
+          "pick up the red snack package from the green tray"
+        ],
+        [
+          7.394,
+          9.253,
+          "place the red food item into the orange basket on the right"
+        ],
+        [
+          9.253,
+          11.643,
+          "pick up the blue cup from the green tray"
+        ],
+        [
+          11.643,
+          13.237,
+          "drop the blue cup into the left brown basket"
+        ],
+        [
+          13.237,
+          16.159,
+          "pick up the black object from the green tray"
+        ],
+        [
+          16.159,
+          17.753,
+          "drop the black object into the left brown basket"
+        ],
+        [
+          17.753,
+          20.674,
+          "pick up the white pen from the green tray"
+        ],
+        [
+          20.674,
+          22.268,
+          "drop the white pen into the left brown basket"
+        ],
+        [
+          22.268,
+          24.659,
+          "pick up the wooden spoon pen from the green tray"
+        ],
+        [
+          24.659,
+          26.252,
+          "drop the wooden spoon into the left brown basket"
+        ]
+      ],
+      "warnings": [],
+      "usage": {
+        "calls": 1,
+        "prompt_tokens": 3852,
+        "output_tokens": 463,
+        "retries": 0,
+        "calls_by_stage": {
+          "segment": 1
+        }
+      }
+    },
+    {
+      "id": "galaxea_013",
+      "family": "galaxea",
+      "ok": true,
+      "elapsed": 29.97,
+      "duration": 22.1,
+      "pred": [
+        [
+          0.0,
+          3.5,
+          "pick_cup"
+        ],
+        [
+          3.5,
+          6.0,
+          "place_cup_in_basket"
+        ],
+        [
+          6.0,
+          9.5,
+          "pick_bottle"
+        ],
+        [
+          9.5,
+          13.0,
+          "place_bottle_in_basket"
+        ],
+        [
+          13.0,
+          18.0,
+          "pick_peach"
+        ],
+        [
+          18.0,
+          20.5,
+          "place_peach_in_basket"
+        ]
+      ],
+      "gold": [
+        [
+          0.0,
+          4.372,
+          "pick up the blue cup"
+        ],
+        [
+          4.372,
+          6.489,
+          "drop the blue cup into the black basket"
+        ],
+        [
+          6.489,
+          11.271,
+          "pick up the black dispenser from the green tray"
+        ],
+        [
+          11.271,
+          13.129,
+          "drop the black dispenser into the black basket"
+        ],
+        [
+          13.129,
+          18.707,
+          "pick up the peach from the green tray"
+        ],
+        [
+          18.707,
+          20.036,
+          "place the peach into the right basket"
+        ]
+      ],
+      "warnings": [],
+      "usage": {
+        "calls": 1,
+        "prompt_tokens": 3852,
+        "output_tokens": 1449,
+        "retries": 0,
+        "calls_by_stage": {
+          "segment": 1
+        }
+      }
+    },
+    {
+      "id": "galaxea_028",
+      "family": "galaxea",
+      "ok": true,
+      "elapsed": 41.07,
+      "duration": 38.67,
+      "pred": [
+        [
+          0.0,
+          5.0,
+          "pick_yellow_test_tube"
+        ],
+        [
+          5.0,
+          16.0,
+          "pour_test_tube_into_container"
+        ],
+        [
+          16.0,
+          20.5,
+          "place_test_tube_in_rack"
+        ],
+        [
+          20.5,
+          25.0,
+          "pick_red_test_tube"
+        ],
+        [
+          25.0,
+          33.5,
+          "pour_test_tube_into_container"
+        ],
+        [
+          33.5,
+          36.5,
+          "place_test_tube_in_rack"
+        ]
+      ],
+      "gold": [
+        [
+          0.0,
+          4.509,
+          "pick up the test tube with yellow liquid from the right"
+        ],
+        [
+          4.509,
+          15.931,
+          "pour the yellow pigment from the test tube into the beaker"
+        ],
+        [
+          15.931,
+          19.915,
+          "place the test tube inside the red cup"
+        ],
+        [
+          19.915,
+          24.962,
+          "pick up the test tube with red liquid from the right"
+        ],
+        [
+          24.962,
+          33.993,
+          "pour the red pigment from the test tube into the beaker"
+        ],
+        [
+          33.993,
+          36.65,
+          "place the test tube inside the red cup"
+        ]
+      ],
+      "warnings": [],
+      "usage": {
+        "calls": 1,
+        "prompt_tokens": 4954,
+        "output_tokens": 497,
+        "retries": 0,
+        "calls_by_stage": {
+          "segment": 1
+        }
+      }
+    },
+    {
+      "id": "galaxea_033",
+      "family": "galaxea",
+      "ok": true,
+      "elapsed": 33.33,
+      "duration": 34.87,
+      "pred": [
+        [
+          0.0,
+          4.5,
+          "pick_red_test_tube"
+        ],
+        [
+          4.5,
+          14.5,
+          "pour_red_test_tube"
+        ],
+        [
+          14.5,
+          16.5,
+          "place_red_test_tube"
+        ],
+        [
+          16.5,
+          22.5,
+          "pick_blue_test_tube"
+        ],
+        [
+          22.5,
+          29.5,
+          "pour_blue_test_tube"
+        ],
+        [
+          29.5,
+          31.0,
+          "place_blue_test_tube"
+        ]
+      ],
+      "gold": [
+        [
+          0.0,
+          4.503,
+          "pick up the test tube with red pigment"
+        ],
+        [
+          4.503,
+          14.596,
+          "pour the red pigment from the test tube into the clear plastic cup"
+        ],
+        [
+          14.596,
+          16.721,
+          "place the empty test tube into the pink bowl"
+        ],
+        [
+          16.721,
+          20.971,
+          "pick up the test tube with blue pigment"
+        ],
+        [
+          20.971,
+          30.8,
+          "pour the blue pigment from the test tube into the pink bowl"
+        ],
+        [
+          30.8,
+          33.25,
+          "place the empty test tube into the pink bowl"
+        ]
+      ],
+      "warnings": [],
+      "usage": {
+        "calls": 1,
+        "prompt_tokens": 4955,
+        "output_tokens": 761,
+        "retries": 0,
+        "calls_by_stage": {
+          "segment": 1
+        }
+      }
+    },
+    {
+      "id": "galaxea_037",
+      "family": "galaxea",
+      "ok": true,
+      "elapsed": 27.6,
+      "duration": 18.6,
+      "pred": [
+        [
+          0.0,
+          3.0,
+          "pick_yellow_test_tube"
+        ],
+        [
+          3.0,
+          5.0,
+          "pour_yellow_pigment_into_beaker"
+        ],
+        [
+          5.0,
+          6.5,
+          "place_yellow_test_tube_in_rack"
+        ],
+        [
+          6.5,
+          11.5,
+          "pick_red_test_tube"
+        ],
+        [
+          11.5,
+          14.5,
+          "pour_red_pigment_into_beaker"
+        ],
+        [
+          14.5,
+          17.0,
+          "place_red_test_tube_in_rack"
+        ]
+      ],
+      "gold": [
+        [
+          0.0,
+          2.369,
+          "pick up the test tube with yellow pigment"
+        ],
+        [
+          2.369,
+          5.558,
+          "pour the yellow pigment from the test tube into the beaker"
+        ],
+        [
+          5.558,
+          7.418,
+          "place the empty test tube into the blue cup on the right"
+        ],
+        [
+          7.418,
+          11.668,
+          "pick up the test tube with red pigment on the left side"
+        ],
+        [
+          11.668,
+          14.855,
+          "pour the red pigment from the test tube into the beaker"
+        ],
+        [
+          14.855,
+          16.98,
+          "place the empty test tube into the blue cup on the left"
+        ]
+      ],
+      "warnings": [],
+      "usage": {
+        "calls": 1,
+        "prompt_tokens": 2746,
+        "output_tokens": 1389,
+        "retries": 0,
+        "calls_by_stage": {
+          "segment": 1
+        }
+      }
+    },
+    {
+      "id": "galaxea_039",
+      "family": "galaxea",
+      "ok": true,
+      "elapsed": 55.53,
+      "duration": 51.47,
+      "pred": [
+        [
+          0.0,
+          8.5,
+          "pick_red_test_tube"
+        ],
+        [
+          8.5,
+          22.0,
+          "pour_red_pigment_into_beaker"
+        ],
+        [
+          22.0,
+          27.5,
+          "place_red_test_tube"
+        ],
+        [
+          27.5,
+          33.0,
+          "pick_yellow_test_tube"
+        ],
+        [
+          33.0,
+          44.5,
+          "pour_yellow_pigment_into_beaker"
+        ],
+        [
+          44.5,
+          48.0,
+          "place_yellow_test_tube"
+        ]
+      ],
+      "gold": [
+        [
+          0.0,
+          8.806,
+          "pick up the test tube with red pigment"
+        ],
+        [
+          8.806,
+          22.087,
+          "pour the red pigment from the test tube into the clear beaker"
+        ],
+        [
+          22.087,
+          26.602,
+          "put the test tube into the pink bowl"
+        ],
+        [
+          26.602,
+          32.977,
+          "pick up the test tube with yellow pigment"
+        ],
+        [
+          32.977,
+          44.134,
+          "pour the yellow pigment from the test tube into the clear beaker"
+        ],
+        [
+          44.134,
+          47.852,
+          "put the test tube into the pink bowl"
+        ]
+      ],
+      "warnings": [],
+      "usage": {
+        "calls": 1,
+        "prompt_tokens": 7162,
+        "output_tokens": 566,
+        "retries": 0,
+        "calls_by_stage": {
+          "segment": 1
+        }
+      }
+    },
+    {
+      "id": "galaxea_041",
+      "family": "galaxea",
+      "ok": true,
+      "elapsed": 35.36,
+      "duration": 27.3,
+      "pred": [
+        [
+          0.0,
+          5.5,
+          "pick_red_test_tube"
+        ],
+        [
+          5.5,
+          11.5,
+          "pour_red_pigment_into_beaker"
+        ],
+        [
+          11.5,
+          17.5,
+          "pick_yellow_test_tube"
+        ],
+        [
+          17.5,
+          23.0,
+          "pour_yellow_pigment_into_beaker"
+        ]
+      ],
+      "gold": [
+        [
+          0.0,
+          5.044,
+          "pick up the test tube with red pigment"
+        ],
+        [
+          5.044,
+          11.153,
+          "pour the red pigment into the clear glass"
+        ],
+        [
+          11.153,
+          13.543,
+          "place the empty test tube into the pink bowl"
+        ],
+        [
+          13.543,
+          17.263,
+          "pick up the test tube with yellow pigment from the table"
+        ],
+        [
+          17.263,
+          22.841,
+          "pour the yellow pigment into the clear glass"
+        ],
+        [
+          22.841,
+          24.965,
+          "place the empty test tube into the pink bowl"
+        ]
+      ],
+      "warnings": [],
+      "usage": {
+        "calls": 1,
+        "prompt_tokens": 3806,
+        "output_tokens": 847,
+        "retries": 0,
+        "calls_by_stage": {
+          "segment": 1
+        }
+      }
+    },
+    {
+      "id": "galaxea_043",
+      "family": "galaxea",
+      "ok": true,
+      "elapsed": 13.95,
+      "duration": 9.17,
+      "pred": [
+        [
+          0.0,
+          2.5,
+          "pick_mouse"
+        ],
+        [
+          2.5,
+          6.0,
+          "place_mouse_on_pad"
+        ]
+      ],
+      "gold": [
+        [
+          0.0,
+          3.454,
+          "grasp the black mouse on the left side of the table with the left gripper"
+        ],
+        [
+          3.454,
+          5.845,
+          "place the black mouse onto the green mouse pad on the right side of the table"
+        ]
+      ],
+      "warnings": [],
+      "usage": {
+        "calls": 1,
+        "prompt_tokens": 1638,
+        "output_tokens": 375,
+        "retries": 0,
+        "calls_by_stage": {
+          "segment": 1
+        }
+      }
+    },
+    {
+      "id": "galaxea_045",
+      "family": "galaxea",
+      "ok": true,
+      "elapsed": 17.12,
+      "duration": 12.63,
+      "pred": [
+        [
+          0.0,
+          2.5,
+          "pick_cup"
+        ],
+        [
+          2.5,
+          7.5,
+          "pour_liquid_into_tray"
+        ],
+        [
+          7.5,
+          10.5,
+          "place_cup"
+        ]
+      ],
+      "gold": [
+        [
+          0.0,
+          3.35,
+          "pick up the glass with liquid"
+        ],
+        [
+          3.35,
+          6.802,
+          "pour the liquid from the cup into the blue bowl"
+        ],
+        [
+          6.802,
+          10.522,
+          "place the clear cup on the table to the right of the pink bowl"
+        ]
+      ],
+      "warnings": [],
+      "usage": {
+        "calls": 1,
+        "prompt_tokens": 2739,
+        "output_tokens": 453,
+        "retries": 0,
+        "calls_by_stage": {
+          "segment": 1
+        }
+      }
+    },
+    {
+      "id": "galaxea_047",
+      "family": "galaxea",
+      "ok": true,
+      "elapsed": 18.02,
+      "duration": 13.43,
+      "pred": [
+        [
+          0.0,
+          4.0,
+          "pick_cup"
+        ],
+        [
+          4.0,
+          9.0,
+          "pour_powder_into_tray"
+        ],
+        [
+          9.0,
+          11.5,
+          "place_cup"
+        ]
+      ],
+      "gold": [
+        [
+          0.0,
+          3.443,
+          "pick up the glass cup containing white powder"
+        ],
+        [
+          3.443,
+          8.505,
+          "pour the white powder from the glass cup into the blue tray"
+        ],
+        [
+          8.505,
+          10.63,
+          "place the cup with white powder on the table next to the pink bowl"
+        ]
+      ],
+      "warnings": [],
+      "usage": {
+        "calls": 1,
+        "prompt_tokens": 2740,
+        "output_tokens": 386,
+        "retries": 0,
+        "calls_by_stage": {
+          "segment": 1
+        }
+      }
+    },
+    {
+      "id": "galaxea_049",
+      "family": "galaxea",
+      "ok": true,
+      "elapsed": 16.3,
+      "duration": 13.17,
+      "pred": [
+        [
+          0.0,
+          3.5,
+          "pick_cup"
+        ],
+        [
+          3.5,
+          8.0,
+          "pour_solid_into_bowl"
+        ],
+        [
+          8.0,
+          11.0,
+          "place_cup"
+        ]
+      ],
+      "gold": [
+        [
+          0.0,
+          3.461,
+          "pick up the glass with beans"
+        ],
+        [
+          3.461,
+          7.971,
+          "pour the dark solids from the transparent cup into the pink bowl"
+        ],
+        [
+          7.971,
+          10.812,
+          "place the clear cup on the table right next to the pink bowl"
+        ]
+      ],
+      "warnings": [],
+      "usage": {
+        "calls": 1,
+        "prompt_tokens": 2740,
+        "output_tokens": 331,
+        "retries": 0,
+        "calls_by_stage": {
+          "segment": 1
+        }
+      }
+    },
+    {
+      "id": "galaxea_050",
+      "family": "galaxea",
+      "ok": true,
+      "elapsed": 14.93,
+      "duration": 12.9,
+      "pred": [
+        [
+          0.0,
+          4.0,
+          "pick_cup"
+        ],
+        [
+          4.0,
+          8.0,
+          "pour_solid_into_tray"
+        ],
+        [
+          8.0,
+          11.5,
+          "place_cup"
+        ]
+      ],
+      "gold": [
+        [
+          0.0,
+          3.98,
+          "pick up the glass with beans"
+        ],
+        [
+          3.98,
+          8.231,
+          "pour the brown solids from the cup into the blue tray"
+        ],
+        [
+          8.231,
+          11.153,
+          "place the glass next to the pink bowl"
+        ]
+      ],
+      "warnings": [],
+      "usage": {
+        "calls": 1,
+        "prompt_tokens": 2740,
+        "output_tokens": 515,
+        "retries": 0,
+        "calls_by_stage": {
+          "segment": 1
+        }
+      }
+    },
+    {
+      "id": "galaxea_052",
+      "family": "galaxea",
+      "ok": true,
+      "elapsed": 12.09,
+      "duration": 13.5,
+      "pred": [
+        [
+          0.0,
+          2.0,
+          "pick_cup"
+        ],
+        [
+          2.0,
+          5.5,
+          "pour_water_into_cup"
+        ],
+        [
+          5.5,
+          9.0,
+          "pour_water_into_cup"
+        ],
+        [
+          9.0,
+          12.0,
+          "place_cup"
+        ]
+      ],
+      "gold": [
+        [
+          0.0,
+          2.382,
+          "pick up the teal cup with water"
+        ],
+        [
+          2.382,
+          6.366,
+          "pour the water into the blue cup"
+        ],
+        [
+          6.366,
+          9.288,
+          "pour the water into the beige cup"
+        ],
+        [
+          9.293,
+          12.679,
+          "place the teal cup on to the table to the left of blue and white cup"
+        ]
+      ],
+      "warnings": [],
+      "usage": {
+        "calls": 1,
+        "prompt_tokens": 2738,
+        "output_tokens": 599,
+        "retries": 0,
+        "calls_by_stage": {
+          "segment": 1
+        }
+      }
+    },
+    {
+      "id": "galaxea_058",
+      "family": "galaxea",
+      "ok": true,
+      "elapsed": 9.91,
+      "duration": 11.77,
+      "pred": [
+        [
+          0.0,
+          3.5,
+          "pick_banana"
+        ],
+        [
+          3.5,
+          9.0,
+          "place_banana_on_bowl"
+        ]
+      ],
+      "gold": [
+        [
+          0.0,
+          3.442,
+          "grasp the banana on the table"
+        ],
+        [
+          3.442,
+          9.286,
+          "place the yellow banana inside the white bowl on the left"
+        ]
+      ],
+      "warnings": [],
+      "usage": {
+        "calls": 1,
+        "prompt_tokens": 2736,
+        "output_tokens": 308,
+        "retries": 0,
+        "calls_by_stage": {
+          "segment": 1
+        }
+      }
+    },
+    {
+      "id": "galaxea_060",
+      "family": "galaxea",
+      "ok": true,
+      "elapsed": 6.77,
+      "duration": 6.5,
+      "pred": [
+        [
+          0.0,
+          3.0,
+          "pick_banana"
+        ],
+        [
+          3.0,
+          4.5,
+          "place_banana_on_plate"
+        ]
+      ],
+      "gold": [
+        [
+          0.0,
+          3.44,
+          "pick up the banana on the table"
+        ],
+        [
+          3.44,
+          4.653,
+          "place the banana on the beige dish"
+        ]
+      ],
+      "warnings": [],
+      "usage": {
+        "calls": 1,
+        "prompt_tokens": 1585,
+        "output_tokens": 337,
+        "retries": 0,
+        "calls_by_stage": {
+          "segment": 1
+        }
+      }
+    },
+    {
+      "id": "galaxea_062",
+      "family": "galaxea",
+      "ok": true,
+      "elapsed": 10.5,
+      "duration": 10.67,
+      "pred": [
+        [
+          0.0,
+          5.0,
+          "pick_banana"
+        ],
+        [
+          5.0,
+          8.0,
+          "place_banana_on_dish"
+        ]
+      ],
+      "gold": [
+        [
+          0.0,
+          5.307,
+          "grasp the banana with the gripper"
+        ],
+        [
+          5.307,
+          7.962,
+          "place the banana inside the grey bowl"
+        ]
+      ],
+      "warnings": [],
+      "usage": {
+        "calls": 1,
+        "prompt_tokens": 2735,
+        "output_tokens": 326,
+        "retries": 0,
+        "calls_by_stage": {
+          "segment": 1
+        }
+      }
+    },
+    {
+      "id": "galaxea_065",
+      "family": "galaxea",
+      "ok": true,
+      "elapsed": 7.4,
+      "duration": 4.43,
+      "pred": [
+        [
+          0.0,
+          2.0,
+          "pick_banana"
+        ],
+        [
+          2.0,
+          3.0,
+          "place_banana_on_plate"
+        ]
+      ],
+      "gold": [
+        [
+          0.0,
+          1.963,
+          "pick up the yellow banana"
+        ],
+        [
+          1.963,
+          3.287,
+          "place the yellow banana on the gray plate"
+        ]
+      ],
+      "warnings": [],
+      "usage": {
+        "calls": 1,
+        "prompt_tokens": 1630,
+        "output_tokens": 442,
+        "retries": 0,
+        "calls_by_stage": {
+          "segment": 1
+        }
+      }
+    },
+    {
+      "id": "galaxea_067",
+      "family": "galaxea",
+      "ok": true,
+      "elapsed": 9.57,
+      "duration": 6.63,
+      "pred": [
+        [
+          0.0,
+          3.0,
+          "pick_banana"
+        ],
+        [
+          3.0,
+          5.0,
+          "place_banana_in_bowl"
+        ]
+      ],
+      "gold": [
+        [
+          0.0,
+          2.876,
+          "pick up the yellow banana"
+        ],
+        [
+          2.876,
+          5.085,
+          "place the yellow banana inside the pink bowl"
+        ]
+      ],
+      "warnings": [],
+      "usage": {
+        "calls": 1,
+        "prompt_tokens": 1585,
+        "output_tokens": 425,
+        "retries": 0,
+        "calls_by_stage": {
+          "segment": 1
+        }
+      }
+    },
+    {
+      "id": "galaxea_069",
+      "family": "galaxea",
+      "ok": true,
+      "elapsed": 13.23,
+      "duration": 8.17,
+      "pred": [
+        [
+          0.0,
+          3.0,
+          "pick_banana"
+        ],
+        [
+          3.0,
+          5.5,
+          "place_banana_in_box"
+        ]
+      ],
+      "gold": [
+        [
+          0.247,
+          2.896,
+          "pick up the banana"
+        ],
+        [
+          2.896,
+          5.763,
+          "place the yellow banana inside the white container"
+        ]
+      ],
+      "warnings": [],
+      "usage": {
+        "calls": 1,
+        "prompt_tokens": 1629,
+        "output_tokens": 381,
+        "retries": 0,
+        "calls_by_stage": {
+          "segment": 1
+        }
+      }
+    },
+    {
+      "id": "galaxea_071",
+      "family": "galaxea",
+      "ok": true,
+      "elapsed": 7.6,
+      "duration": 4.33,
+      "pred": [
+        [
+          0.0,
+          2.0,
+          "pick_banana"
+        ],
+        [
+          2.0,
+          3.0,
+          "place_banana_in_basket"
+        ]
+      ],
+      "gold": [
+        [
+          0.0,
+          1.869,
+          "pick up the banana"
+        ],
+        [
+          1.869,
+          3.33,
+          "drop the banana into the basked"
+        ]
+      ],
+      "warnings": [],
+      "usage": {
+        "calls": 1,
+        "prompt_tokens": 1630,
+        "output_tokens": 289,
+        "retries": 0,
+        "calls_by_stage": {
+          "segment": 1
+        }
+      }
+    },
+    {
+      "id": "galaxea_073",
+      "family": "galaxea",
+      "ok": true,
+      "elapsed": 20.37,
+      "duration": 14.87,
+      "pred": [
+        [
+          0.0,
+          7.0,
+          "open_drawer"
+        ],
+        [
+          7.0,
+          13.0,
+          "close_drawer"
+        ]
+      ],
+      "gold": [
+        [
+          0.0,
+          7.395,
+          "pull the white handle to open the red drawer"
+        ],
+        [
+          7.427,
+          12.964,
+          "push the red drawer closed"
+        ]
+      ],
+      "warnings": [],
+      "usage": {
+        "calls": 1,
+        "prompt_tokens": 2735,
+        "output_tokens": 413,
+        "retries": 0,
+        "calls_by_stage": {
+          "segment": 1
+        }
+      }
+    },
+    {
+      "id": "galaxea_075",
+      "family": "galaxea",
+      "ok": true,
+      "elapsed": 18.72,
+      "duration": 13.4,
+      "pred": [
+        [
+          0.0,
+          5.5,
+          "open_drawer"
+        ],
+        [
+          5.5,
+          11.0,
+          "close_drawer"
+        ]
+      ],
+      "gold": [
+        [
+          0.0,
+          5.153,
+          "grasp the white handle and pull open the yellow drawer"
+        ],
+        [
+          5.153,
+          11.348,
+          "push the yellow drawer closed"
+        ]
+      ],
+      "warnings": [],
+      "usage": {
+        "calls": 1,
+        "prompt_tokens": 2735,
+        "output_tokens": 501,
+        "retries": 0,
+        "calls_by_stage": {
+          "segment": 1
+        }
+      }
+    },
+    {
+      "id": "homer_1",
+      "family": "homer",
+      "ok": false,
+      "error": "LLMError: segment failed after 4 attempts: segment: model returned no content (finish=[])",
+      "trace": ", CoarseSegments,\n             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/Users/finnmetz/Documents/rando_projects/Manda/robot-episode-labeler/src/rel/annotation/llm.py\", line 237, in json\n    raise LLMError(f\"{stage} failed after {self.max_retries} attempts: {last}\") from last\nrel.annotation.llm.LLMError: segment failed after 4 attempts: segment: model returned no content (finish=[])\n",
+      "gold": [
+        [
+          0.0,
+          7.709,
+          "twist open the pitcher lid"
+        ],
+        [
+          7.709,
+          10.837,
+          "pick up the pitcher"
+        ],
+        [
+          10.837,
+          20.746,
+          "pour water from the pitcher into the wine glass"
+        ],
+        [
+          20.746,
+          21.712,
+          "place the pitcher on the black board right next to wine glass"
+        ],
+        [
+          21.712,
+          26.514,
+          "twist the pitcher lid to close it"
+        ],
+        [
+          26.514,
+          27.855,
+          "pick up the pitcher"
+        ],
+        [
+          27.855,
+          62.588,
+          "pour water from the pitcher into the wine glass"
+        ],
+        [
+          62.588,
+          65.413,
+          "move the tall glass closer to the wine glass"
+        ],
+        [
+          65.413,
+          67.987,
+          "place the pitcher on the black board right and below the wine glass"
+        ],
+        [
+          67.987,
+          72.944,
+          "twist the pitcher lid to open it slightly"
+        ],
+        [
+          72.944,
+          74.356,
+          "pick up the pitcher"
+        ],
+        [
+          74.356,
+          79.969,
+          "pour a bit of water from the pitcher into the tall glass"
+        ],
+        [
+          79.969,
+          83.203,
+          "move the glass wine 7cm to the left"
+        ],
+        [
+          83.203,
+          134.022,
+          "pour water from the pitcher into the tall glass until it's almost full"
+        ],
+        [
+          134.022,
+          137.134,
+          "pour water from the pitcher into the wine glass until it's full"
+        ],
+        [
+          137.134,
+          140.219,
+          "pour water from the pitcher into the tall glass until it's full"
+        ],
+        [
+          140.219,
+          142.2,
+          "place the pitcher on the table"
+        ],
+        [
+          142.2,
+          147.534,
+          "reposition the wine glass to the left center part of table"
+        ],
+        [
+          147.534,
+          152.14,
+          "move the tall glass to the right-center part of the table"
+        ],
+        [
+          152.14,
+          161.18,
+          "place the pitcher on the center part of the table between the two glasses"
+        ]
+      ],
+      "usage": {
+        "calls": 4,
+        "prompt_tokens": 2408,
+        "output_tokens": 0,
+        "retries": 3,
+        "calls_by_stage": {
+          "segment": 4
+        }
+      }
+    },
+    {
+      "id": "homer_10",
+      "family": "homer",
+      "ok": true,
+      "elapsed": 55.84,
+      "duration": 120.83,
+      "pred": [
+        [
+          0.0,
+          17.5,
+          "wipe_countertop"
+        ],
+        [
+          17.5,
+          43.0,
+          "wipe_table"
+        ],
+        [
+          43.0,
+          46.5,
+          "move_placemat"
+        ],
+        [
+          46.5,
+          109.0,
+          "wipe_table"
+        ],
+        [
+          109.0,
+          120.5,
+          "wipe_stovetop"
+        ]
+      ],
+      "gold": [
+        [
+          0.0,
+          1.334,
+          "unfold the yellow cloth"
+        ],
+        [
+          1.334,
+          19.357,
+          "wipe the wooden countertop with a yellow cloth"
+        ],
+        [
+          19.357,
+          42.314,
+          "wipe the dining table with a yellow cloth"
+        ],
+        [
+          42.314,
+          46.664,
+          "pick up the round brown placemat from the table and clean under it"
+        ],
+        [
+          46.664,
+          65.749,
+          "wipe the wooden dinning table with a yellow cloth"
+        ],
+        [
+          65.749,
+          71.02,
+          "pick up the round brown placemats from the wooden table and move to the right"
+        ],
+        [
+          71.02,
+          81.991,
+          "wipe the wooden countertop with a yellow cloth"
+        ],
+        [
+          81.991,
+          87.154,
+          "move the round brown placemats closer to you and place it exactly to the left of the other one on the table"
+        ],
+        [
+          87.154,
+          108.365,
+          "wipe the wooden kitchen table with a yellow cloth"
+        ],
+        [
+          108.365,
+          120.83,
+          "wipe the black glass stovetop with a yellow cloth"
+        ]
+      ],
+      "warnings": [],
+      "usage": {
+        "calls": 3,
+        "prompt_tokens": 18135,
+        "output_tokens": 2091,
+        "retries": 0,
+        "calls_by_stage": {
+          "segment": 3
+        }
+      }
+    },
+    {
+      "id": "homer_11",
+      "family": "homer",
+      "ok": true,
+      "elapsed": 35.66,
+      "duration": 131.69,
+      "pred": [
+        [
+          0.0,
+          2.5,
+          "no_completed_subtask"
+        ],
+        [
+          2.5,
+          7.0,
+          "open_jar"
+        ],
+        [
+          7.0,
+          13.5,
+          "close_jar"
+        ],
+        [
+          13.5,
+          16.0,
+          "open_jar"
+        ],
+        [
+          16.0,
+          24.5,
+          "close_jar"
+        ],
+        [
+          24.5,
+          28.5,
+          "open_jar"
+        ],
+        [
+          28.5,
+          34.5,
+          "close_jar"
+        ],
+        [
+          34.5,
+          43.0,
+          "open_bottle"
+        ],
+        [
+          43.0,
+          50.0,
+          "close_bottle"
+        ],
+        [
+          50.0,
+          59.5,
+          "open_container"
+        ],
+        [
+          59.5,
+          68.5,
+          "inspect_container"
+        ],
+        [
+          68.5,
+          76.0,
+          "close_container"
+        ],
+        [
+          76.0,
+          82.5,
+          "open_container"
+        ],
+        [
+          82.5,
+          89.0,
+          "inspect_container"
+        ],
+        [
+          89.0,
+          95.5,
+          "close_container"
+        ],
+        [
+          95.5,
+          100.0,
+          "open_jar"
+        ],
+        [
+          100.0,
+          104.5,
+          "inspect_jar"
+        ],
+        [
+          104.5,
+          109.5,
+          "close_jar"
+        ],
+        [
+          109.5,
+          112.0,
+          "open_jar"
+        ],
+        [
+          112.0,
+          115.0,
+          "inspect_jar"
+        ],
+        [
+          115.0,
+          118.5,
+          "close_jar"
+        ],
+        [
+          118.5,
+          121.5,
+          "open_jar"
+        ],
+        [
+          121.5,
+          124.5,
+          "inspect_jar"
+        ],
+        [
+          124.5,
+          129.0,
+          "close_jar"
+        ]
+      ],
+      "gold": [
+        [
+          0.0,
+          3.421,
+          "pick up small jar containing coffee beans from the bottom left of the tray"
+        ],
+        [
+          3.421,
+          7.485,
+          "unscrew and remove the pink lid from the jar you are holding"
+        ],
+        [
+          7.485,
+          11.992,
+          "close small jar containing coffee beans in your hand with the pink lid you are holding"
+        ],
+        [
+          11.992,
+          13.741,
+          "place the small jar with a pink lid you are holding on the left bottom side of tray"
+        ],
+        [
+          13.741,
+          17.463,
+          "pick up the plastic jar containing white powder from bottom middle of the table"
+        ],
+        [
+          17.463,
+          20.231,
+          "unscrew the pink lid from the jar you are holding"
+        ],
+        [
+          20.231,
+          22.818,
+          "screw in the pink lid onto the jar you are holding"
+        ],
+        [
+          22.818,
+          24.195,
+          "place the small jar in your hand between the two jars with coffee beans on tray"
+        ],
+        [
+          24.195,
+          25.691,
+          "pick up the plastic jar containing beans from right bottom of the table"
+        ],
+        [
+          25.691,
+          28.875,
+          "unscrew and remove the pink lid from the jar you are holding"
+        ],
+        [
+          28.875,
+          33.016,
+          "close small jar containing coffee beans in your hand with the pink lid you are holding"
+        ],
+        [
+          33.016,
+          34.476,
+          "place the small jar with a pink lid in your hand on the bottom right side of tray"
+        ],
+        [
+          34.476,
+          36.78,
+          "pick up the pink and black bottle from the table"
+        ],
+        [
+          36.78,
+          42.037,
+          "open the bottle you are holding"
+        ],
+        [
+          42.037,
+          48.539,
+          "close the black-pink bottle you are holding"
+        ],
+        [
+          48.539,
+          51.786,
+          "place the pink-black bottle to the top right of tray"
+        ],
+        [
+          51.786,
+          54.864,
+          "pick up the orange floral container"
+        ],
+        [
+          54.864,
+          61.774,
+          "unscrew the lid from the container you are holding"
+        ],
+        [
+          61.774,
+          68.382,
+          "scoop white powder from the clear container using an orange measuring spoon"
+        ],
+        [
+          68.382,
+          74.207,
+          "press the orange lid onto the clear plastic container to close it"
+        ],
+        [
+          74.207,
+          76.607,
+          "place the jar with the orange lid you are holding to middle top of tray"
+        ],
+        [
+          76.607,
+          79.647,
+          "pick up the large jar with a green lid from the top-left of the tray"
+        ],
+        [
+          79.647,
+          83.091,
+          "unscrew the lid from the container you are holding"
+        ],
+        [
+          83.091,
+          90.155,
+          "stir the sugar with a spoon"
+        ],
+        [
+          90.155,
+          93.621,
+          "screw the green lid onto the plastic jar you are holding"
+        ],
+        [
+          93.621,
+          96.283,
+          "place the jar you are holding on the left bottom side of the tray"
+        ],
+        [
+          96.283,
+          98.559,
+          "pick up the plastic jar containing beans from right bottom of the table"
+        ],
+        [
+          98.559,
+          101.158,
+          "remove the pink lid from the container you are holding"
+        ],
+        [
+          101.158,
+          104.681,
+          "stir the beens with your hand"
+        ],
+        [
+          104.681,
+          109.199,
+          "close small jar containing coffee beans in your hand with the pink lid you are holding"
+        ],
+        [
+          109.199,
+          110.614,
+          "place the small jar with a pink lid in your hand on the bottom right side of tray"
+        ],
+        [
+          110.614,
+          111.601,
+          "pick up the plastic jar containing white powder from bottom middle of the table"
+        ],
+        [
+          111.601,
+          112.228,
+          "remove the pink lid from the jar you are holding"
+        ],
+        [
+          112.228,
+          115.374,
+          "inspect the powder inside the container"
+        ],
+        [
+          115.374,
+          117.032,
+          "close the small jar you are holding containing white powder with the pink lid"
+        ],
+        [
+          117.032,
+          118.44,
+          "place the small jar in your hand between the two jars with coffee beans on tray"
+        ],
+        [
+          118.44,
+          120.037,
+          "pick up small jar containing coffee beans from the bottom left of the tray"
+        ],
+        [
+          120.037,
+          121.212,
+          "unscrew and remove the pink lid from the jar you are holding"
+        ],
+        [
+          121.212,
+          125.329,
+          "stir the beens with your hand"
+        ],
+        [
+          125.329,
+          128.369,
+          "close the small jar you are holding with the pink lid"
+        ],
+        [
+          128.369,
+          131.69,
+          "place the small jar with a pink lid you are holding on the left bottom side of tray"
+        ]
+      ],
+      "warnings": [
+        "trimmed 1.50s overlap between 'close_bottle' and 'open_container'",
+        "trimmed 1.00s overlap between 'open_jar' and 'inspect_jar'",
+        "trimmed 0.50s overlap between 'inspect_jar' and 'close_jar'"
+      ],
+      "usage": {
+        "calls": 3,
+        "prompt_tokens": 19597,
+        "output_tokens": 2635,
+        "retries": 0,
+        "calls_by_stage": {
+          "segment": 3
+        }
+      }
+    },
+    {
+      "id": "homer_12",
+      "family": "homer",
+      "ok": true,
+      "elapsed": 28.48,
+      "duration": 124.66,
+      "pred": [
+        [
+          0.0,
+          3.5,
+          "open_blue_powder_can"
+        ],
+        [
+          3.5,
+          6.0,
+          "close_blue_powder_can"
+        ],
+        [
+          6.0,
+          8.0,
+          "open_blue_powder_can"
+        ],
+        [
+          8.0,
+          11.5,
+          "close_blue_powder_can"
+        ],
+        [
+          11.5,
+          15.5,
+          "open_nescafe_jar"
+        ],
+        [
+          15.5,
+          21.0,
+          "close_nescafe_jar"
+        ],
+        [
+          21.0,
+          25.5,
+          "open_glass_jar"
+        ],
+        [
+          25.5,
+          29.0,
+          "close_glass_jar"
+        ],
+        [
+          29.0,
+          33.5,
+          "open_tea_canister"
+        ],
+        [
+          33.5,
+          38.5,
+          "close_tea_canister"
+        ],
+        [
+          38.5,
+          41.5,
+          "open_plastic_grain_container"
+        ],
+        [
+          41.5,
+          46.0,
+          "close_plastic_grain_container"
+        ],
+        [
+          46.0,
+          47.0,
+          "open_plastic_grain_container"
+        ],
+        [
+          47.0,
+          50.0,
+          "close_plastic_grain_container"
+        ],
+        [
+          50.0,
+          53.0,
+          "open_metal_container"
+        ],
+        [
+          53.0,
+          57.5,
+          "close_metal_container"
+        ],
+        [
+          57.5,
+          59.5,
+          "open_metal_container"
+        ],
+        [
+          59.5,
+          67.5,
+          "open_jar"
+        ],
+        [
+          67.5,
+          71.5,
+          "close_jar"
+        ],
+        [
+          71.5,
+          78.0,
+          "open_green_bottle"
+        ],
+        [
+          78.0,
+          83.0,
+          "close_green_bottle"
+        ],
+        [
+          83.0,
+          86.5,
+          "open_blue_box"
+        ],
+        [
+          86.5,
+          89.5,
+          "close_blue_box"
+        ],
+        [
+          89.5,
+          94.0,
+          "open_plastic_container"
+        ],
+        [
+          94.0,
+          98.5,
+          "close_plastic_container"
+        ],
+        [
+          98.5,
+          104.0,
+          "open_jar"
+        ],
+        [
+          104.0,
+          108.5,
+          "close_jar"
+        ],
+        [
+          108.5,
+          114.0,
+          "open_jar"
+        ],
+        [
+          114.0,
+          118.0,
+          "close_jar"
+        ],
+        [
+          118.0,
+          121.0,
+          "open_container"
+        ],
+        [
+          121.0,
+          124.0,
+          "close_container"
+        ]
+      ],
+      "gold": [
+        [
+          0.0,
+          2.617,
+          "pick up the blue plastic container from the counter and open it"
+        ],
+        [
+          2.617,
+          3.978,
+          "open the blue plastic container"
+        ],
+        [
+          3.978,
+          5.993,
+          "close the blue lid of the plastic container"
+        ],
+        [
+          5.993,
+          8.363,
+          "open the blue lid of the container you are holding"
+        ],
+        [
+          8.363,
+          9.615,
+          "close the blue lid of the plastic container"
+        ],
+        [
+          9.615,
+          10.981,
+          "place the blue container on the left side of black countertop"
+        ],
+        [
+          10.981,
+          12.622,
+          "pick up the nescafe container"
+        ],
+        [
+          12.622,
+          15.813,
+          "remove the red lid from the nescafe container"
+        ],
+        [
+          15.813,
+          19.669,
+          "place the red lid onto the coffee jar to close it"
+        ],
+        [
+          19.669,
+          21.178,
+          "place the red container on the black surface to the right of the blue container"
+        ],
+        [
+          21.178,
+          22.659,
+          "pick up the glass jar"
+        ],
+        [
+          22.659,
+          25.269,
+          "unscrew and remove the black lid from the glass jar"
+        ],
+        [
+          25.269,
+          27.657,
+          "screw the black lid onto the glass jar"
+        ],
+        [
+          27.657,
+          28.872,
+          "place the glass container with black lid onto the black surface to the right of the blue container and bellow the nespreso container"
+        ],
+        [
+          28.872,
+          30.542,
+          "pick up a plastic jar with orange lid"
+        ],
+        [
+          30.542,
+          33.71,
+          "unscrew and remove the orange lid from the plastic jar"
+        ],
+        [
+          33.71,
+          36.234,
+          "place the orange lid onto the jar in your hand and screw it closed"
+        ],
+        [
+          36.234,
+          37.996,
+          "place the container with orange lid onto the black surface to the right of nespreso container"
+        ],
+        [
+          37.996,
+          39.347,
+          "pick up the clear container with blue lid"
+        ],
+        [
+          39.347,
+          41.961,
+          "remove the blue lid from the rectangular food storage container"
+        ],
+        [
+          41.961,
+          45.323,
+          "close the plastic food container with the light blue lid"
+        ],
+        [
+          45.323,
+          47.159,
+          "remove the blue lid from the rectangular food storage container"
+        ],
+        [
+          47.159,
+          49.529,
+          "close the plastic food container with the light blue lid"
+        ],
+        [
+          49.529,
+          50.703,
+          "place the container with blue lid onto the black surface to the right of glass jar with a black lid"
+        ],
+        [
+          50.703,
+          51.811,
+          "pick up the metal container"
+        ],
+        [
+          51.811,
+          53.559,
+          "twist and remove the lid from the metal container"
+        ],
+        [
+          53.559,
+          57.243,
+          "place the lid onto the metal container to close it"
+        ],
+        [
+          57.243,
+          58.343,
+          "twist and remove the lid from the metal container"
+        ],
+        [
+          58.343,
+          60.117,
+          "place the lid onto the metal container to close it"
+        ],
+        [
+          60.117,
+          60.811,
+          "place the metal container onto the black surface to the right of container with blue lid"
+        ],
+        [
+          60.811,
+          63.162,
+          "pick up the clear plastic bottle with pink lid"
+        ],
+        [
+          63.162,
+          67.296,
+          "unscrew and remove the pink lid from the clear plastic bottle"
+        ],
+        [
+          67.296,
+          71.05,
+          "screw the pink lid onto the plastic bottle"
+        ],
+        [
+          71.05,
+          71.924,
+          "place the plastic bottle with pink lid onto the black surface to the right of container with orange lid"
+        ],
+        [
+          71.924,
+          73.309,
+          "pick up the green bottle with green cap"
+        ],
+        [
+          73.309,
+          77.908,
+          "unscrew and remove the green cap from the green bottle"
+        ],
+        [
+          77.908,
+          82.338,
+          "screw the green cap onto the green bottle"
+        ],
+        [
+          82.338,
+          83.678,
+          "place the green bottle onto the black surface to the right of bottle with pink lid"
+        ],
+        [
+          83.678,
+          85.208,
+          "pick up the blue plastic container"
+        ],
+        [
+          85.208,
+          86.859,
+          "remove the lid from the blue plastic container"
+        ],
+        [
+          86.859,
+          88.461,
+          "close the blue lid of the plastic container"
+        ],
+        [
+          88.461,
+          90.807,
+          "place the blue container on the left side of black countertop next to glass jar with black lid"
+        ],
+        [
+          90.807,
+          92.418,
+          "pick up the plastic food container with blue lid"
+        ],
+        [
+          92.418,
+          94.229,
+          "remove the blue lid from the plastic food container"
+        ],
+        [
+          94.229,
+          96.107,
+          "place the blue lid onto the white container of sesame seeds"
+        ],
+        [
+          96.107,
+          98.145,
+          "place the blue container on the black countertop to the right of glass jar with black lid"
+        ],
+        [
+          98.145,
+          99.665,
+          "pick up the small bottle with pink cap"
+        ],
+        [
+          99.665,
+          104.65,
+          "unscrew and remove the pink cap from the small bottle"
+        ],
+        [
+          104.65,
+          108.22,
+          "place the pink lid onto the bottle to close it"
+        ],
+        [
+          108.22,
+          109.284,
+          "place the bottle with pink lid on the black countertop to the right of container with orange lid"
+        ],
+        [
+          109.284,
+          110.799,
+          "pick up the coffee jar with red lid"
+        ],
+        [
+          110.799,
+          114.118,
+          "unscrew and remove the red lid from the coffee jar"
+        ],
+        [
+          114.118,
+          117.648,
+          "screw the red lid onto the nescafe container"
+        ],
+        [
+          117.648,
+          119.265,
+          "place the nescafe container on the black countertop to the right of container with orange lid"
+        ],
+        [
+          119.265,
+          120.487,
+          "pick up the metal container"
+        ],
+        [
+          120.487,
+          121.806,
+          "twist and remove the lid from the metal container"
+        ],
+        [
+          121.806,
+          123.149,
+          "screw the lid onto the silver metal container"
+        ],
+        [
+          123.149,
+          124.66,
+          "place the metal container on the black countertop to the right of container with blue lid"
+        ]
+      ],
+      "warnings": [
+        "trimmed 1.00s overlap between 'close_plastic_grain_container' and 'open_metal_container'",
+        "trimmed 0.50s overlap between 'open_metal_container' and 'close_metal_container'",
+        "trimmed 3.00s overlap between 'close_metal_container' and 'open_metal_container'",
+        "trimmed 0.50s overlap between 'open_jar' and 'close_jar'",
+        "trimmed 0.50s overlap between 'close_jar' and 'open_jar'"
+      ],
+      "usage": {
+        "calls": 3,
+        "prompt_tokens": 18496,
+        "output_tokens": 1584,
+        "retries": 0,
+        "calls_by_stage": {
+          "segment": 3
+        }
+      }
+    },
+    {
+      "id": "homer_15",
+      "family": "homer",
+      "ok": true,
+      "elapsed": 35.78,
+      "duration": 132.3,
+      "pred": [
+        [
+          0.0,
+          7.5,
+          "spread_white_cloth"
+        ],
+        [
+          7.5,
+          25.5,
+          "fold_white_cloth"
+        ],
+        [
+          25.5,
+          29.5,
+          "place_white_cloth_aside"
+        ],
+        [
+          29.5,
+          39.5,
+          "spread_patterned_cloth"
+        ],
+        [
+          39.5,
+          46.5,
+          "fold_patterned_cloth"
+        ],
+        [
+          46.5,
+          50.0,
+          "spread_patterned_cloth"
+        ],
+        [
+          50.0,
+          61.5,
+          "fold_patterned_cloth"
+        ],
+        [
+          61.5,
+          95.5,
+          "fold_blue_towel"
+        ],
+        [
+          95.5,
+          100.0,
+          "no_completed_subtask"
+        ],
+        [
+          100.0,
+          128.5,
+          "fold_striped_cloth"
+        ]
+      ],
+      "gold": [
+        [
+          0.0,
+          6.703,
+          "unfold and lay the white cloth flat on the bed"
+        ],
+        [
+          6.703,
+          9.836,
+          "fold the bottom half of the white cloth upward to align with the top edge"
+        ],
+        [
+          9.836,
+          12.7,
+          "smooth the folded white cloth"
+        ],
+        [
+          12.7,
+          15.599,
+          "fold the left side of the white cloth over to the right side"
+        ],
+        [
+          15.599,
+          20.885,
+          "fold the white cloth in half horizontally"
+        ],
+        [
+          20.885,
+          24.331,
+          "fold the white cloth in half"
+        ],
+        [
+          24.331,
+          30.168,
+          "place the folded white cloth on the right side of the bed"
+        ],
+        [
+          30.168,
+          33.058,
+          "pick up the patterned cloth"
+        ],
+        [
+          33.058,
+          38.968,
+          "unfold and spread the patterned cloth flat on the bed"
+        ],
+        [
+          38.968,
+          44.294,
+          "fold the left side of the patterned cloth over to the right"
+        ],
+        [
+          44.294,
+          51.892,
+          "fold the bottom edge of the patterned cloth upward"
+        ],
+        [
+          51.892,
+          56.744,
+          "fold the patterned fabric in half"
+        ],
+        [
+          56.744,
+          63.4,
+          "place the folded patterned cloth on the right side of the bed"
+        ],
+        [
+          63.4,
+          65.957,
+          "pick up the blue pillowcase"
+        ],
+        [
+          65.957,
+          69.515,
+          "unfold and spread the blue pillowcase flat on the bed"
+        ],
+        [
+          69.515,
+          73.063,
+          "fold the bottom edge of the blue towel upward"
+        ],
+        [
+          73.063,
+          82.51,
+          "fold the left half of the blue towel over to the right"
+        ],
+        [
+          82.51,
+          85.189,
+          "smooth the blue towel"
+        ],
+        [
+          85.189,
+          90.733,
+          "fold the light blue towel in half and smooth it down"
+        ],
+        [
+          90.733,
+          97.109,
+          "lift the folded blue cloth from the bed and move it to the right"
+        ],
+        [
+          97.109,
+          101.047,
+          "pick up the green and white striped towel"
+        ],
+        [
+          101.047,
+          110.966,
+          "spread the green and white striped towel flat on the bed"
+        ],
+        [
+          110.966,
+          116.071,
+          "fold the left side of the green striped towel to the right"
+        ],
+        [
+          116.071,
+          119.276,
+          "smooth folded green striped cloth"
+        ],
+        [
+          119.276,
+          123.919,
+          "fold the green striped cloth in half"
+        ],
+        [
+          123.919,
+          132.3,
+          "lift the folded green striped cloth and move it to the right"
+        ]
+      ],
+      "warnings": [
+        "trimmed 0.50s overlap between 'spread_patterned_cloth' and 'fold_patterned_cloth'",
+        "trimmed 1.00s overlap between 'no_completed_subtask' and 'fold_striped_cloth'"
+      ],
+      "usage": {
+        "calls": 3,
+        "prompt_tokens": 19572,
+        "output_tokens": 1927,
+        "retries": 0,
+        "calls_by_stage": {
+          "segment": 3
+        }
+      }
+    },
+    {
+      "id": "homer_2",
+      "family": "homer",
+      "ok": true,
+      "elapsed": 33.56,
+      "duration": 154.2,
+      "pred": [
+        [
+          0.0,
+          3.0,
+          "turn_on_faucet"
+        ],
+        [
+          3.0,
+          12.0,
+          "apply_soap_to_sponge"
+        ],
+        [
+          12.0,
+          29.5,
+          "wash_sponge"
+        ],
+        [
+          29.5,
+          38.0,
+          "scrub_glass_cup_with_sponge"
+        ],
+        [
+          38.0,
+          44.5,
+          "rinse_glass_cup"
+        ],
+        [
+          44.5,
+          47.5,
+          "place_glass_cup_on_counter"
+        ],
+        [
+          47.5,
+          56.0,
+          "scrub_black_mug_with_sponge"
+        ],
+        [
+          56.0,
+          60.5,
+          "rinse_black_mug"
+        ],
+        [
+          60.5,
+          63.0,
+          "place_black_mug_on_rack"
+        ],
+        [
+          63.0,
+          69.5,
+          "scrub_glass_with_sponge"
+        ],
+        [
+          69.5,
+          81.0,
+          "rinse_glass"
+        ],
+        [
+          81.0,
+          83.0,
+          "place_glass_on_rack"
+        ],
+        [
+          83.0,
+          95.0,
+          "scrub_saucer_with_sponge"
+        ],
+        [
+          95.0,
+          98.0,
+          "rinse_saucer"
+        ],
+        [
+          98.0,
+          99.5,
+          "place_saucer_on_rack"
+        ],
+        [
+          99.5,
+          111.0,
+          "scrub_glass_bowl_with_sponge"
+        ],
+        [
+          111.0,
+          115.5,
+          "rinse_glass_bowl"
+        ],
+        [
+          115.5,
+          117.0,
+          "place_glass_bowl_on_counter"
+        ],
+        [
+          117.0,
+          118.5,
+          "pick_up_rice_paddle"
+        ],
+        [
+          118.5,
+          133.0,
+          "scrub_rice_paddle_with_sponge"
+        ],
+        [
+          133.0,
+          134.0,
+          "rinse_rice_paddle"
+        ],
+        [
+          134.0,
+          136.0,
+          "place_rice_paddle_on_counter"
+        ],
+        [
+          136.0,
+          141.5,
+          "scrub_sink_drain_with_sponge"
+        ],
+        [
+          141.5,
+          145.0,
+          "rinse_sponge"
+        ],
+        [
+          145.0,
+          151.0,
+          "rinse_hands"
+        ],
+        [
+          151.0,
+          152.0,
+          "turn_off_faucet"
+        ]
+      ],
+      "gold": [
+        [
+          0.0,
+          3.981,
+          "turn on the kitchen faucet"
+        ],
+        [
+          3.981,
+          6.717,
+          "wet the yellow sponge under the running water"
+        ],
+        [
+          6.717,
+          11.151,
+          "put a dish soap on the dish sponge"
+        ],
+        [
+          11.151,
+          19.269,
+          "wet and squeeze the yellow sponge under the running water"
+        ],
+        [
+          19.269,
+          21.116,
+          "pick up the silver spoon from glass mug with cofee"
+        ],
+        [
+          21.116,
+          28.83,
+          "wash the silver spoon with a sponge under running water"
+        ],
+        [
+          28.83,
+          30.91,
+          "place the silver spoon on the kitchen towel and the above the black up"
+        ],
+        [
+          30.91,
+          31.75,
+          "pick up the glass mug from the sink"
+        ],
+        [
+          31.75,
+          43.735,
+          "wash the glass mug with a sponge under running water"
+        ],
+        [
+          43.735,
+          46.979,
+          "place the glass mug on the kitchen towel and above the right most plate"
+        ],
+        [
+          46.979,
+          49.714,
+          "pick up the yellow sponge from the sink"
+        ],
+        [
+          49.714,
+          52.377,
+          "pick up the black mug from the sink"
+        ],
+        [
+          52.377,
+          59.439,
+          "scrub the black mug with a sponge under running water in the sink"
+        ],
+        [
+          59.439,
+          62.175,
+          "place the black mug on the kitchen towel and to the left of the glass mug"
+        ],
+        [
+          62.175,
+          63.36,
+          "pick up the yellow sponge"
+        ],
+        [
+          63.36,
+          65.845,
+          "pick up the clear glass from the sink"
+        ],
+        [
+          65.845,
+          80.872,
+          "scrub and rinse a clear glass under running water in the sink"
+        ],
+        [
+          80.872,
+          82.09,
+          "place the clear glass on top of the right most plate"
+        ],
+        [
+          82.09,
+          84.287,
+          "pick up the yellow sponge"
+        ],
+        [
+          84.287,
+          89.636,
+          "pick up the white saucer from the sink"
+        ],
+        [
+          89.636,
+          98.315,
+          "scrub the white saucer with a sponge under running water in the sink"
+        ],
+        [
+          98.315,
+          99.826,
+          "place the white saucer on top of the black cup"
+        ],
+        [
+          99.826,
+          103.358,
+          "pick up the clear glass bowl from the sink"
+        ],
+        [
+          103.358,
+          114.467,
+          "scrub and rinse a clear glass bowl with a sponge under running water in the sink"
+        ],
+        [
+          114.467,
+          116.115,
+          "place the clear glass bowl on top of the black cup"
+        ],
+        [
+          116.115,
+          123.573,
+          "pick up the white spatula from the sink"
+        ],
+        [
+          123.573,
+          134.741,
+          "rinse the white spatula under running water in the sink"
+        ],
+        [
+          134.741,
+          140.618,
+          "clean the sink with sponge"
+        ],
+        [
+          140.618,
+          149.256,
+          "rinse and squeeze the sponge under running water in the sink and wash your hands"
+        ],
+        [
+          149.256,
+          151.542,
+          "turn off the kitchen faucet"
+        ]
+      ],
+      "warnings": [],
+      "usage": {
+        "calls": 3,
+        "prompt_tokens": 21793,
+        "output_tokens": 2041,
+        "retries": 0,
+        "calls_by_stage": {
+          "segment": 3
+        }
+      }
+    },
+    {
+      "id": "homer_29",
+      "family": "homer",
+      "ok": true,
+      "elapsed": 16.48,
+      "duration": 84.93,
+      "pred": [
+        [
+          0.0,
+          1.5,
+          "adjust_cutting_board"
+        ],
+        [
+          1.5,
+          3.0,
+          "pick_knife_and_onion"
+        ],
+        [
+          3.0,
+          29.5,
+          "peel_onion"
+        ],
+        [
+          29.5,
+          31.0,
+          "place_onion_and_knife_on_cutting_board"
+        ],
+        [
+          31.0,
+          33.0,
+          "gather_onion_peels"
+        ],
+        [
+          33.0,
+          39.5,
+          "discard_onion_peels_in_trash_can"
+        ],
+        [
+          39.5,
+          41.5,
+          "pick_knife"
+        ],
+        [
+          41.5,
+          74.0,
+          "slice_onion"
+        ],
+        [
+          74.0,
+          82.5,
+          "transfer_sliced_onion_to_bowl"
+        ],
+        [
+          82.5,
+          83.5,
+          "place_cutting_board"
+        ]
+      ],
+      "gold": [
+        [
+          0.0,
+          2.709,
+          "pick up the onion and the knife"
+        ],
+        [
+          2.709,
+          7.435,
+          "cut the top of the red onion with a knife"
+        ],
+        [
+          7.435,
+          14.109,
+          "cut the bottom of the red onion with a knife"
+        ],
+        [
+          14.109,
+          30.037,
+          "peel the outer skin of the red onion using hand"
+        ],
+        [
+          30.037,
+          30.852,
+          "place the red onion on the cutting board"
+        ],
+        [
+          30.852,
+          31.632,
+          "place the knife on the cutting board"
+        ],
+        [
+          31.632,
+          32.233,
+          "pick up the onion peel"
+        ],
+        [
+          32.233,
+          36.677,
+          "throw the onion peel into the trash bin"
+        ],
+        [
+          36.677,
+          41.349,
+          "pick up the onion and the knife"
+        ],
+        [
+          41.349,
+          74.298,
+          "dice the red onion on the cutting board"
+        ],
+        [
+          74.298,
+          75.68,
+          "pick up the cutting board"
+        ],
+        [
+          75.68,
+          82.499,
+          "scrape the diced onions from the cutting board into the bowl"
+        ],
+        [
+          82.499,
+          84.889,
+          "place the white cutting board with the knife on the counter next to the sink"
+        ]
+      ],
+      "warnings": [],
+      "usage": {
+        "calls": 2,
+        "prompt_tokens": 12277,
+        "output_tokens": 519,
+        "retries": 0,
+        "calls_by_stage": {
+          "segment": 2
+        }
+      }
+    },
+    {
+      "id": "homer_3",
+      "family": "homer",
+      "ok": true,
+      "elapsed": 25.61,
+      "duration": 137.49,
+      "pred": [
+        [
+          0.0,
+          9.0,
+          "pour_powder_into_bowl"
+        ],
+        [
+          9.0,
+          18.0,
+          "pour_water_into_bowl"
+        ],
+        [
+          18.0,
+          20.5,
+          "pick_up_spoon"
+        ],
+        [
+          20.5,
+          132.5,
+          "stir_contents_in_bowl"
+        ]
+      ],
+      "gold": [
+        [
+          0.0,
+          3.285,
+          "pick up the green bag with brown powder"
+        ],
+        [
+          3.285,
+          8.841,
+          "pour brown powder from the green bag into the metal pan"
+        ],
+        [
+          8.841,
+          10.572,
+          "new subtask"
+        ],
+        [
+          10.572,
+          12.296,
+          "pick up the blue-shite cup from the left side of the table"
+        ],
+        [
+          12.296,
+          17.648,
+          "pour water from the blue-white cup into the pan"
+        ],
+        [
+          17.648,
+          18.597,
+          "place the blue cup on the left side of the table"
+        ],
+        [
+          18.597,
+          19.856,
+          "pick up a white spatula"
+        ],
+        [
+          19.856,
+          131.898,
+          "stir the brown liquid in the pan using a white spatula"
+        ],
+        [
+          131.898,
+          135.747,
+          "place the pan containing orange liquid onto the black stovetop"
+        ]
+      ],
+      "warnings": [],
+      "usage": {
+        "calls": 3,
+        "prompt_tokens": 19050,
+        "output_tokens": 1630,
+        "retries": 0,
+        "calls_by_stage": {
+          "segment": 3
+        }
+      }
+    },
+    {
+      "id": "homer_33",
+      "family": "homer",
+      "ok": true,
+      "elapsed": 18.67,
+      "duration": 72.23,
+      "pred": [
+        [
+          0.0,
+          5.5,
+          "pick_onion_and_knife"
+        ],
+        [
+          5.5,
+          41.5,
+          "peel_onion"
+        ],
+        [
+          41.5,
+          48.0,
+          "cut_onion_in_half"
+        ],
+        [
+          48.0,
+          50.0,
+          "place_onion_half_on_board"
+        ],
+        [
+          50.0,
+          71.5,
+          "slice_onion_half"
+        ]
+      ],
+      "gold": [
+        [
+          0.0,
+          3.625,
+          "pick up the green-handled knife"
+        ],
+        [
+          3.625,
+          5.794,
+          "pick up onion from the cutting board"
+        ],
+        [
+          5.794,
+          11.372,
+          "peel the top of the red onion using a knife"
+        ],
+        [
+          11.372,
+          16.95,
+          "peel the bottom of the red onion using a knife"
+        ],
+        [
+          16.95,
+          43.909,
+          "peel the red onion with a knife"
+        ],
+        [
+          43.909,
+          48.689,
+          "cut the red onion in half in your hand"
+        ],
+        [
+          48.689,
+          63.851,
+          "slice the purple onion on the cutting board"
+        ],
+        [
+          63.851,
+          72.23,
+          "slice the purple onion on the cutting board"
+        ]
+      ],
+      "warnings": [],
+      "usage": {
+        "calls": 2,
+        "prompt_tokens": 11180,
+        "output_tokens": 724,
+        "retries": 0,
+        "calls_by_stage": {
+          "segment": 2
+        }
+      }
+    },
+    {
+      "id": "homer_37",
+      "family": "homer",
+      "ok": true,
+      "elapsed": 25.17,
+      "duration": 66.13,
+      "pred": [
+        [
+          0.0,
+          15.0,
+          "slice_tomato"
+        ],
+        [
+          15.0,
+          62.0,
+          "dice_tomato_slices"
+        ],
+        [
+          62.0,
+          63.5,
+          "place_tomato_in_bowl"
+        ]
+      ],
+      "gold": [
+        [
+          0.0,
+          11.685,
+          "cut the left red tomato on the cutting board into wedges"
+        ],
+        [
+          11.685,
+          22.31,
+          "slice the left tomato wedge into dices"
+        ],
+        [
+          22.31,
+          45.419,
+          "slice the middle tomato wedge into dices"
+        ],
+        [
+          45.419,
+          62.169,
+          "slice the remaining tomato wedge into dices"
+        ],
+        [
+          62.169,
+          62.824,
+          "pick up the uncut tomato"
+        ],
+        [
+          62.824,
+          65.622,
+          "place the tomato in your hand to the bowl with others"
+        ]
+      ],
+      "warnings": [],
+      "usage": {
+        "calls": 2,
+        "prompt_tokens": 10040,
+        "output_tokens": 1113,
+        "retries": 0,
+        "calls_by_stage": {
+          "segment": 2
+        }
+      }
+    },
+    {
+      "id": "homer_38",
+      "family": "homer",
+      "ok": true,
+      "elapsed": 25.24,
+      "duration": 90.79,
+      "pred": [
+        [
+          0.0,
+          1.5,
+          "pick_plates"
+        ],
+        [
+          1.5,
+          18.5,
+          "place_plates_on_table"
+        ],
+        [
+          18.5,
+          25.5,
+          "pick_glasses"
+        ],
+        [
+          25.5,
+          41.0,
+          "place_glasses_on_table"
+        ],
+        [
+          41.0,
+          49.0,
+          "open_drawer"
+        ],
+        [
+          49.0,
+          65.0,
+          "pick_cutlery"
+        ],
+        [
+          65.0,
+          66.5,
+          "close_drawer"
+        ],
+        [
+          66.5,
+          89.0,
+          "place_cutlery"
+        ]
+      ],
+      "gold": [
+        [
+          0.0,
+          1.856,
+          "pick up the stack of white plates from the counter"
+        ],
+        [
+          1.856,
+          8.226,
+          "place the bottom plate from the stack one to the head of table closer to you"
+        ],
+        [
+          8.226,
+          11.945,
+          "place the bottom white plate on the table in front of the nearest chair to the right"
+        ],
+        [
+          11.945,
+          15.133,
+          "place the bottom white plate on the table in front of the nearest chair to the right"
+        ],
+        [
+          15.133,
+          18.054,
+          "place the bottom white plate to the head of table closer to you"
+        ],
+        [
+          18.054,
+          25.226,
+          "pick up four empty glasses from the kitchen counter"
+        ],
+        [
+          25.226,
+          31.335,
+          "place the bottom inglass in your left hand to the center of the table"
+        ],
+        [
+          31.335,
+          33.726,
+          "place the glass in your left hand right next to the glass on the table"
+        ],
+        [
+          33.726,
+          37.976,
+          "place the bottom glass in your right hand on the table above to the plate in front of you"
+        ],
+        [
+          37.976,
+          40.101,
+          "place the glass in your right hand on the table above to the plate at seating to your right"
+        ],
+        [
+          40.101,
+          49.487,
+          "pull open the cutlery drawer under the kitchen counter"
+        ],
+        [
+          49.487,
+          53.995,
+          "pick up the two wooden-handled knives"
+        ],
+        [
+          53.995,
+          57.714,
+          "pick up two steel knives"
+        ],
+        [
+          57.714,
+          63.823,
+          "pick up four steel forks"
+        ],
+        [
+          63.823,
+          67.011,
+          "slide the cutlery drawer closed"
+        ],
+        [
+          67.011,
+          74.979,
+          "place a knife and a fork on either side of the plate on at the head of the table"
+        ],
+        [
+          74.979,
+          79.494,
+          "place a knife and a fork on either side of the plate at the seating to your right"
+        ],
+        [
+          79.494,
+          83.479,
+          "place a knife and a fork on either side of the plate  at the seating to your right"
+        ],
+        [
+          83.479,
+          90.79,
+          "place a knife and a fork on either side of the plate  at the seating to your right"
+        ]
+      ],
+      "warnings": [],
+      "usage": {
+        "calls": 2,
+        "prompt_tokens": 13381,
+        "output_tokens": 1251,
+        "retries": 0,
+        "calls_by_stage": {
+          "segment": 2
+        }
+      }
+    },
+    {
+      "id": "homer_39",
+      "family": "homer",
+      "ok": true,
+      "elapsed": 24.36,
+      "duration": 61.13,
+      "pred": [
+        [
+          0.0,
+          4.5,
+          "move_fruit_basket"
+        ],
+        [
+          4.5,
+          14.5,
+          "wipe_countertop"
+        ],
+        [
+          14.5,
+          18.5,
+          "move_bottle"
+        ],
+        [
+          18.5,
+          24.0,
+          "wipe_countertop"
+        ],
+        [
+          24.0,
+          30.5,
+          "move_container"
+        ],
+        [
+          30.5,
+          37.0,
+          "move_skewer"
+        ],
+        [
+          37.0,
+          40.0,
+          "move_rolling_pin"
+        ],
+        [
+          40.0,
+          53.0,
+          "wipe_countertop"
+        ],
+        [
+          53.0,
+          56.5,
+          "fold_cloth"
+        ],
+        [
+          56.5,
+          59.5,
+          "wipe_countertop"
+        ]
+      ],
+      "gold": [
+        [
+          0.0,
+          0.417,
+          "pick up the stainless steel metal cup"
+        ],
+        [
+          0.417,
+          0.95,
+          "place the stainless steel metal cup next to the grey bag"
+        ],
+        [
+          0.95,
+          4.26,
+          "wipe the countertop with a blue grey cloth next to the mixer"
+        ],
+        [
+          4.26,
+          4.783,
+          "pick up the wire fruit bowl"
+        ],
+        [
+          4.783,
+          5.485,
+          "place the wire fruit bowl next to the mixer"
+        ],
+        [
+          5.485,
+          6.438,
+          "pick up the metal cup"
+        ],
+        [
+          6.438,
+          13.38,
+          "wipe the granite countertop with a blue grey sponge next to the fruit bowl"
+        ],
+        [
+          13.38,
+          14.678,
+          "place the metal cup to the right of the fruit bowl"
+        ],
+        [
+          14.678,
+          15.974,
+          "pick up the beige container from the countertop"
+        ],
+        [
+          15.974,
+          17.547,
+          "wipe the countertop with a blue grey cloth"
+        ],
+        [
+          17.547,
+          18.356,
+          "place the beige container on the countertop next to the metal cup"
+        ],
+        [
+          18.356,
+          19.082,
+          "pick up the metal container below the beige container"
+        ],
+        [
+          19.082,
+          19.707,
+          "place the metal container below the metal cup"
+        ],
+        [
+          19.707,
+          20.89,
+          "pick up the blue-capped jar next to the beige container"
+        ],
+        [
+          20.89,
+          21.748,
+          "place the blue-capped jar below the metal container"
+        ],
+        [
+          21.748,
+          24.58,
+          "pick up the metal container next to washer rack"
+        ],
+        [
+          24.58,
+          26.306,
+          "wipe the countertop with a blue grey cloth"
+        ],
+        [
+          26.306,
+          27.621,
+          "place the metal container in your hand next to the washer rack"
+        ],
+        [
+          27.621,
+          28.494,
+          "pick the metal container closest to your left hand"
+        ],
+        [
+          28.494,
+          29.344,
+          "move the metal container in your hand next to the beige container"
+        ],
+        [
+          29.344,
+          30.121,
+          "pick up the blue-capped bottle near your left hand"
+        ],
+        [
+          30.121,
+          30.867,
+          "move the blue-capped bottle below the beige container"
+        ],
+        [
+          30.867,
+          33.385,
+          "wipe the granite countertop with a blue grey cloth under the blue-capped bottle"
+        ],
+        [
+          33.385,
+          34.626,
+          "wipe the countertop with a cloth next to the washer rack"
+        ],
+        [
+          34.626,
+          34.881,
+          "pick up the metal object with red rubber"
+        ],
+        [
+          34.881,
+          35.823,
+          "place the metal object with red rubber below the fruit bowl"
+        ],
+        [
+          35.823,
+          37.413,
+          "pick up the rolling board"
+        ],
+        [
+          37.413,
+          39.575,
+          "move rolling board to the left"
+        ],
+        [
+          39.575,
+          43.989,
+          "wipe the kitchen countertop with a blue grey cloth next to the rolling board"
+        ],
+        [
+          43.989,
+          44.346,
+          "hold the holder of pan located under the stove"
+        ],
+        [
+          44.346,
+          45.213,
+          "turn the holder of pan by 45 degrees clockwise"
+        ],
+        [
+          45.213,
+          50.255,
+          "wipe the kitchen countertop with a blue grey cloth next to the rolling board"
+        ],
+        [
+          50.255,
+          53.261,
+          "wipe the edge of the countertop"
+        ],
+        [
+          53.261,
+          54.4,
+          "unwrap the blue grey cloth"
+        ],
+        [
+          54.4,
+          56.541,
+          "and fold the blue grey once"
+        ],
+        [
+          56.541,
+          61.13,
+          "wipe the granite countertop with a blue grey cloth"
+        ]
+      ],
+      "warnings": [
+        "trimmed 7.50s overlap between 'wipe_countertop' and 'fold_cloth'"
+      ],
+      "usage": {
+        "calls": 2,
+        "prompt_tokens": 10087,
+        "output_tokens": 1413,
+        "retries": 0,
+        "calls_by_stage": {
+          "segment": 2
+        }
+      }
+    },
+    {
+      "id": "homer_4",
+      "family": "homer",
+      "ok": true,
+      "elapsed": 35.97,
+      "duration": 130.03,
+      "pred": [
+        [
+          0.0,
+          8.0,
+          "wipe_tabletop"
+        ],
+        [
+          8.0,
+          15.5,
+          "wipe_drawer_front"
+        ],
+        [
+          15.5,
+          23.5,
+          "wipe_nightstand_side"
+        ],
+        [
+          23.5,
+          26.5,
+          "open_drawer"
+        ],
+        [
+          26.5,
+          45.0,
+          "wipe_inside_drawer"
+        ],
+        [
+          45.0,
+          47.0,
+          "close_drawer"
+        ],
+        [
+          47.0,
+          50.0,
+          "wipe_tabletop"
+        ],
+        [
+          50.0,
+          53.5,
+          "wipe_table"
+        ],
+        [
+          53.5,
+          59.5,
+          "fold_cloth"
+        ],
+        [
+          59.5,
+          65.0,
+          "wipe_table"
+        ],
+        [
+          65.0,
+          87.0,
+          "wipe_drawer"
+        ],
+        [
+          87.0,
+          96.0,
+          "wipe_table"
+        ],
+        [
+          96.0,
+          99.5,
+          "fold_cloth"
+        ],
+        [
+          99.5,
+          129.5,
+          "wipe_table"
+        ]
+      ],
+      "gold": [
+        [
+          0.0,
+          9.69,
+          "wipe the top surface of the wooden nightstand with a white cloth"
+        ],
+        [
+          9.69,
+          22.898,
+          "wipe the front surface and drawer of the wooden nightstand with a white cloth"
+        ],
+        [
+          22.898,
+          26.785,
+          "open the nightstand drawer"
+        ],
+        [
+          26.785,
+          44.345,
+          "wipe the inside of the nightstand drawer with a cloth"
+        ],
+        [
+          44.345,
+          47.292,
+          "close the nightstand drawer"
+        ],
+        [
+          47.292,
+          53.789,
+          "wipe the top surface of the wooden nightstand with a white cloth"
+        ],
+        [
+          53.789,
+          60.341,
+          "fold the cloth"
+        ],
+        [
+          60.341,
+          66.365,
+          "wipe the top surface of the wooden nightstand with a white cloth"
+        ],
+        [
+          66.365,
+          77.904,
+          "wipe the front of wooden nightstand with a white cloth"
+        ],
+        [
+          77.904,
+          86.989,
+          "wipe the drawer handle of the wooden nightstand with a white cloth"
+        ],
+        [
+          86.989,
+          96.318,
+          "wipe the top surface of the wooden nightstand with a white cloth"
+        ],
+        [
+          96.318,
+          97.709,
+          "fold the cloth"
+        ],
+        [
+          97.709,
+          114.862,
+          "wipe the top surface of the wooden nightstand with a white cloth"
+        ],
+        [
+          114.862,
+          120.034,
+          "wipe the front drawer of the wooden nightstand with a white cloth"
+        ],
+        [
+          120.034,
+          130.03,
+          "wipe the top surface of the wooden table with a white cloth"
+        ]
+      ],
+      "warnings": [
+        "trimmed 4.00s overlap between 'wipe_tabletop' and 'wipe_table'"
+      ],
+      "usage": {
+        "calls": 3,
+        "prompt_tokens": 18478,
+        "output_tokens": 1259,
+        "retries": 0,
+        "calls_by_stage": {
+          "segment": 3
+        }
+      }
+    },
+    {
+      "id": "homer_40",
+      "family": "homer",
+      "ok": true,
+      "elapsed": 18.46,
+      "duration": 61.51,
+      "pred": [
+        [
+          0.0,
+          3.0,
+          "spray_table"
+        ],
+        [
+          3.0,
+          28.0,
+          "wipe_table"
+        ],
+        [
+          28.0,
+          34.0,
+          "spray_table"
+        ],
+        [
+          34.0,
+          56.5,
+          "wipe_table"
+        ],
+        [
+          56.5,
+          57.5,
+          "place_spray_bottle"
+        ],
+        [
+          57.5,
+          59.0,
+          "wipe_table"
+        ]
+      ],
+      "gold": [
+        [
+          0.0,
+          0.955,
+          "pick up the blue spray bottle from the table"
+        ],
+        [
+          0.955,
+          2.809,
+          "spray the dining table with the cleaning spray"
+        ],
+        [
+          2.809,
+          8.5,
+          "wipe the dining table with a paper towel"
+        ],
+        [
+          8.5,
+          9.75,
+          "spray cleaning liquid onto the dining table"
+        ],
+        [
+          9.75,
+          22.309,
+          "wipe the round dining table with a paper towel"
+        ],
+        [
+          22.309,
+          23.209,
+          "spray cleaning liquid onto the dining table"
+        ],
+        [
+          23.209,
+          27.424,
+          "wipe the round table with a paper towel"
+        ],
+        [
+          27.424,
+          28.753,
+          "put the spray bottle on the table"
+        ],
+        [
+          28.753,
+          30.735,
+          "pick up the spray bottle from the table with your left hand"
+        ],
+        [
+          30.735,
+          32.952,
+          "spray the dining table with the spray bottle"
+        ],
+        [
+          32.952,
+          56.06,
+          "wipe the round dining table with a paper towel"
+        ],
+        [
+          56.06,
+          56.472,
+          "put the spray bottle on the table"
+        ],
+        [
+          56.473,
+          59.559,
+          "wipe the table surface with a paper towel"
+        ]
+      ],
+      "warnings": [
+        "trimmed 3.00s overlap between 'wipe_table' and 'place_spray_bottle'"
+      ],
+      "usage": {
+        "calls": 2,
+        "prompt_tokens": 10086,
+        "output_tokens": 1323,
+        "retries": 0,
+        "calls_by_stage": {
+          "segment": 2
+        }
+      }
+    },
+    {
+      "id": "homer_41",
+      "family": "homer",
+      "ok": true,
+      "elapsed": 12.49,
+      "duration": 54.3,
+      "pred": [
+        [
+          0.0,
+          8.5,
+          "pick_blue_bottle"
+        ],
+        [
+          8.5,
+          15.0,
+          "place_blue_bottle_on_stove"
+        ],
+        [
+          15.0,
+          20.0,
+          "pick_water_bottle"
+        ],
+        [
+          20.0,
+          26.0,
+          "place_water_bottle_on_stove"
+        ],
+        [
+          26.0,
+          34.0,
+          "pick_glass_bottle"
+        ],
+        [
+          34.0,
+          48.5,
+          "place_glass_bottle_on_stove"
+        ]
+      ],
+      "gold": [
+        [
+          5.42,
+          8.643,
+          "pick up the small blue bottle next to the bigger water bottle"
+        ],
+        [
+          8.682,
+          14.244,
+          "carry the plastic water bottle and place it on the silver gas stove"
+        ],
+        [
+          14.244,
+          20.238,
+          "pick up the clear plastic bottle with a blue cap from the counter"
+        ],
+        [
+          20.238,
+          25.472,
+          "carry the plastic water bottle and place it on the gas stove"
+        ],
+        [
+          25.472,
+          33.671,
+          "walk across the kitchen and pick up the glass bottle of red liquid from the counter"
+        ],
+        [
+          33.671,
+          44.418,
+          "carry the glass bottle of red liquid to the stove"
+        ],
+        [
+          44.418,
+          49.899,
+          "place the glass bottle with red liquid between the two bottles of water"
+        ]
+      ],
+      "warnings": [],
+      "usage": {
+        "calls": 1,
+        "prompt_tokens": 7149,
+        "output_tokens": 1301,
+        "retries": 0,
+        "calls_by_stage": {
+          "segment": 1
+        }
+      }
+    },
+    {
+      "id": "homer_48",
+      "family": "homer",
+      "ok": true,
+      "elapsed": 15.57,
+      "duration": 55.99,
+      "pred": [
+        [
+          0.0,
+          4.5,
+          "place_green_lid_on_container"
+        ],
+        [
+          4.5,
+          8.5,
+          "place_container_on_shelf"
+        ],
+        [
+          8.5,
+          13.5,
+          "stack_container"
+        ],
+        [
+          13.5,
+          17.5,
+          "place_container_on_shelf"
+        ],
+        [
+          17.5,
+          22.0,
+          "stack_container"
+        ],
+        [
+          22.0,
+          27.5,
+          "stack_container"
+        ],
+        [
+          27.5,
+          33.0,
+          "place_lid_on_stacked_container"
+        ],
+        [
+          33.0,
+          38.5,
+          "place_tray_on_shelf"
+        ],
+        [
+          38.5,
+          46.0,
+          "place_round_container_on_shelf"
+        ],
+        [
+          46.0,
+          50.0,
+          "place_round_container_on_shelf"
+        ],
+        [
+          50.0,
+          54.5,
+          "stack_round_container"
+        ]
+      ],
+      "gold": [
+        [
+          0.0,
+          2.418,
+          "pick up the plastic container with green lid"
+        ],
+        [
+          2.418,
+          4.614,
+          "place the plastic container with green lid on the counter"
+        ],
+        [
+          4.614,
+          6.117,
+          "pick up the plastic container with green lid"
+        ],
+        [
+          6.117,
+          8.854,
+          "place the container with green lid onto the white container with green lid"
+        ],
+        [
+          8.854,
+          10.537,
+          "pick up the plastic container with green lid"
+        ],
+        [
+          10.537,
+          13.114,
+          "stack the green-lidded container on the stack of green-lidded containers"
+        ],
+        [
+          13.114,
+          15.712,
+          "pickup the white transparent container"
+        ],
+        [
+          15.712,
+          17.63,
+          "place the white transparent container on the counter"
+        ],
+        [
+          17.63,
+          19.413,
+          "pickup the white transparent container"
+        ],
+        [
+          19.413,
+          21.88,
+          "place the white transparent container onto a white transparent container"
+        ],
+        [
+          21.88,
+          23.942,
+          "pickup the white transparent container"
+        ],
+        [
+          23.942,
+          27.459,
+          "place the white transparent container onto a stack of white transparent container"
+        ],
+        [
+          27.459,
+          29.001,
+          "pick up the yellow-lidded container"
+        ],
+        [
+          29.001,
+          31.443,
+          "place the yellow-lidded container on top of the stack of clear containers"
+        ],
+        [
+          31.443,
+          35.166,
+          "pick up the white transparent container"
+        ],
+        [
+          35.166,
+          37.796,
+          "place the white transparent container next to the stack of clear containers"
+        ],
+        [
+          37.796,
+          41.222,
+          "move a stack of three yellow plastic cups from next to the sink to microwave"
+        ],
+        [
+          41.222,
+          41.893,
+          "pick up gold-lidded cylindrical container"
+        ],
+        [
+          41.893,
+          42.547,
+          "put the gold-lidded cylindrical container right next to the orange bag"
+        ],
+        [
+          42.547,
+          43.248,
+          "pick up the yellow-lidded cylindrical container from top of stack"
+        ],
+        [
+          43.248,
+          43.635,
+          "place the yellow-lidded cylindrical container  under the gold-lidded container"
+        ],
+        [
+          43.635,
+          44.532,
+          "pick up a container with cookies"
+        ],
+        [
+          44.532,
+          46.305,
+          "place container with cookies on top of the clear container"
+        ],
+        [
+          46.305,
+          47.706,
+          "pick up the yellow lid container"
+        ],
+        [
+          47.706,
+          49.747,
+          "place the yellow lid container onto the clear plastic container with cookies"
+        ],
+        [
+          49.747,
+          51.691,
+          "pick up the gold-lidded jar"
+        ],
+        [
+          51.691,
+          53.998,
+          "place the gold-lidded jar on top of yellow lidded container"
+        ]
+      ],
+      "warnings": [],
+      "usage": {
+        "calls": 1,
+        "prompt_tokens": 7104,
+        "output_tokens": 508,
+        "retries": 0,
+        "calls_by_stage": {
+          "segment": 1
+        }
+      }
+    },
+    {
+      "id": "homer_5",
+      "family": "homer",
+      "ok": true,
+      "elapsed": 53.54,
+      "duration": 129.47,
+      "pred": [
+        [
+          0.0,
+          68.5,
+          "wipe_shelf"
+        ],
+        [
+          68.5,
+          74.0,
+          "wipe_lower_shelf"
+        ],
+        [
+          74.0,
+          91.5,
+          "wipe_shelf"
+        ],
+        [
+          91.5,
+          100.0,
+          "wipe_lower_shelf"
+        ],
+        [
+          100.0,
+          129.0,
+          "wipe_shelf"
+        ]
+      ],
+      "gold": [
+        [
+          0.0,
+          4.659,
+          "wipe the the top of white shelf with a purple cloth"
+        ],
+        [
+          4.659,
+          11.063,
+          "wipe the the middle of white shelf with a purple cloth"
+        ],
+        [
+          11.063,
+          20.097,
+          "wipe the top of white shelf between blue goblet and magazine with purple cloth"
+        ],
+        [
+          20.097,
+          28.563,
+          "wipe the the top of white shelf with a purple cloth"
+        ],
+        [
+          28.563,
+          43.823,
+          "wipe the middle shelf of the white table with a purple cloth"
+        ],
+        [
+          43.823,
+          67.989,
+          "wipe the the top of white shelf with a purple cloth"
+        ],
+        [
+          67.989,
+          73.796,
+          "wipe the middle shelf of the white cabinet with a purple cloth"
+        ],
+        [
+          73.796,
+          90.785,
+          "wipe the white shelf surface around the decorative items with a purple cloth"
+        ],
+        [
+          90.785,
+          107.363,
+          "wipe the middle shelf of the white cabinet with a purple cloth"
+        ],
+        [
+          107.363,
+          129.465,
+          "wipe the white shelf surface with a purple cloth"
+        ]
+      ],
+      "warnings": [
+        "trimmed 7.50s overlap between 'wipe_lower_shelf' and 'wipe_shelf'"
+      ],
+      "usage": {
+        "calls": 3,
+        "prompt_tokens": 18109,
+        "output_tokens": 1200,
+        "retries": 0,
+        "calls_by_stage": {
+          "segment": 3
+        }
+      }
+    },
+    {
+      "id": "homer_50",
+      "family": "homer",
+      "ok": true,
+      "elapsed": 10.1,
+      "duration": 46.48,
+      "pred": [
+        [
+          0.0,
+          3.0,
+          "pick_up_toy_car_frame_and_wheel"
+        ],
+        [
+          3.0,
+          5.5,
+          "attach_first_wheel_to_toy_car"
+        ],
+        [
+          5.5,
+          8.0,
+          "insert_screw_into_first_wheel"
+        ],
+        [
+          8.0,
+          15.0,
+          "screw_in_first_wheel_with_screwdriver"
+        ],
+        [
+          15.0,
+          17.5,
+          "attach_second_wheel_to_toy_car"
+        ],
+        [
+          17.5,
+          20.0,
+          "insert_screw_into_second_wheel"
+        ],
+        [
+          20.0,
+          26.0,
+          "screw_in_second_wheel_with_screwdriver"
+        ],
+        [
+          26.0,
+          29.5,
+          "attach_third_wheel_to_toy_car"
+        ],
+        [
+          29.5,
+          31.5,
+          "insert_screw_into_third_wheel"
+        ],
+        [
+          31.5,
+          36.0,
+          "screw_in_third_wheel_with_screwdriver"
+        ],
+        [
+          36.0,
+          38.0,
+          "attach_fourth_wheel_to_toy_car"
+        ],
+        [
+          38.0,
+          40.5,
+          "insert_screw_into_fourth_wheel"
+        ],
+        [
+          40.5,
+          46.48,
+          "screw_in_fourth_wheel_with_screwdriver"
+        ]
+      ],
+      "gold": [
+        [
+          0.0,
+          2.428,
+          "pick up the black tire"
+        ],
+        [
+          2.428,
+          3.806,
+          "push a black tire onto the right-back wheel hub of the yellow toy excavator"
+        ],
+        [
+          3.806,
+          4.779,
+          "pick up the orange screw"
+        ],
+        [
+          4.779,
+          7.517,
+          "secure the black wheel with the orange screw"
+        ],
+        [
+          7.517,
+          8.412,
+          "pick up the green screwdriver"
+        ],
+        [
+          8.412,
+          15.144,
+          "use a green screwdriver to tighten the screw on the toy excavator's wheel"
+        ],
+        [
+          15.144,
+          15.467,
+          "place the green screwdriver on the table right next to screws"
+        ],
+        [
+          15.467,
+          15.87,
+          "pick up the black tire"
+        ],
+        [
+          15.87,
+          17.263,
+          "push a black tire onto the right-front wheel hub of the yellow toy excavator"
+        ],
+        [
+          17.263,
+          17.886,
+          "pick up the orange screw"
+        ],
+        [
+          17.886,
+          20.17,
+          "secure the black wheel with the orange screw"
+        ],
+        [
+          20.17,
+          20.53,
+          "pick up the green screwdriver"
+        ],
+        [
+          20.53,
+          25.483,
+          "use a green screwdriver to tighten the screw on the toy excavator's wheel"
+        ],
+        [
+          25.483,
+          25.723,
+          "place the green screwdriver on the table right next to screws"
+        ],
+        [
+          25.723,
+          26.675,
+          "pick up the black tire"
+        ],
+        [
+          26.675,
+          29.438,
+          "push a black tire onto the left-back wheel hub of the yellow toy excavator"
+        ],
+        [
+          29.438,
+          29.718,
+          "pick up the orange screw"
+        ],
+        [
+          29.718,
+          31.66,
+          "secure the black wheel with the orange screw"
+        ],
+        [
+          31.66,
+          31.93,
+          "pick up the green screwdriver"
+        ],
+        [
+          31.93,
+          35.547,
+          "use a green screwdriver to tighten the screw on the toy excavator's wheel"
+        ],
+        [
+          35.547,
+          35.74,
+          "place the green screwdriver on the table right next to screws"
+        ],
+        [
+          35.74,
+          36.226,
+          "pick up the black tire"
+        ],
+        [
+          36.226,
+          38.084,
+          "push a black tire onto the left-front wheel hub of the yellow toy excavator"
+        ],
+        [
+          38.084,
+          38.412,
+          "pick up the orange screw"
+        ],
+        [
+          38.412,
+          39.944,
+          "secure the black wheel with the orange screw"
+        ],
+        [
+          39.944,
+          40.425,
+          "pick up the green screwdriver"
+        ],
+        [
+          40.425,
+          46.48,
+          "tighten the screw on the wheel of the yellow toy excavator using a green screwdriver"
+        ]
+      ],
+      "warnings": [],
+      "usage": {
+        "calls": 1,
+        "prompt_tokens": 6000,
+        "output_tokens": 650,
+        "retries": 0,
+        "calls_by_stage": {
+          "segment": 1
+        }
+      }
+    },
+    {
+      "id": "homer_52",
+      "family": "homer",
+      "ok": true,
+      "elapsed": 16.59,
+      "duration": 37.99,
+      "pred": [
+        [
+          0.0,
+          7.0,
+          "cross_and_pull_shoelaces"
+        ],
+        [
+          7.0,
+          31.5,
+          "tie_shoelace_bow"
+        ]
+      ],
+      "gold": [
+        [
+          0.0,
+          1.15,
+          "pick up the left and right shoe lace"
+        ],
+        [
+          1.15,
+          3.407,
+          "pull the shoelaces to loosen the grey shoe"
+        ],
+        [
+          3.407,
+          8.716,
+          "pull and cross the shoelaces of the grey shoe"
+        ],
+        [
+          8.716,
+          16.223,
+          "Make a loop (\"bunny ear\") with both laces"
+        ],
+        [
+          16.223,
+          23.796,
+          "push a section of the wrapped lace through the hole that forms behind the loop, creating a second loop."
+        ],
+        [
+          23.796,
+          31.905,
+          "pull both loops outward until the knot is snug"
+        ]
+      ],
+      "warnings": [],
+      "usage": {
+        "calls": 1,
+        "prompt_tokens": 4940,
+        "output_tokens": 444,
+        "retries": 0,
+        "calls_by_stage": {
+          "segment": 1
+        }
+      }
+    },
+    {
+      "id": "homer_53",
+      "family": "homer",
+      "ok": true,
+      "elapsed": 15.99,
+      "duration": 47.11,
+      "pred": [
+        [
+          0.0,
+          18.0,
+          "tie_right_shoe_shoelace"
+        ],
+        [
+          18.0,
+          24.5,
+          "put_on_left_shoe"
+        ],
+        [
+          24.5,
+          45.5,
+          "tie_left_shoe_shoelace"
+        ]
+      ],
+      "gold": [
+        [
+          2.531,
+          4.56,
+          "pick up the left and right shoelace"
+        ],
+        [
+          4.56,
+          11.283,
+          "cross the two lace ends and pull tight"
+        ],
+        [
+          11.283,
+          12.948,
+          "make a loop (\"bunny ear\") with one lace"
+        ],
+        [
+          12.948,
+          16.614,
+          "wrap the other lace around the base of that loop and push through the hole that forms behind the loop, creating a second loop."
+        ],
+        [
+          16.614,
+          17.464,
+          "pull both loops outward until the knot is snug"
+        ],
+        [
+          17.464,
+          19.434,
+          "pick up the left shoe"
+        ],
+        [
+          19.434,
+          28.826,
+          "put the shoe onto your left leg"
+        ],
+        [
+          28.826,
+          29.94,
+          "pick up the left and right shoelace"
+        ],
+        [
+          29.94,
+          33.252,
+          "cross the two lace ends and pull tight"
+        ],
+        [
+          33.252,
+          35.438,
+          "make a loop (\"bunny ear\") with one lace"
+        ],
+        [
+          35.438,
+          42.275,
+          "wrap the other lace around the base of that loop and push through the hole that forms behind the loop, creating a second loop"
+        ],
+        [
+          42.275,
+          44.732,
+          "pull both loops outward until the knot is snug."
+        ]
+      ],
+      "warnings": [],
+      "usage": {
+        "calls": 1,
+        "prompt_tokens": 6000,
+        "output_tokens": 314,
+        "retries": 0,
+        "calls_by_stage": {
+          "segment": 1
+        }
+      }
+    },
+    {
+      "id": "homer_56",
+      "family": "homer",
+      "ok": true,
+      "elapsed": 5.83,
+      "duration": 55.17,
+      "pred": [
+        [
+          0.0,
+          13.5,
+          "unfold_towel"
+        ],
+        [
+          13.5,
+          24.5,
+          "fold_towel_lengthwise"
+        ],
+        [
+          24.5,
+          50.0,
+          "roll_towel"
+        ],
+        [
+          50.0,
+          52.5,
+          "reposition_rolled_towel"
+        ]
+      ],
+      "gold": [
+        [
+          0.599,
+          3.704,
+          "pick up the pink towel"
+        ],
+        [
+          3.704,
+          6.684,
+          "unfold the pink towel and hold it up horizontally with both hands"
+        ],
+        [
+          6.684,
+          12.66,
+          "fold the pink towel in half"
+        ],
+        [
+          12.66,
+          16.636,
+          "fold the pink towel in half on the table"
+        ],
+        [
+          16.636,
+          20.731,
+          "bring the bottom corners of the pink towel upward and gather them together in the center"
+        ],
+        [
+          20.731,
+          26.862,
+          "unfold the pink towel and fold it in half lengthwise on the table"
+        ],
+        [
+          26.862,
+          43.768,
+          "roll the pink towel on the white table"
+        ],
+        [
+          43.768,
+          50.123,
+          "smooth out the towel roll"
+        ],
+        [
+          50.123,
+          53.345,
+          "rotate the pink towel on the table 90 degrees clockwise"
+        ]
+      ],
+      "warnings": [],
+      "usage": {
+        "calls": 1,
+        "prompt_tokens": 7149,
+        "output_tokens": 431,
+        "retries": 0,
+        "calls_by_stage": {
+          "segment": 1
+        }
+      }
+    },
+    {
+      "id": "homer_59",
+      "family": "homer",
+      "ok": true,
+      "elapsed": 26.38,
+      "duration": 60.67,
+      "pred": [
+        [
+          0.0,
+          1.5,
+          "pick_book"
+        ],
+        [
+          1.5,
+          4.5,
+          "place_book_on_shelf"
+        ],
+        [
+          4.5,
+          8.0,
+          "pick_book"
+        ],
+        [
+          8.0,
+          11.5,
+          "place_book_on_shelf"
+        ],
+        [
+          11.5,
+          14.5,
+          "pick_book"
+        ],
+        [
+          14.5,
+          18.0,
+          "place_book_on_shelf"
+        ],
+        [
+          18.0,
+          21.5,
+          "pick_book"
+        ],
+        [
+          21.5,
+          25.5,
+          "place_book_on_shelf"
+        ],
+        [
+          25.5,
+          29.0,
+          "pick_book"
+        ],
+        [
+          29.0,
+          32.5,
+          "place_book_on_shelf"
+        ],
+        [
+          32.5,
+          35.5,
+          "pick_book"
+        ],
+        [
+          35.5,
+          38.0,
+          "place_book_on_shelf"
+        ],
+        [
+          38.0,
+          41.0,
+          "pick_book"
+        ],
+        [
+          41.0,
+          44.0,
+          "place_book_on_shelf"
+        ],
+        [
+          44.0,
+          46.5,
+          "pick_book"
+        ],
+        [
+          46.5,
+          49.0,
+          "place_book_on_shelf"
+        ],
+        [
+          49.0,
+          50.0,
+          "pick_book"
+        ],
+        [
+          50.0,
+          53.0,
+          "place_book_on_shelf"
+        ],
+        [
+          53.0,
+          55.5,
+          "pick_book"
+        ],
+        [
+          55.5,
+          58.0,
+          "place_book_on_shelf"
+        ]
+      ],
+      "gold": [
+        [
+          0.0,
+          1.016,
+          "pick up the three books next to the case with books"
+        ],
+        [
+          1.016,
+          4.418,
+          "place them three books on to the empty shelf"
+        ],
+        [
+          4.418,
+          7.047,
+          "pick the first three books from the case, starting from the left"
+        ],
+        [
+          7.047,
+          11.323,
+          "place the three books onto the shelf right next to existing books"
+        ],
+        [
+          11.323,
+          13.675,
+          "pick the first three books from the case, starting from the left"
+        ],
+        [
+          13.675,
+          17.65,
+          "place the three books onto the shelf right next to existing books"
+        ],
+        [
+          17.65,
+          20.316,
+          "pick the first three books from the case, starting from the left"
+        ],
+        [
+          20.316,
+          25.406,
+          "place the three books onto the shelf right next to existing books"
+        ],
+        [
+          25.406,
+          27.489,
+          "pick the first three books from the case, starting from the left"
+        ],
+        [
+          27.489,
+          32.377,
+          "place the three books onto the shelf right next to existing books"
+        ],
+        [
+          32.377,
+          34.128,
+          "pick the first three books from the case, starting from the left"
+        ],
+        [
+          34.128,
+          37.998,
+          "place the three books onto the shelf right next to existing books"
+        ],
+        [
+          37.998,
+          39.971,
+          "pick the first three books from the case, starting from the left"
+        ],
+        [
+          39.971,
+          43.802,
+          "place the three books onto the shelf right next to existing books"
+        ],
+        [
+          43.802,
+          45.551,
+          "pick the first three books from the case, starting from the left"
+        ],
+        [
+          45.551,
+          48.249,
+          "place the three books onto the shelf right next to existing books"
+        ],
+        [
+          48.249,
+          50.065,
+          "pick the first three books from the case, starting from the left"
+        ],
+        [
+          50.065,
+          53.427,
+          "place the three books onto the shelf right next to existing books"
+        ],
+        [
+          53.427,
+          54.847,
+          "pick the book from the case"
+        ],
+        [
+          54.847,
+          57.977,
+          "place the book onto the shelf right next to existing books"
+        ]
+      ],
+      "warnings": [
+        "trimmed 1.50s overlap between 'pick_book' and 'place_book_on_shelf'",
+        "trimmed 1.00s overlap between 'place_book_on_shelf' and 'pick_book'",
+        "trimmed 0.50s overlap between 'pick_book' and 'place_book_on_shelf'"
+      ],
+      "usage": {
+        "calls": 2,
+        "prompt_tokens": 10126,
+        "output_tokens": 1301,
+        "retries": 0,
+        "calls_by_stage": {
+          "segment": 2
+        }
+      }
+    },
+    {
+      "id": "homer_60",
+      "family": "homer",
+      "ok": true,
+      "elapsed": 24.67,
+      "duration": 71.23,
+      "pred": [
+        [
+          0.0,
+          51.0,
+          "place_books_on_shelf"
+        ],
+        [
+          51.0,
+          59.0,
+          "pick_books"
+        ],
+        [
+          59.0,
+          68.0,
+          "place_books_on_shelf"
+        ]
+      ],
+      "gold": [
+        [
+          0.0,
+          1.814,
+          "pick four books from the top of the book stack"
+        ],
+        [
+          1.814,
+          5.623,
+          "place the four books onto the middle shelf of the white cabinet"
+        ],
+        [
+          5.623,
+          8.502,
+          "pick up three books from the top of the book stack"
+        ],
+        [
+          8.502,
+          13.955,
+          "place three books onto the middle shelf of the white cabinet"
+        ],
+        [
+          13.955,
+          17.051,
+          "pick up three books from the top of the book stack"
+        ],
+        [
+          17.051,
+          21.19,
+          "place three books onto the middle shelf of the white cabinet"
+        ],
+        [
+          21.19,
+          25.702,
+          "pick up three books from the top of the book stack"
+        ],
+        [
+          25.702,
+          31.205,
+          "place three books onto the middle shelf of the white cabinet"
+        ],
+        [
+          31.205,
+          33.762,
+          "pick up five books from the top of the book stack"
+        ],
+        [
+          33.762,
+          40.874,
+          "place five books onto the middle shelf of the white cabinet"
+        ],
+        [
+          40.874,
+          43.074,
+          "pick up one book from the top of the book stack"
+        ],
+        [
+          43.074,
+          45.709,
+          "place the book onto the middle shelf of the white cabinet"
+        ],
+        [
+          45.709,
+          47.788,
+          "pick up one book from the top of the book stack"
+        ],
+        [
+          47.788,
+          50.542,
+          "place the book onto the middle shelf of the white cabinet"
+        ],
+        [
+          50.542,
+          52.651,
+          "pick up one book from the top of the book stack"
+        ],
+        [
+          52.651,
+          55.03,
+          "place the book onto the middle shelf of the white cabinet"
+        ],
+        [
+          55.03,
+          57.686,
+          "pick four books from the top of the book stack and"
+        ],
+        [
+          57.686,
+          67.808,
+          "place the four books onto the middle shelf of the white cabinet"
+        ]
+      ],
+      "warnings": [
+        "trimmed 4.50s overlap between 'place_books_on_shelf' and 'pick_books'"
+      ],
+      "usage": {
+        "calls": 2,
+        "prompt_tokens": 11214,
+        "output_tokens": 982,
+        "retries": 0,
+        "calls_by_stage": {
+          "segment": 2
+        }
+      }
+    },
+    {
+      "id": "homer_7",
+      "family": "homer",
+      "ok": true,
+      "elapsed": 35.85,
+      "duration": 143.81,
+      "pred": [
+        [
+          0.0,
+          8.5,
+          "draw_sun_circle"
+        ],
+        [
+          8.5,
+          22.0,
+          "draw_sun_rays"
+        ],
+        [
+          22.0,
+          40.0,
+          "draw_clouds"
+        ],
+        [
+          40.0,
+          45.0,
+          "draw_birds"
+        ],
+        [
+          45.0,
+          50.0,
+          "draw_beach_hills"
+        ],
+        [
+          50.0,
+          60.5,
+          "draw_palm_tree_trunk"
+        ],
+        [
+          60.5,
+          86.5,
+          "draw_palm_tree_leaves"
+        ],
+        [
+          86.5,
+          100.0,
+          "draw_sand_details"
+        ],
+        [
+          100.0,
+          117.5,
+          "draw_ocean_waves"
+        ],
+        [
+          117.5,
+          136.5,
+          "draw_clouds_and_birds"
+        ]
+      ],
+      "gold": [
+        [
+          0.0,
+          1.333,
+          "pick up the pencil"
+        ],
+        [
+          1.333,
+          21.551,
+          "draw a sun on the white paper with a pen in the center of the paper"
+        ],
+        [
+          21.551,
+          39.16,
+          "draw clouds on the paper right next to the sun"
+        ],
+        [
+          39.16,
+          45.051,
+          "draw birds next to the clouds on the paper"
+        ],
+        [
+          45.051,
+          53.664,
+          "draw curved lines beach at the bottom right of the paper"
+        ],
+        [
+          53.664,
+          87.329,
+          "draw a palm tree in the middle of hills with a pen"
+        ],
+        [
+          87.329,
+          101.391,
+          "draw stones on the beach"
+        ],
+        [
+          101.391,
+          117.447,
+          "draw wavy lines representing to the left of beach using a pen"
+        ],
+        [
+          117.447,
+          131.468,
+          "draw clouds on the upper-left part of the paper with a pen"
+        ],
+        [
+          131.468,
+          136.585,
+          "draw birds in the sky around the cloud at top-left of the paper with a pen"
+        ]
+      ],
+      "warnings": [
+        "trimmed 2.00s overlap between 'draw_beach_hills' and 'draw_palm_tree_trunk'",
+        "trimmed 2.50s overlap between 'draw_sand_details' and 'draw_ocean_waves'"
+      ],
+      "usage": {
+        "calls": 3,
+        "prompt_tokens": 20625,
+        "output_tokens": 1491,
+        "retries": 0,
+        "calls_by_stage": {
+          "segment": 3
+        }
+      }
+    },
+    {
+      "id": "homer_9",
+      "family": "homer",
+      "ok": true,
+      "elapsed": 42.89,
+      "duration": 171.06,
+      "pred": [
+        [
+          0.0,
+          3.5,
+          "pick_sponge"
+        ],
+        [
+          3.5,
+          39.5,
+          "wash_first_glass"
+        ],
+        [
+          39.5,
+          50.0,
+          "wash_second_glass"
+        ],
+        [
+          50.0,
+          62.5,
+          "rinse_sponge"
+        ],
+        [
+          62.5,
+          100.0,
+          "scrub_glass"
+        ],
+        [
+          100.0,
+          133.0,
+          "rinse_glass"
+        ],
+        [
+          133.0,
+          150.0,
+          "wash_glass"
+        ],
+        [
+          150.0,
+          163.5,
+          "rinse_glass"
+        ],
+        [
+          163.5,
+          168.0,
+          "place_glass"
+        ]
+      ],
+      "gold": [
+        [
+          2.817,
+          5.473,
+          "turn on the kitchen faucet"
+        ],
+        [
+          5.473,
+          7.036,
+          "pick up right clear glass with the green dishcloth inside"
+        ],
+        [
+          7.036,
+          9.157,
+          "rinse the green dishcloth and the right clear glass under the running water in the sink"
+        ],
+        [
+          9.157,
+          10.275,
+          "turn off kitchen faucet"
+        ],
+        [
+          10.275,
+          39.269,
+          "wash the inside of clear glass using a green dishcloth under"
+        ],
+        [
+          39.269,
+          65.655,
+          "wash the outside of clear glass using a green dishcloth"
+        ],
+        [
+          65.655,
+          66.563,
+          "place the clear glass into the sink to the right-center"
+        ],
+        [
+          66.563,
+          67.879,
+          "pick up the clear glass from the left-center of the sink"
+        ],
+        [
+          67.879,
+          73.525,
+          "wash the inside of clear glass in your hand using a green dishcloth"
+        ],
+        [
+          73.525,
+          104.092,
+          "wash the outside of clear glass using a green dishcloth under"
+        ],
+        [
+          104.092,
+          105.478,
+          "place the clear glass to the center of sink"
+        ],
+        [
+          105.478,
+          106.927,
+          "turn on the kitchen faucet"
+        ],
+        [
+          106.927,
+          107.964,
+          "clean your hands under the running faucet"
+        ],
+        [
+          107.964,
+          109.187,
+          "pickup the right clear glass from the sink"
+        ],
+        [
+          109.187,
+          130.593,
+          "rinse the glass in your hand under the running tap"
+        ],
+        [
+          130.593,
+          133.019,
+          "place the clear glass in your hand to the left edge of the sink"
+        ],
+        [
+          133.019,
+          135.724,
+          "pickup the clear glass from the sink"
+        ],
+        [
+          135.724,
+          159.419,
+          "rinse the glass in your hand under the running water"
+        ],
+        [
+          159.419,
+          162.578,
+          "turn off kitchen faucet"
+        ],
+        [
+          162.578,
+          167.515,
+          "place the clear glass in your hand to the left edge of the sink and above the clear glass"
+        ]
+      ],
+      "warnings": [
+        "trimmed 3.50s overlap between 'wash_second_glass' and 'rinse_sponge'",
+        "trimmed 5.50s overlap between 'scrub_glass' and 'rinse_glass'",
+        "trimmed 6.50s overlap between 'wash_glass' and 'rinse_glass'"
+      ],
+      "usage": {
+        "calls": 4,
+        "prompt_tokens": 25753,
+        "output_tokens": 3170,
+        "retries": 0,
+        "calls_by_stage": {
+          "segment": 4
+        }
+      }
+    },
+    {
+      "id": "robointer_droid_000001",
+      "family": "droid",
+      "ok": true,
+      "elapsed": 5.43,
+      "duration": 10.4,
+      "pred": [
+        [
+          0.0,
+          6.0,
+          "pick_bowl"
+        ],
+        [
+          6.0,
+          9.0,
+          "place_bowl"
+        ]
+      ],
+      "gold": [
+        [
+          0.0,
+          5.895,
+          "grasp the bowl on the table with the robot gripper"
+        ],
+        [
+          5.895,
+          9.049,
+          "push the bowl to the right side of the table"
+        ]
+      ],
+      "warnings": [],
+      "usage": {
+        "calls": 1,
+        "prompt_tokens": 2727,
+        "output_tokens": 452,
+        "retries": 0,
+        "calls_by_stage": {
+          "segment": 1
+        }
+      }
+    },
+    {
+      "id": "robointer_droid_000002",
+      "family": "droid",
+      "ok": true,
+      "elapsed": 3.39,
+      "duration": 11.3,
+      "pred": [
+        [
+          0.0,
+          9.0,
+          "remove_lid_from_can"
+        ],
+        [
+          9.0,
+          10.5,
+          "place_lid_on_table"
+        ]
+      ],
+      "gold": [
+        [
+          0.0,
+          7.304,
+          "pick up the black lid from the top of the can"
+        ],
+        [
+          7.304,
+          10.941,
+          "place the black lid on the table to the left of the can"
+        ]
+      ],
+      "warnings": [],
+      "usage": {
+        "calls": 1,
+        "prompt_tokens": 2737,
+        "output_tokens": 362,
+        "retries": 0,
+        "calls_by_stage": {
+          "segment": 1
+        }
+      }
+    },
+    {
+      "id": "robointer_droid_000003",
+      "family": "droid",
+      "ok": true,
+      "elapsed": 4.64,
+      "duration": 10.4,
+      "pred": [
+        [
+          0.0,
+          4.0,
+          "grasp_bowl"
+        ],
+        [
+          4.0,
+          9.0,
+          "move_bowl"
+        ]
+      ],
+      "gold": [
+        [
+          0.0,
+          6.3,
+          "pick up the black bowl on the table"
+        ],
+        [
+          6.3,
+          9.515,
+          "push the black bowl to the right side of the table"
+        ]
+      ],
+      "warnings": [],
+      "usage": {
+        "calls": 1,
+        "prompt_tokens": 2727,
+        "output_tokens": 528,
+        "retries": 0,
+        "calls_by_stage": {
+          "segment": 1
+        }
+      }
+    },
+    {
+      "id": "robointer_droid_000004",
+      "family": "droid",
+      "ok": true,
+      "elapsed": 3.22,
+      "duration": 11.3,
+      "pred": [
+        [
+          0.0,
+          9.0,
+          "remove_lid_from_can"
+        ],
+        [
+          9.0,
+          10.5,
+          "place_lid_on_table"
+        ]
+      ],
+      "gold": [
+        [
+          0.0,
+          7.296,
+          "pick up the black lid from the top of the can"
+        ],
+        [
+          7.296,
+          10.338,
+          "place the black lid on the table right next to the can"
+        ]
+      ],
+      "warnings": [],
+      "usage": {
+        "calls": 1,
+        "prompt_tokens": 2737,
+        "output_tokens": 385,
+        "retries": 0,
+        "calls_by_stage": {
+          "segment": 1
+        }
+      }
+    },
+    {
+      "id": "robointer_droid_000005",
+      "family": "droid",
+      "ok": true,
+      "elapsed": 3.54,
+      "duration": 12.6,
+      "pred": [
+        [
+          0.0,
+          8.0,
+          "pick_pen"
+        ],
+        [
+          8.0,
+          11.0,
+          "place_pen_on_table"
+        ]
+      ],
+      "gold": [
+        [
+          0.0,
+          7.809,
+          "pick up the pen from the black-red cup"
+        ],
+        [
+          7.809,
+          11.718,
+          "place the pen on the table left next to the cup"
+        ]
+      ],
+      "warnings": [],
+      "usage": {
+        "calls": 1,
+        "prompt_tokens": 2733,
+        "output_tokens": 463,
+        "retries": 0,
+        "calls_by_stage": {
+          "segment": 1
+        }
+      }
+    },
+    {
+      "id": "robointer_droid_000006",
+      "family": "droid",
+      "ok": true,
+      "elapsed": 3.26,
+      "duration": 12.6,
+      "pred": [
+        [
+          0.0,
+          8.0,
+          "pick_pen"
+        ],
+        [
+          8.0,
+          11.0,
+          "place_pen_on_table"
+        ]
+      ],
+      "gold": [
+        [
+          0.0,
+          7.782,
+          "pick up the pen from the black-red cup"
+        ],
+        [
+          7.782,
+          11.709,
+          "place the pen on the table to the left of the cup"
+        ]
+      ],
+      "warnings": [],
+      "usage": {
+        "calls": 1,
+        "prompt_tokens": 2733,
+        "output_tokens": 467,
+        "retries": 0,
+        "calls_by_stage": {
+          "segment": 1
+        }
+      }
+    },
+    {
+      "id": "robointer_droid_000007",
+      "family": "droid",
+      "ok": true,
+      "elapsed": 3.19,
+      "duration": 13.8,
+      "pred": [
+        [
+          0.0,
+          7.5,
+          "pick_bottle"
+        ],
+        [
+          7.5,
+          12.5,
+          "place_bottle_in_mug"
+        ]
+      ],
+      "gold": [
+        [
+          0.0,
+          8.871,
+          "pick up the solid glue from the table"
+        ],
+        [
+          8.871,
+          13.8,
+          "place the solid glue in the yellow cup"
+        ]
+      ],
+      "warnings": [],
+      "usage": {
+        "calls": 1,
+        "prompt_tokens": 2734,
+        "output_tokens": 422,
+        "retries": 0,
+        "calls_by_stage": {
+          "segment": 1
+        }
+      }
+    },
+    {
+      "id": "robointer_droid_000008",
+      "family": "droid",
+      "ok": true,
+      "elapsed": 4.02,
+      "duration": 13.8,
+      "pred": [
+        [
+          0.0,
+          8.5,
+          "pick_bottle"
+        ],
+        [
+          8.5,
+          12.0,
+          "place_bottle_in_mug"
+        ]
+      ],
+      "gold": [
+        [
+          0.0,
+          9.3,
+          "pick up the solid glue from the table"
+        ],
+        [
+          9.3,
+          13.531,
+          "place the solid glue in the yellow cup"
+        ]
+      ],
+      "warnings": [],
+      "usage": {
+        "calls": 1,
+        "prompt_tokens": 2734,
+        "output_tokens": 349,
+        "retries": 0,
+        "calls_by_stage": {
+          "segment": 1
+        }
+      }
+    },
+    {
+      "id": "robointer_droid_000009",
+      "family": "droid",
+      "ok": true,
+      "elapsed": 4.96,
+      "duration": 15.4,
+      "pred": [
+        [
+          0.0,
+          7.0,
+          "pick_cloth"
+        ],
+        [
+          7.0,
+          13.5,
+          "place_cloth_on_shield"
+        ]
+      ],
+      "gold": [
+        [
+          0.0,
+          6.096,
+          "pick up the cloth from the purple mat on the table"
+        ],
+        [
+          6.096,
+          14.933,
+          "drape the green cloth over the transparent plastic barrier"
+        ]
+      ],
+      "warnings": [],
+      "usage": {
+        "calls": 1,
+        "prompt_tokens": 2684,
+        "output_tokens": 536,
+        "retries": 0,
+        "calls_by_stage": {
+          "segment": 1
+        }
+      }
+    },
+    {
+      "id": "robointer_droid_000010",
+      "family": "droid",
+      "ok": true,
+      "elapsed": 4.77,
+      "duration": 15.2,
+      "pred": [
+        [
+          0.0,
+          7.0,
+          "pick_blue_object"
+        ],
+        [
+          7.0,
+          12.0,
+          "place_blue_object_in_drawer"
+        ]
+      ],
+      "gold": [
+        [
+          0.0,
+          5.855,
+          "pick up the blue block from the table"
+        ],
+        [
+          5.855,
+          8.4,
+          "place the blue block inside the open drawer"
+        ],
+        [
+          8.4,
+          15.2,
+          "push the drawer door to close the drawer"
+        ]
+      ],
+      "warnings": [],
+      "usage": {
+        "calls": 1,
+        "prompt_tokens": 2730,
+        "output_tokens": 722,
+        "retries": 0,
+        "calls_by_stage": {
+          "segment": 1
+        }
+      }
+    },
+    {
+      "id": "robointer_droid_000011",
+      "family": "droid",
+      "ok": true,
+      "elapsed": 8.91,
+      "duration": 16.5,
+      "pred": [
+        [
+          0.0,
+          11.5,
+          "put_rubber_band_around_jar"
+        ]
+      ],
+      "gold": [
+        [
+          0.0,
+          9.9,
+          "put the rubber band around the jar"
+        ],
+        [
+          9.9,
+          15.024,
+          "pull and release the rubber band"
+        ]
+      ],
+      "warnings": [],
+      "usage": {
+        "calls": 1,
+        "prompt_tokens": 2685,
+        "output_tokens": 490,
+        "retries": 0,
+        "calls_by_stage": {
+          "segment": 1
+        }
+      }
+    },
+    {
+      "id": "robointer_droid_000012",
+      "family": "droid",
+      "ok": true,
+      "elapsed": 4.7,
+      "duration": 15.2,
+      "pred": [
+        [
+          0.0,
+          5.0,
+          "pick_blue_object"
+        ],
+        [
+          5.0,
+          9.5,
+          "place_blue_object_in_drawer"
+        ],
+        [
+          9.5,
+          12.0,
+          "close_drawer"
+        ]
+      ],
+      "gold": [
+        [
+          0.0,
+          5.63,
+          "pick up the blue block from the table"
+        ],
+        [
+          5.636,
+          8.4,
+          "place the blue block inside the open drawer"
+        ],
+        [
+          8.4,
+          15.2,
+          "push the bottom drawer closed"
+        ]
+      ],
+      "warnings": [],
+      "usage": {
+        "calls": 1,
+        "prompt_tokens": 2730,
+        "output_tokens": 495,
+        "retries": 0,
+        "calls_by_stage": {
+          "segment": 1
+        }
+      }
+    },
+    {
+      "id": "robointer_droid_000013",
+      "family": "droid",
+      "ok": true,
+      "elapsed": 3.54,
+      "duration": 16.4,
+      "pred": [
+        [
+          0.0,
+          5.5,
+          "pick_cup"
+        ],
+        [
+          5.5,
+          15.5,
+          "place_cup"
+        ]
+      ],
+      "gold": [
+        [
+          0.0,
+          8.116,
+          "pick up the silver cup from the countertop behind the sink"
+        ],
+        [
+          8.116,
+          15.808,
+          "place the silver cup on the right side of the countertop next to the green dispenser"
+        ]
+      ],
+      "warnings": [],
+      "usage": {
+        "calls": 1,
+        "prompt_tokens": 2684,
+        "output_tokens": 579,
+        "retries": 0,
+        "calls_by_stage": {
+          "segment": 1
+        }
+      }
+    },
+    {
+      "id": "robointer_droid_000014",
+      "family": "droid",
+      "ok": true,
+      "elapsed": 3.61,
+      "duration": 15.4,
+      "pred": [
+        [
+          0.0,
+          6.5,
+          "pick_cloth"
+        ],
+        [
+          6.5,
+          15.0,
+          "place_cloth_on_shield"
+        ]
+      ],
+      "gold": [
+        [
+          0.0,
+          6.175,
+          "pick up the cloth from the purple mat on the table"
+        ],
+        [
+          6.175,
+          14.811,
+          "place the white cloth on top of the plastic barrier"
+        ]
+      ],
+      "warnings": [],
+      "usage": {
+        "calls": 1,
+        "prompt_tokens": 2684,
+        "output_tokens": 471,
+        "retries": 0,
+        "calls_by_stage": {
+          "segment": 1
+        }
+      }
+    },
+    {
+      "id": "robointer_droid_000015",
+      "family": "droid",
+      "ok": true,
+      "elapsed": 6.24,
+      "duration": 16.4,
+      "pred": [
+        [
+          0.0,
+          16.4,
+          "no_completed_subtask"
+        ]
+      ],
+      "gold": [
+        [
+          0.0,
+          8.21,
+          "pick up the silver cup on the left side of the countertop"
+        ],
+        [
+          8.21,
+          15.607,
+          "place the silver cup on the right side of the countertop next to the dispenser with green liquid"
+        ]
+      ],
+      "warnings": [],
+      "usage": {
+        "calls": 1,
+        "prompt_tokens": 2684,
+        "output_tokens": 578,
+        "retries": 0,
+        "calls_by_stage": {
+          "segment": 1
+        }
+      }
+    },
+    {
+      "id": "robointer_droid_000016",
+      "family": "droid",
+      "ok": true,
+      "elapsed": 4.45,
+      "duration": 16.5,
+      "pred": [
+        [
+          0.0,
+          15.5,
+          "put_rubber_band_around_jar"
+        ]
+      ],
+      "gold": [
+        [
+          0.0,
+          9.9,
+          "place the rubber band around the lid of the jar"
+        ],
+        [
+          9.9,
+          15.19,
+          "pull the rubber band and release it"
+        ]
+      ],
+      "warnings": [],
+      "usage": {
+        "calls": 1,
+        "prompt_tokens": 2685,
+        "output_tokens": 463,
+        "retries": 0,
+        "calls_by_stage": {
+          "segment": 1
+        }
+      }
+    },
+    {
+      "id": "robointer_droid_000017",
+      "family": "droid",
+      "ok": true,
+      "elapsed": 3.88,
+      "duration": 17.2,
+      "pred": [
+        [
+          0.0,
+          8.5,
+          "pick_marker"
+        ],
+        [
+          8.5,
+          15.0,
+          "place_marker_on_table"
+        ]
+      ],
+      "gold": [
+        [
+          0.0,
+          8.31,
+          "pick up the black marker from the metal pot"
+        ],
+        [
+          8.31,
+          14.681,
+          "place the black marker on the right top side of the wooden table"
+        ]
+      ],
+      "warnings": [],
+      "usage": {
+        "calls": 1,
+        "prompt_tokens": 2689,
+        "output_tokens": 508,
+        "retries": 0,
+        "calls_by_stage": {
+          "segment": 1
+        }
+      }
+    },
+    {
+      "id": "robointer_droid_000019",
+      "family": "droid",
+      "ok": true,
+      "elapsed": 4.6,
+      "duration": 17.2,
+      "pred": [
+        [
+          0.0,
+          8.5,
+          "pick_marker"
+        ],
+        [
+          8.5,
+          15.0,
+          "place_marker_on_table"
+        ]
+      ],
+      "gold": [
+        [
+          0.0,
+          7.919,
+          "pick up the marker from the container"
+        ],
+        [
+          7.936,
+          14.085,
+          "place the marker on the right top side of the table"
+        ]
+      ],
+      "warnings": [],
+      "usage": {
+        "calls": 1,
+        "prompt_tokens": 2689,
+        "output_tokens": 386,
+        "retries": 0,
+        "calls_by_stage": {
+          "segment": 1
+        }
+      }
+    },
+    {
+      "id": "robointer_droid_000021",
+      "family": "droid",
+      "ok": true,
+      "elapsed": 8.36,
+      "duration": 18.0,
+      "pred": [
+        [
+          0.0,
+          8.0,
+          "pick_tomato"
+        ],
+        [
+          8.0,
+          14.0,
+          "place_tomato_in_silver_bowl"
+        ]
+      ],
+      "gold": [
+        [
+          0.0,
+          10.314,
+          "reach for the tomato on the left side of the table"
+        ],
+        [
+          10.331,
+          16.286,
+          "place the tomato inside the silver bowl"
+        ]
+      ],
+      "warnings": [],
+      "usage": {
+        "calls": 1,
+        "prompt_tokens": 2728,
+        "output_tokens": 1361,
+        "retries": 0,
+        "calls_by_stage": {
+          "segment": 1
+        }
+      }
+    },
+    {
+      "id": "robointer_droid_000022",
+      "family": "droid",
+      "ok": true,
+      "elapsed": 3.42,
+      "duration": 18.7,
+      "pred": [
+        [
+          0.0,
+          9.5,
+          "pick_pineapple"
+        ],
+        [
+          9.5,
+          16.0,
+          "place_pineapple_beside_oven"
+        ]
+      ],
+      "gold": [
+        [
+          0.0,
+          9.264,
+          "pick up the soft pineapple from the table"
+        ],
+        [
+          9.277,
+          18.404,
+          "place the soft pineapple beside the oven next to banana"
+        ]
+      ],
+      "warnings": [],
+      "usage": {
+        "calls": 1,
+        "prompt_tokens": 2731,
+        "output_tokens": 281,
+        "retries": 0,
+        "calls_by_stage": {
+          "segment": 1
+        }
+      }
+    },
+    {
+      "id": "robointer_droid_000023",
+      "family": "droid",
+      "ok": true,
+      "elapsed": 5.11,
+      "duration": 18.1,
+      "pred": [
+        [
+          0.0,
+          13.5,
+          "pick_cup_lid"
+        ],
+        [
+          13.5,
+          16.0,
+          "place_cup_lid_to_the_right"
+        ]
+      ],
+      "gold": [
+        [
+          0.0,
+          9.687,
+          "pick up the lid from the cup on the table"
+        ],
+        [
+          9.695,
+          16.024,
+          "place the cup lid on the table to left of the cup with noodles"
+        ]
+      ],
+      "warnings": [],
+      "usage": {
+        "calls": 1,
+        "prompt_tokens": 2728,
+        "output_tokens": 411,
+        "retries": 0,
+        "calls_by_stage": {
+          "segment": 1
+        }
+      }
+    },
+    {
+      "id": "robointer_droid_000024",
+      "family": "droid",
+      "ok": true,
+      "elapsed": 4.38,
+      "duration": 18.0,
+      "pred": [
+        [
+          0.0,
+          5.0,
+          "pick_tomato"
+        ],
+        [
+          5.0,
+          16.5,
+          "place_tomato_in_bowl"
+        ]
+      ],
+      "gold": [
+        [
+          0.0,
+          10.691,
+          "pick up the red tomato on the left side of the table"
+        ],
+        [
+          10.734,
+          15.234,
+          "place the red tomato inside the silver bowl"
+        ]
+      ],
+      "warnings": [],
+      "usage": {
+        "calls": 1,
+        "prompt_tokens": 2728,
+        "output_tokens": 564,
+        "retries": 0,
+        "calls_by_stage": {
+          "segment": 1
+        }
+      }
+    },
+    {
+      "id": "robointer_droid_000025",
+      "family": "droid",
+      "ok": true,
+      "elapsed": 6.5,
+      "duration": 18.1,
+      "pred": [
+        [
+          0.0,
+          11.0,
+          "pick_cup_lid"
+        ],
+        [
+          11.0,
+          16.0,
+          "place_cup_lid_to_right"
+        ]
+      ],
+      "gold": [
+        [
+          0.0,
+          10.0,
+          "pick up the lid on from the cup"
+        ],
+        [
+          10.012,
+          16.441,
+          "place the lid on the table next to the right cup on the table"
+        ]
+      ],
+      "warnings": [],
+      "usage": {
+        "calls": 1,
+        "prompt_tokens": 2728,
+        "output_tokens": 558,
+        "retries": 0,
+        "calls_by_stage": {
+          "segment": 1
+        }
+      }
+    },
+    {
+      "id": "robointer_droid_000027",
+      "family": "droid",
+      "ok": true,
+      "elapsed": 3.42,
+      "duration": 18.7,
+      "pred": [
+        [
+          0.0,
+          12.0,
+          "pick_stuffed_pineapple"
+        ],
+        [
+          12.0,
+          16.0,
+          "place_stuffed_pineapple_beside_oven"
+        ]
+      ],
+      "gold": [
+        [
+          0.0,
+          9.029,
+          "pick up the soft pineapple from the table"
+        ],
+        [
+          9.033,
+          18.093,
+          "place the soft pineapple beside the oven"
+        ]
+      ],
+      "warnings": [],
+      "usage": {
+        "calls": 1,
+        "prompt_tokens": 2731,
+        "output_tokens": 518,
+        "retries": 0,
+        "calls_by_stage": {
+          "segment": 1
+        }
+      }
+    },
+    {
+      "id": "robointer_droid_000028",
+      "family": "droid",
+      "ok": true,
+      "elapsed": 5.32,
+      "duration": 19.4,
+      "pred": [
+        [
+          0.0,
+          11.0,
+          "no_completed_subtask"
+        ],
+        [
+          11.0,
+          13.0,
+          "pick_paper"
+        ],
+        [
+          13.0,
+          17.5,
+          "place_paper"
+        ]
+      ],
+      "gold": [
+        [
+          0.0,
+          10.048,
+          "pick up the piece of paper from the bottom-left edge of the desk"
+        ],
+        [
+          10.059,
+          16.418,
+          "place the paper on the shelf in front of the books"
+        ]
+      ],
+      "warnings": [],
+      "usage": {
+        "calls": 1,
+        "prompt_tokens": 2738,
+        "output_tokens": 1117,
+        "retries": 0,
+        "calls_by_stage": {
+          "segment": 1
+        }
+      }
+    },
+    {
+      "id": "robointer_droid_000029",
+      "family": "droid",
+      "ok": true,
+      "elapsed": 3.52,
+      "duration": 23.2,
+      "pred": [
+        [
+          0.0,
+          15.0,
+          "pick_bottle"
+        ],
+        [
+          15.0,
+          21.5,
+          "place_bottle_on_table"
+        ]
+      ],
+      "gold": [
+        [
+          0.0,
+          15.098,
+          "pick up the bottle from the wooden tray"
+        ],
+        [
+          15.101,
+          22.397,
+          "place the bottle and to the right of the wooden tray"
+        ]
+      ],
+      "warnings": [],
+      "usage": {
+        "calls": 1,
+        "prompt_tokens": 3839,
+        "output_tokens": 99,
+        "retries": 0,
+        "calls_by_stage": {
+          "segment": 1
+        }
+      }
+    },
+    {
+      "id": "robointer_droid_000030",
+      "family": "droid",
+      "ok": true,
+      "elapsed": 5.53,
+      "duration": 23.2,
+      "pred": [
+        [
+          0.0,
+          15.0,
+          "pick_bottle"
+        ],
+        [
+          15.0,
+          22.0,
+          "place_bottle_on_table"
+        ]
+      ],
+      "gold": [
+        [
+          0.0,
+          15.115,
+          "pick up the left-most bottle on the in the wooden tray"
+        ],
+        [
+          15.139,
+          22.357,
+          "place the bottle on the table to the bottom right of the tray"
+        ]
+      ],
+      "warnings": [],
+      "usage": {
+        "calls": 1,
+        "prompt_tokens": 3839,
+        "output_tokens": 633,
+        "retries": 0,
+        "calls_by_stage": {
+          "segment": 1
+        }
+      }
+    },
+    {
+      "id": "robointer_droid_000032",
+      "family": "droid",
+      "ok": true,
+      "elapsed": 5.76,
+      "duration": 27.7,
+      "pred": [
+        [
+          0.0,
+          20.0,
+          "pick_measuring_spoon"
+        ],
+        [
+          20.0,
+          25.0,
+          "place_measuring_spoon_on_counter"
+        ]
+      ],
+      "gold": [
+        [
+          0.0,
+          19.341,
+          "pick up the red measuring spoon from the open drawer"
+        ],
+        [
+          19.377,
+          26.121,
+          "place the red measuring spoon on the kitchen counter left next to the gray measuring spoon"
+        ]
+      ],
+      "warnings": [],
+      "usage": {
+        "calls": 1,
+        "prompt_tokens": 3800,
+        "output_tokens": 518,
+        "retries": 0,
+        "calls_by_stage": {
+          "segment": 1
+        }
+      }
+    },
+    {
+      "id": "robointer_droid_000033",
+      "family": "droid",
+      "ok": true,
+      "elapsed": 4.56,
+      "duration": 27.7,
+      "pred": [
+        [
+          0.0,
+          18.5,
+          "pick_measuring_spoon"
+        ],
+        [
+          18.5,
+          26.5,
+          "place_measuring_spoon_on_counter"
+        ]
+      ],
+      "gold": [
+        [
+          0.0,
+          19.9,
+          "pick up the red measuring spoon from the open drawer"
+        ],
+        [
+          19.922,
+          25.922,
+          "place the red measuring spoon on the kitchen counter next to the grey measuring spoon"
+        ]
+      ],
+      "warnings": [],
+      "usage": {
+        "calls": 1,
+        "prompt_tokens": 3800,
+        "output_tokens": 565,
+        "retries": 0,
+        "calls_by_stage": {
+          "segment": 1
+        }
+      }
+    },
+    {
+      "id": "robointer_droid_000034",
+      "family": "droid",
+      "ok": true,
+      "elapsed": 5.59,
+      "duration": 28.6,
+      "pred": [
+        [
+          0.0,
+          22.5,
+          "pick_gray_toy"
+        ],
+        [
+          22.5,
+          27.0,
+          "place_gray_toy_in_sink"
+        ]
+      ],
+      "gold": [
+        [
+          0.0,
+          22.025,
+          "pick up the gray toy from the bowl"
+        ],
+        [
+          22.051,
+          27.919,
+          "drop the gray toy into the toy sink basin"
+        ]
+      ],
+      "warnings": [],
+      "usage": {
+        "calls": 1,
+        "prompt_tokens": 3840,
+        "output_tokens": 843,
+        "retries": 0,
+        "calls_by_stage": {
+          "segment": 1
+        }
+      }
+    },
+    {
+      "id": "robointer_droid_000035",
+      "family": "droid",
+      "ok": true,
+      "elapsed": 4.59,
+      "duration": 28.6,
+      "pred": [
+        [
+          0.0,
+          28.6,
+          "no_completed_subtask"
+        ]
+      ],
+      "gold": [
+        [
+          0.0,
+          21.41,
+          "pick up the gray toy from the bowl"
+        ],
+        [
+          21.41,
+          26.805,
+          "drop the gray toy in the toy sink"
+        ]
+      ],
+      "warnings": [],
+      "usage": {
+        "calls": 1,
+        "prompt_tokens": 3840,
+        "output_tokens": 464,
+        "retries": 0,
+        "calls_by_stage": {
+          "segment": 1
+        }
+      }
+    },
+    {
+      "id": "robointer_droid_000036",
+      "family": "droid",
+      "ok": true,
+      "elapsed": 7.02,
+      "duration": 27.7,
+      "pred": [
+        [
+          0.0,
+          9.0,
+          "pick_wipe"
+        ],
+        [
+          9.0,
+          27.0,
+          "wipe_lid"
+        ]
+      ],
+      "gold": [
+        [
+          0.0,
+          7.583,
+          "pick up the white cloth from the table"
+        ],
+        [
+          7.611,
+          20.9,
+          "wipe the white lid with the cleaning cloth"
+        ],
+        [
+          20.902,
+          26.701,
+          "place the cleaning cloth next purple spray"
+        ]
+      ],
+      "warnings": [],
+      "usage": {
+        "calls": 1,
+        "prompt_tokens": 3785,
+        "output_tokens": 517,
+        "retries": 0,
+        "calls_by_stage": {
+          "segment": 1
+        }
+      }
+    },
+    {
+      "id": "robointer_droid_000037",
+      "family": "droid",
+      "ok": true,
+      "elapsed": 4.52,
+      "duration": 28.5,
+      "pred": [
+        [
+          0.0,
+          12.5,
+          "pick_small_white_drawer"
+        ],
+        [
+          12.5,
+          16.5,
+          "place_small_white_drawer_in_top_drawer"
+        ],
+        [
+          16.5,
+          26.0,
+          "close_top_drawer"
+        ]
+      ],
+      "gold": [
+        [
+          0.0,
+          12.849,
+          "pick up the small white drawer from the open cabinet drawer"
+        ],
+        [
+          12.849,
+          20.8,
+          "place the small white box inside the open wooden drawer"
+        ],
+        [
+          20.8,
+          28.5,
+          "push the drawer inward to close"
+        ]
+      ],
+      "warnings": [],
+      "usage": {
+        "calls": 1,
+        "prompt_tokens": 3839,
+        "output_tokens": 423,
+        "retries": 0,
+        "calls_by_stage": {
+          "segment": 1
+        }
+      }
+    },
+    {
+      "id": "robointer_droid_000038",
+      "family": "droid",
+      "ok": true,
+      "elapsed": 5.16,
+      "duration": 27.7,
+      "pred": [
+        [
+          0.0,
+          5.5,
+          "pick_cloth"
+        ],
+        [
+          5.5,
+          24.5,
+          "wipe_lid"
+        ]
+      ],
+      "gold": [
+        [
+          0.0,
+          7.547,
+          "pick up the cleaning cloth from the table"
+        ],
+        [
+          7.547,
+          20.9,
+          "wipe the white lid with the cleaning cloth"
+        ],
+        [
+          20.922,
+          26.101,
+          "place the cleaning cloth next to the white lid"
+        ]
+      ],
+      "warnings": [],
+      "usage": {
+        "calls": 1,
+        "prompt_tokens": 3785,
+        "output_tokens": 325,
+        "retries": 0,
+        "calls_by_stage": {
+          "segment": 1
+        }
+      }
+    },
+    {
+      "id": "robointer_droid_000039",
+      "family": "droid",
+      "ok": true,
+      "elapsed": 4.7,
+      "duration": 28.5,
+      "pred": [
+        [
+          0.0,
+          14.0,
+          "pick_small_white_drawer"
+        ],
+        [
+          14.0,
+          18.0,
+          "place_small_white_drawer_in_drawer"
+        ],
+        [
+          18.0,
+          26.5,
+          "close_drawer"
+        ]
+      ],
+      "gold": [
+        [
+          0.0,
+          12.945,
+          "pick up the small white box from the shelf"
+        ],
+        [
+          12.945,
+          19.393,
+          "place the small white box inside the open top drawer"
+        ],
+        [
+          19.393,
+          28.5,
+          "push the top drawer of the brown cabinet inward to close it"
+        ]
+      ],
+      "warnings": [],
+      "usage": {
+        "calls": 1,
+        "prompt_tokens": 3839,
+        "output_tokens": 358,
+        "retries": 0,
+        "calls_by_stage": {
+          "segment": 1
+        }
+      }
+    },
+    {
+      "id": "robointer_droid_000042",
+      "family": "droid",
+      "ok": true,
+      "elapsed": 5.42,
+      "duration": 31.2,
+      "pred": [
+        [
+          0.0,
+          20.5,
+          "pick_cup"
+        ],
+        [
+          20.5,
+          28.0,
+          "place_cup_on_table"
+        ]
+      ],
+      "gold": [
+        [
+          0.0,
+          17.935,
+          "pick up the glass cup from the grey plate"
+        ],
+        [
+          17.97,
+          28.545,
+          "place the glass cup on the white table to the right of a yellow sponge"
+        ]
+      ],
+      "warnings": [],
+      "usage": {
+        "calls": 1,
+        "prompt_tokens": 4938,
+        "output_tokens": 563,
+        "retries": 0,
+        "calls_by_stage": {
+          "segment": 1
+        }
+      }
+    },
+    {
+      "id": "robointer_droid_000043",
+      "family": "droid",
+      "ok": true,
+      "elapsed": 5.4,
+      "duration": 32.2,
+      "pred": [
+        [
+          0.0,
+          12.5,
+          "pick_lid"
+        ],
+        [
+          12.5,
+          29.5,
+          "cover_pot"
+        ]
+      ],
+      "gold": [
+        [
+          0.0,
+          9.531,
+          "pick up the glass lid from the table"
+        ],
+        [
+          9.559,
+          31.062,
+          "place the glass lid on top of the black pot"
+        ]
+      ],
+      "warnings": [],
+      "usage": {
+        "calls": 1,
+        "prompt_tokens": 4932,
+        "output_tokens": 564,
+        "retries": 0,
+        "calls_by_stage": {
+          "segment": 1
+        }
+      }
+    },
+    {
+      "id": "robointer_droid_000044",
+      "family": "droid",
+      "ok": true,
+      "elapsed": 5.82,
+      "duration": 32.2,
+      "pred": [
+        [
+          0.0,
+          10.5,
+          "pick_lid"
+        ],
+        [
+          10.5,
+          15.5,
+          "place_lid_on_pot"
+        ]
+      ],
+      "gold": [
+        [
+          0.0,
+          9.648,
+          "grasp the handle of the glass lid on the table"
+        ],
+        [
+          9.652,
+          29.227,
+          "place the glass lid on top of the black pot"
+        ]
+      ],
+      "warnings": [],
+      "usage": {
+        "calls": 1,
+        "prompt_tokens": 4932,
+        "output_tokens": 527,
+        "retries": 0,
+        "calls_by_stage": {
+          "segment": 1
+        }
+      }
+    },
+    {
+      "id": "robointer_droid_000045",
+      "family": "droid",
+      "ok": true,
+      "elapsed": 7.57,
+      "duration": 36.5,
+      "pred": [
+        [
+          0.0,
+          3.5,
+          "open_drawer"
+        ],
+        [
+          3.5,
+          9.5,
+          "pick_object"
+        ],
+        [
+          9.5,
+          17.5,
+          "place_object_in_drawer"
+        ],
+        [
+          17.5,
+          25.5,
+          "pick_knife"
+        ],
+        [
+          25.5,
+          29.5,
+          "place_knife_in_drawer"
+        ],
+        [
+          29.5,
+          35.0,
+          "close_drawer"
+        ]
+      ],
+      "gold": [
+        [
+          0.0,
+          11.668,
+          "pick up the grey electronic meter from the table"
+        ],
+        [
+          11.714,
+          15.837,
+          "place the grey electronic meter into the drawer into the right most container"
+        ],
+        [
+          15.837,
+          21.142,
+          "pick up the grey electronic meter from the table"
+        ],
+        [
+          21.157,
+          24.857,
+          "place the grey electronic meter into the right most compartment of the drawer organizer"
+        ],
+        [
+          24.857,
+          34.995,
+          "push to the drawer to close the drawer"
+        ]
+      ],
+      "warnings": [],
+      "usage": {
+        "calls": 1,
+        "prompt_tokens": 4896,
+        "output_tokens": 1111,
+        "retries": 0,
+        "calls_by_stage": {
+          "segment": 1
+        }
+      }
+    },
+    {
+      "id": "robointer_droid_000046",
+      "family": "droid",
+      "ok": true,
+      "elapsed": 13.23,
+      "duration": 36.5,
+      "pred": [
+        [
+          0.0,
+          6.0,
+          "pick_object"
+        ],
+        [
+          6.0,
+          11.5,
+          "place_object_in_drawer"
+        ],
+        [
+          11.5,
+          16.5,
+          "pick_object"
+        ],
+        [
+          16.5,
+          21.0,
+          "place_object_in_drawer"
+        ],
+        [
+          21.0,
+          35.0,
+          "close_drawer"
+        ]
+      ],
+      "gold": [
+        [
+          0.0,
+          11.8,
+          "pick up the grey electronic meter on the table"
+        ],
+        [
+          11.819,
+          16.1,
+          "place the grey electronic meter into the drawer into the right most container"
+        ],
+        [
+          16.1,
+          21.3,
+          "pick up the grey electronic meter on the table"
+        ],
+        [
+          21.368,
+          25.541,
+          "place the grey electronic meter into the drawer into the right most container"
+        ],
+        [
+          25.594,
+          36.5,
+          "push to the drawer to close the drawer"
+        ]
+      ],
+      "warnings": [],
+      "usage": {
+        "calls": 1,
+        "prompt_tokens": 4896,
+        "output_tokens": 1159,
+        "retries": 0,
+        "calls_by_stage": {
+          "segment": 1
+        }
+      }
+    },
+    {
+      "id": "robointer_droid_000047",
+      "family": "droid",
+      "ok": true,
+      "elapsed": 8.58,
+      "duration": 43.1,
+      "pred": [
+        [
+          0.0,
+          6.0,
+          "pick_blue_block"
+        ],
+        [
+          6.0,
+          11.0,
+          "place_blue_block_in_bowl"
+        ],
+        [
+          11.0,
+          15.5,
+          "pick_green_block"
+        ],
+        [
+          15.5,
+          19.0,
+          "place_green_block_in_bowl"
+        ],
+        [
+          19.0,
+          26.0,
+          "pick_red_block"
+        ],
+        [
+          26.0,
+          29.0,
+          "place_red_block_in_bowl"
+        ],
+        [
+          29.0,
+          37.0,
+          "pick_yellow_block"
+        ],
+        [
+          37.0,
+          41.0,
+          "place_yellow_block_in_bowl"
+        ]
+      ],
+      "gold": [
+        [
+          0.0,
+          8.291,
+          "pick up the blue building block from the top of the cabinet"
+        ],
+        [
+          8.291,
+          13.1,
+          "drop the blue building block into the black bowl"
+        ],
+        [
+          13.1,
+          15.745,
+          "pick up the green building block from the top of the cabinet"
+        ],
+        [
+          15.745,
+          19.6,
+          "drop the green building block into the black bowl"
+        ],
+        [
+          19.6,
+          27.432,
+          "pick up the red building block from the top of the cabinet"
+        ],
+        [
+          27.432,
+          29.749,
+          "drop the red building block into the black bowl"
+        ],
+        [
+          29.749,
+          37.272,
+          "pick up the yellow building block from the top of the cabinet"
+        ],
+        [
+          37.272,
+          41.203,
+          "drop the yellow building block into the black bowl"
+        ]
+      ],
+      "warnings": [],
+      "usage": {
+        "calls": 1,
+        "prompt_tokens": 6054,
+        "output_tokens": 637,
+        "retries": 0,
+        "calls_by_stage": {
+          "segment": 1
+        }
+      }
+    },
+    {
+      "id": "robointer_droid_000050",
+      "family": "droid",
+      "ok": true,
+      "elapsed": 5.59,
+      "duration": 43.1,
+      "pred": [
+        [
+          0.0,
+          8.0,
+          "pick_blue_block"
+        ],
+        [
+          8.0,
+          11.5,
+          "place_blue_block_in_bowl"
+        ],
+        [
+          11.5,
+          16.0,
+          "pick_green_block"
+        ],
+        [
+          16.0,
+          18.5,
+          "place_green_block_in_bowl"
+        ],
+        [
+          18.5,
+          26.5,
+          "pick_red_block"
+        ],
+        [
+          26.5,
+          29.5,
+          "place_red_block_in_bowl"
+        ],
+        [
+          29.5,
+          39.0,
+          "pick_yellow_block"
+        ],
+        [
+          39.0,
+          41.5,
+          "place_yellow_block_in_bowl"
+        ]
+      ],
+      "gold": [
+        [
+          0.0,
+          8.26,
+          "pick up the blue building block from the top of the cabinet"
+        ],
+        [
+          8.26,
+          11.296,
+          "drop the blue building block into the black bowl"
+        ],
+        [
+          11.296,
+          16.554,
+          "pick up the green building block from the top of the cabinet"
+        ],
+        [
+          16.554,
+          19.196,
+          "drop the green building block into the black bowl"
+        ],
+        [
+          19.196,
+          27.276,
+          "pick up the red building block from the top of the cabinet"
+        ],
+        [
+          27.276,
+          30.06,
+          "drop the red building block into the black bowl"
+        ],
+        [
+          30.06,
+          37.148,
+          "pick up the yellow building block from the top of the cabinet"
+        ],
+        [
+          37.148,
+          41.545,
+          "drop the yellow building block into the black bowl"
+        ]
+      ],
+      "warnings": [],
+      "usage": {
+        "calls": 1,
+        "prompt_tokens": 6054,
+        "output_tokens": 1197,
+        "retries": 0,
+        "calls_by_stage": {
+          "segment": 1
+        }
+      }
+    },
+    {
+      "id": "robointer_droid_000055",
+      "family": "droid",
+      "ok": true,
+      "elapsed": 15.91,
+      "duration": 64.7,
+      "pred": [
+        [
+          0.0,
+          17.5,
+          "pick_spoon"
+        ],
+        [
+          17.5,
+          58.0,
+          "scoop_contents_from_bowl"
+        ],
+        [
+          58.0,
+          62.0,
+          "pour_contents_into_crate"
+        ]
+      ],
+      "gold": [
+        [
+          0.0,
+          15.153,
+          "pick up the spoon from the blue bowl"
+        ],
+        [
+          15.153,
+          35.637,
+          "scoop contents from the blue bowl with the spoon"
+        ],
+        [
+          35.637,
+          57.366,
+          "pour the contents of the spoon into the small  wooden box"
+        ],
+        [
+          57.366,
+          63.906,
+          "place the spoon into the blue bowl"
+        ]
+      ],
+      "warnings": [
+        "trimmed 0.50s overlap between 'scoop_contents_from_bowl' and 'pour_contents_into_crate'"
+      ],
+      "usage": {
+        "calls": 2,
+        "prompt_tokens": 10098,
+        "output_tokens": 1196,
+        "retries": 0,
+        "calls_by_stage": {
+          "segment": 2
+        }
+      }
+    },
+    {
+      "id": "robointer_droid_000056",
+      "family": "droid",
+      "ok": true,
+      "elapsed": 10.27,
+      "duration": 64.7,
+      "pred": [
+        [
+          0.0,
+          7.5,
+          "pick_spoon"
+        ],
+        [
+          7.5,
+          37.0,
+          "scoop_contents_from_bowl"
+        ],
+        [
+          37.0,
+          57.0,
+          "pour_contents_into_crate"
+        ],
+        [
+          57.0,
+          63.5,
+          "place_spoon_in_bowl"
+        ]
+      ],
+      "gold": [
+        [
+          0.0,
+          14.826,
+          "pick up the spoon from the blue bowl"
+        ],
+        [
+          14.826,
+          36.057,
+          "scoop contents from the blue bowl using the spoon"
+        ],
+        [
+          36.057,
+          56.992,
+          "pour contents from the spoon into the small wooden crate"
+        ],
+        [
+          56.992,
+          63.766,
+          "place the spoon in the bowl"
+        ]
+      ],
+      "warnings": [
+        "trimmed 0.50s overlap between 'pour_contents_into_crate' and 'place_spoon_in_bowl'"
+      ],
+      "usage": {
+        "calls": 2,
+        "prompt_tokens": 10097,
+        "output_tokens": 1065,
+        "retries": 0,
+        "calls_by_stage": {
+          "segment": 2
+        }
+      }
+    },
+    {
+      "id": "robointer_droid_000057",
+      "family": "droid",
+      "ok": true,
+      "elapsed": 15.31,
+      "duration": 74.5,
+      "pred": [
+        [
+          0.0,
+          24.0,
+          "fold_cloth"
+        ],
+        [
+          24.0,
+          40.25,
+          "grasp_cloth"
+        ],
+        [
+          40.25,
+          66.0,
+          "grasp_cloth"
+        ],
+        [
+          66.0,
+          70.5,
+          "place_cloth_in_box"
+        ]
+      ],
+      "gold": [
+        [
+          0.0,
+          8.687,
+          "pick up the black marker from the yellow sheet on the table"
+        ],
+        [
+          8.687,
+          14.432,
+          "place the black marker on the yellow sheet of paper"
+        ],
+        [
+          14.432,
+          30.975,
+          "fold the yellow cloth in half"
+        ],
+        [
+          30.975,
+          40.72,
+          "fold the left edge of the yellow cloth into the center."
+        ],
+        [
+          40.72,
+          45.461,
+          "move the folded cloth to the left"
+        ],
+        [
+          45.461,
+          62.2,
+          "bring the right edge of yellow cloth across and lay it over the folded section."
+        ],
+        [
+          62.2,
+          66.05,
+          "pick up the yellow cloth from the table"
+        ],
+        [
+          66.05,
+          72.619,
+          "place the yellow cloth inside the cardboard box"
+        ]
+      ],
+      "warnings": [],
+      "usage": {
+        "calls": 2,
+        "prompt_tokens": 11179,
+        "output_tokens": 1802,
+        "retries": 0,
+        "calls_by_stage": {
+          "segment": 2
+        }
+      }
+    },
+    {
+      "id": "robointer_droid_000058",
+      "family": "droid",
+      "ok": true,
+      "elapsed": 14.29,
+      "duration": 74.5,
+      "pred": [
+        [
+          0.0,
+          13.5,
+          "pick_object"
+        ],
+        [
+          13.5,
+          24.5,
+          "place_object_in_box"
+        ],
+        [
+          24.5,
+          59.5,
+          "no_completed_subtask"
+        ],
+        [
+          59.5,
+          66.5,
+          "pick_cloth"
+        ],
+        [
+          66.5,
+          71.5,
+          "place_cloth_in_box"
+        ]
+      ],
+      "gold": [
+        [
+          0.0,
+          8.849,
+          "pick up the black marker from the table"
+        ],
+        [
+          8.849,
+          13.762,
+          "place the black marker onto the yellow sheet of paper"
+        ],
+        [
+          13.762,
+          31.526,
+          "fold the yellow sheet in half"
+        ],
+        [
+          31.526,
+          41.664,
+          "fold the left edge of the yellow cloth into the center."
+        ],
+        [
+          41.664,
+          45.389,
+          "move the yellow cloth to the left"
+        ],
+        [
+          45.389,
+          59.331,
+          "bring the right edge of yellow cloth across and lay it over the folded section."
+        ],
+        [
+          59.331,
+          65.479,
+          "pick up the yellow cloth from the table"
+        ],
+        [
+          65.479,
+          72.511,
+          "place the yellow cloth into a box"
+        ]
+      ],
+      "warnings": [],
+      "usage": {
+        "calls": 2,
+        "prompt_tokens": 11182,
+        "output_tokens": 824,
+        "retries": 0,
+        "calls_by_stage": {
+          "segment": 2
+        }
+      }
+    },
+    {
+      "id": "robointer_droid_000059",
+      "family": "droid",
+      "ok": true,
+      "elapsed": 15.01,
+      "duration": 75.9,
+      "pred": [
+        [
+          0.0,
+          25.0,
+          "pick_plug"
+        ],
+        [
+          25.0,
+          49.0,
+          "insert_plug_into_power_strip"
+        ],
+        [
+          49.0,
+          64.0,
+          "insert_plug_into_power_strip"
+        ]
+      ],
+      "gold": [
+        [
+          0.0,
+          21.833,
+          "pick up the white plug from the table"
+        ],
+        [
+          21.833,
+          63.669,
+          "insert the black plug into the middle of the power strip on the table"
+        ],
+        [
+          63.669,
+          75.133,
+          "push the plug into the power strip on the table"
+        ]
+      ],
+      "warnings": [],
+      "usage": {
+        "calls": 2,
+        "prompt_tokens": 11154,
+        "output_tokens": 1404,
+        "retries": 0,
+        "calls_by_stage": {
+          "segment": 2
+        }
+      }
+    },
+    {
+      "id": "robointer_droid_000060",
+      "family": "droid",
+      "ok": true,
+      "elapsed": 9.31,
+      "duration": 75.9,
+      "pred": [
+        [
+          0.0,
+          13.5,
+          "pick_plug"
+        ],
+        [
+          13.5,
+          44.25,
+          "insert_plug_into_power_strip"
+        ],
+        [
+          44.25,
+          65.0,
+          "insert_plug_into_power_strip"
+        ]
+      ],
+      "gold": [
+        [
+          0.0,
+          22.2,
+          "pick up the white plug from the table"
+        ],
+        [
+          22.2,
+          64.548,
+          "insert the black plug into the middle of the power strip on the table"
+        ],
+        [
+          64.6,
+          75.9,
+          "push the plug into the power strip on the table"
+        ]
+      ],
+      "warnings": [],
+      "usage": {
+        "calls": 2,
+        "prompt_tokens": 11154,
+        "output_tokens": 741,
+        "retries": 0,
+        "calls_by_stage": {
+          "segment": 2
+        }
+      }
+    },
+    {
+      "id": "robointer_droid_000061",
+      "family": "droid",
+      "ok": true,
+      "elapsed": 10.71,
+      "duration": 107.3,
+      "pred": [
+        [
+          0.0,
+          15.0,
+          "pick_spoon"
+        ],
+        [
+          15.0,
+          35.0,
+          "scoop_contents"
+        ],
+        [
+          35.0,
+          49.5,
+          "pour_contents_into_bowl"
+        ],
+        [
+          49.5,
+          78.5,
+          "pour_contents_into_bowl"
+        ],
+        [
+          78.5,
+          96.0,
+          "scoop_contents"
+        ],
+        [
+          96.0,
+          105.5,
+          "pour_contents_into_bowl"
+        ]
+      ],
+      "gold": [
+        [
+          0.0,
+          14.832,
+          "pick up the spoon from the green bowl on the left"
+        ],
+        [
+          14.832,
+          33.455,
+          "scoop some contents from the white bowl with the spoon"
+        ],
+        [
+          33.455,
+          56.026,
+          "pour the contents from the spoon into the green bowl on the left"
+        ],
+        [
+          56.026,
+          69.894,
+          "scoop some contents from the white bowl with the spoon"
+        ],
+        [
+          69.894,
+          94.213,
+          "pour the contents from the spoon into the green bowl on the left"
+        ],
+        [
+          94.213,
+          104.823,
+          "place the spoon into the white bowl on the right"
+        ]
+      ],
+      "warnings": [],
+      "usage": {
+        "calls": 2,
+        "prompt_tokens": 14470,
+        "output_tokens": 846,
+        "retries": 0,
+        "calls_by_stage": {
+          "segment": 2
+        }
+      }
+    },
+    {
+      "id": "robointer_droid_000062",
+      "family": "droid",
+      "ok": true,
+      "elapsed": 17.77,
+      "duration": 107.3,
+      "pred": [
+        [
+          0.0,
+          14.5,
+          "pick_spoon"
+        ],
+        [
+          14.5,
+          38.0,
+          "scoop_contents"
+        ],
+        [
+          38.0,
+          56.0,
+          "pour_contents_into_bowl"
+        ],
+        [
+          56.0,
+          81.5,
+          "scoop_contents"
+        ],
+        [
+          81.5,
+          94.0,
+          "pour_contents_into_bowl"
+        ],
+        [
+          94.0,
+          105.5,
+          "place_spoon_in_bowl"
+        ]
+      ],
+      "gold": [
+        [
+          0.0,
+          14.832,
+          "pick up the spoon from the green bowl on the left"
+        ],
+        [
+          14.832,
+          34.152,
+          "scoop some contents from the white bowl with the spoon"
+        ],
+        [
+          34.152,
+          56.103,
+          "pour the contents from the spoon into the green bowl on the left"
+        ],
+        [
+          56.103,
+          69.739,
+          "scoop some contents from the white bowl with the spoon"
+        ],
+        [
+          69.739,
+          94.058,
+          "pour the contents from the spoon into the green bowl on the left"
+        ],
+        [
+          94.058,
+          104.668,
+          "place the spoon into the white bowl on the right"
+        ]
+      ],
+      "warnings": [],
+      "usage": {
+        "calls": 2,
+        "prompt_tokens": 14470,
+        "output_tokens": 1243,
+        "retries": 0,
+        "calls_by_stage": {
+          "segment": 2
+        }
+      }
+    }
+  ]
+}

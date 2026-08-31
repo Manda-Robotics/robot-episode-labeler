@@ -1,33 +1,34 @@
 # Decisions
 
-Dated ADRs for `robot-episode-labeler`. Context and consequences, not just the call.
-Convention inherited from the `manda` product repo.
+Dated ADRs for `robot-episode-labeler`. Each records context, measurements where
+they exist, the decision, and its consequences. The convention is inherited from
+the `manda` product repo.
 
 ---
 
-## ADR-001 — Ship the annotation primitive, not the annotation business (2026-08-27)
+## ADR-001 — Ship the automatic primitive only (2026-08-27)
 
-**Context.** Established annotation vendors in this space sell a bundle: customer
-ontology alignment, manually labelled golden examples, customer-specific trained
-models, human QA on low-confidence predictions, and a review console. That bundle
-is what makes their boundaries trustworthy, and it is expensive and slow to build.
+**Context.** Established annotation vendors sell a bundle: customer ontology
+alignment, manually labelled golden examples, customer-specific trained models,
+human QA on low-confidence predictions, and a review console. That bundle is what
+makes their boundaries trustworthy, and it is expensive and slow to build.
 
 **Decision.** Build only the automatic primitive: `video + instruction -> timestamped
 subtasks`. No human review loop, no per-customer training, no review console, no
 onboarding call.
 
 **Consequences.** We cannot match a human-in-the-loop vendor on boundary accuracy
-and must not claim to. In exchange we can be tried in sixty seconds by anyone with
-a video, which is a different product with a different distribution channel. Any
-future moat comes from corrections users make to our output, not from the wrapper.
+and must not claim to. In exchange, anyone with a video can try the system in
+sixty seconds, which is a different product with a different distribution channel.
+Any future moat comes from corrections users make to the output.
 
 ---
 
 ## ADR-002 — Own the frame-sampling grid (2026-08-27)
 
-**Context.** Video-native model APIs accept an MP4 directly, but typically ingest at
-around 1 fps by default. Manipulation boundaries — a gripper closing, an object
-leaving a surface — routinely occur inside a single one-second frame. At 1 fps an
+**Context.** Video-native model APIs accept an MP4 directly but typically ingest at
+around 1 fps by default. Manipulation boundaries (a gripper closing, an object
+leaving a surface) routinely occur inside a single one-second frame. At 1 fps an
 episode reads as "not holding" then "holding", which supports the label `pick up
 cup` but cannot place the boundary.
 
@@ -46,7 +47,7 @@ keyframes in 25 s, so boundary refinement can seek cheaply without drift.
 
 **Context.** `macrodata/WGO-Bench` is 100 manually annotated robot and egocentric
 episodes with 743 gold subtask segments across DROID (50), Galaxea (25) and HomER
-egocentric video (25). It is the only public benchmark aimed squarely at this task.
+egocentric video (25). It is the only public benchmark aimed at this task.
 
 **Decision.** Use it as the development benchmark. Score segmentation and labeling
 separately. Report the boundary tolerance curve (±0.25 / 0.5 / 1 / 2 s) as the
@@ -54,19 +55,19 @@ headline, because that is the number a robotics user can interpret.
 
 **Consequences.** The licence is CC-BY-NC-SA-4.0, so the data must never be
 redistributed or bundled into a commercial artifact; `data/` is gitignored.
-Publishing measured scores is unaffected. The corpus is unbalanced — HomER supplies
-470 of 743 segments — so pooled metrics are dominated by egocentric video and every
+Publishing measured scores is unaffected. The corpus is unbalanced (HomER supplies
+470 of 743 segments), so pooled metrics are dominated by egocentric video and every
 result is also reported per family.
 
 ---
 
-## ADR-004 — Telemetry boundary-snapping is a conditional feature, not the wedge (2026-08-27)
+## ADR-004 — Telemetry boundary-snapping is an optional step (2026-08-27)
 
-**Context.** Robot telemetry seemed like an obvious edge over a video-only
-competitor: a gripper opening or closing *is* the world-state change that defines
-most manipulation boundaries, and WGO-Bench ships synchronized gripper channels for
-its 75 robot episodes. Before building on it, we measured whether debounced gripper
-transitions actually coincide with gold boundaries.
+**Context.** Robot telemetry looked like an edge over a video-only competitor: a
+gripper opening or closing *is* the world-state change that defines most
+manipulation boundaries, and WGO-Bench ships synchronized gripper channels for its
+75 robot episodes. Before building on it, we measured whether debounced gripper
+transitions coincide with gold boundaries.
 
 **Measured** (Schmitt-trigger transitions, 0.3 s minimum dwell, both arms merged):
 
@@ -78,11 +79,11 @@ transitions actually coincide with gold boundaries.
 **Decision.** Do not build the pipeline around telemetry. Keep it as an optional
 snapping step for callers who supply gripper state, gated per robot family.
 
-**Consequences.** The signal is real but narrow. It is strong on Galaxea, weak on
-DROID, and absent on HomER, which is video-only and is the majority of the
-benchmark's segments. Since the product's premise is that a caller can send a plain
-video, a video-only path has to carry the accuracy on its own. Effort goes to VLM
-boundary refinement instead.
+**Consequences.** The signal is real but narrow: strong on Galaxea, weak on DROID,
+absent on HomER, which is video-only and the majority of the benchmark's segments.
+The product's premise is that a caller can send a plain video, so a video-only path
+has to carry the accuracy on its own. Effort goes to VLM boundary refinement
+instead.
 
 *(An earlier pass of this analysis scored family-specific channels against the
 whole corpus's boundaries and understated Galaxea badly; the table above uses
@@ -90,7 +91,7 @@ per-family denominators.)*
 
 ---
 
-## ADR-005 — Invariants are enforced in code, not requested in prompts (2026-08-27)
+## ADR-005 — Invariants are enforced in code (2026-08-27)
 
 **Context.** Ordering, in-bounds timestamps, contiguity, non-overlap, closed label
 vocabularies and closed attribute rubrics are all things a prompt can ask for and a
@@ -99,33 +100,32 @@ model can silently violate.
 **Decision.** `annotation/validate.py` enforces them deterministically after every
 inference stage: clamp to the episode, drop sub-threshold segments, trim overlaps,
 snap gaps, snap out-of-vocabulary labels to the caller's list, drop attributes
-outside the rubric — each recorded as a caller-visible warning.
+outside the rubric. Each correction is recorded as a caller-visible warning.
 
-**Consequences.** "Schema mode" is a guarantee rather than a request. Every
-correction is surfaced instead of hidden, which is also how we learn where prompts
-are failing.
+**Consequences.** Schema mode is a guarantee rather than a request. Every
+correction is surfaced, which is also how we learn where prompts are failing.
 
 ---
 
-## ADR-006 — Default to gemini-3.5-flash, but treat the model as a measurement (2026-08-27)
+## ADR-006 — Default to gemini-3.5-flash, and treat the model as a measurement (2026-08-27)
 
 **Context.** WGO-Bench's published pipeline used Gemini 3.5 Flash, so defaulting to
-it makes our numbers comparable to theirs. But `gemini-3.6-flash` and
+it makes our numbers comparable to theirs. `gemini-3.6-flash` and
 `gemini-3.7-flash` are both available on the same API.
 
 **Decision.** Default to `gemini-3.5-flash` for comparability; keep the model a
 single constructor argument and A/B the newer models on the benchmark before
 changing the default.
 
-**Consequences.** Our first number is interpretable against published work. The
+**Consequences.** The first number is interpretable against published work. The
 model choice becomes a result we can show rather than an assumption we inherited.
 
 ---
 
-## ADR-007 — Confidence is derived from disagreement, not self-report (2026-08-27)
+## ADR-007 — Confidence is derived from stage disagreement (2026-08-27)
 
-**Context.** A model will happily emit `"confidence": 0.97`. That number looks
-precise and is not calibrated.
+**Context.** A model will emit `"confidence": 0.97`. That number looks precise and
+is not calibrated.
 
 **Decision.** Report coarse `high | medium | low` plus explicit `flags`, derived
 from observable disagreement: how far refinement moved a boundary
@@ -134,17 +134,17 @@ pass (`label_disagreement`), whether a repeat pass found a different number of
 events (`segment_count_unstable`), whether a label had to be snapped into the
 caller's vocabulary (`label_outside_vocabulary`).
 
-**Consequences.** Users can filter to unflagged segments without us pretending the
-system is human-quality. Flags are also the natural place to trigger human review
-if we ever add one.
+**Consequences.** Users can filter to unflagged segments without us claiming the
+system is human-quality. Flags are also the natural trigger for human review if
+one is ever added.
 
 ---
 
-## ADR-008 — Annotations cover the manipulation, not the whole video (2026-08-27)
+## ADR-008 — Annotations end at the last manipulation (2026-08-27)
 
 **Context.** The first segmentation prompt required contiguous coverage ending at
 the episode duration. It also forbade segments for retreat motion. When an episode
-ends with the arm retreating — which most do — those two rules contradict, and the
+ends with the arm retreating, which most do, those two rules contradict, and the
 model resolved the contradiction by inventing a trailing `retract_arm` segment.
 Observed twice before it was traced to the prompt rather than the model.
 
@@ -157,15 +157,14 @@ Observed twice before it was traced to the prompt rather than the model.
 | homer | 0.992 | 0/25 | 0.51 s |
 
 **Decision.** Gold annotations are contiguous *internally* and always start at 0.00,
-but stop when the last manipulation completes. The prompt now says so explicitly,
-and gap-snapping in `validate.py` stays (internal gaps are near-nonexistent) while
+but stop when the last manipulation completes. The prompt now says so explicitly.
+Gap-snapping in `validate.py` stays (internal gaps are near-nonexistent), and
 nothing extends the last segment to the episode end.
 
 **Consequences.** On two spot-checked episodes the spurious trailing segment
 disappeared and segment counts became correct, with boundary errors of 0.12 s and
-0.46 s. Generalising from two episodes proves nothing; the corpus run is what
-counts. The wider lesson is that the output contract should be derived from what
-the gold data does, not assumed.
+0.46 s. Two episodes prove nothing; the corpus run is what counts. The wider
+lesson is that the output contract should be derived from what the gold data does.
 
 ---
 
@@ -179,23 +178,22 @@ measured two different pipelines and was discarded.
 short hash over all prompt files) is stamped into every response's metadata.
 
 **Consequences.** A run cannot drift mid-flight, and any stored result can be tied
-back to the exact prompts that produced it. Changing a prompt now requires a new
-run, which is the correct cost.
+back to the exact prompts that produced it. Changing a prompt requires a new run.
 
 ---
 
-## ADR-010 — Decoding is a property of the package, not the host (2026-08-27)
+## ADR-010 — Decoding does not depend on the host ffmpeg (2026-08-27)
 
 **Context.** Every Galaxea episode (25 of 100) failed to decode. Homebrew's macOS
 ffmpeg 8.0.1 ships an AV1 decoder with `Supported hardware devices: videotoolbox`
 and no software fallback, so on hardware without AV1 acceleration every AV1 file is
 undecodable. `-hwaccel none` does not help, because the decoder itself is
-hardware-only. A quarter of the benchmark — and any customer sending AV1 — was
+hardware-only. A quarter of the benchmark, and any customer sending AV1, was
 silently unusable.
 
-**Decision.** `video/decode.py` tries the host ffmpeg first and transparently falls
-back to the static `imageio-ffmpeg` build, which carries libaom. The regression test
-builds its own AV1 fixture with libsvtav1, so it needs no checked-in binary.
+**Decision.** `video/decode.py` tries the host ffmpeg first and falls back to the
+static `imageio-ffmpeg` build, which carries libaom. The regression test builds
+its own AV1 fixture with libsvtav1, so it needs no checked-in binary.
 
 **Consequences.** One extra dependency (~20 MB) in exchange for decoding not
 depending on how the deployment host's ffmpeg was compiled. This also matters for
@@ -222,7 +220,7 @@ noisier than the corpus.
 
 ---
 
-## ADR-012 — Subdivision, and buying recall with precision (2026-08-27)
+## ADR-012 — Subdivision: recall bought with precision (2026-08-27)
 
 **Context.** Recall was a near-monotonic function of event duration, and zero below
 one second. `annotation/subdivide.py` re-reads any predicted segment longer than
@@ -244,22 +242,21 @@ By gold-segment duration, recall went 0.000 → 0.109 under a second, and
 
 **Decision.** Keep subdivision on for `balanced` and `strict`, off for `fast`.
 
-**Consequences.** This buys a large gain in event discovery with a real loss of
-precision — we now over-split some genuinely single events, which is why F1 is
-flat. For the product's purpose, making episodes searchable, a missed event is
-worse than a spurious boundary the user can see and ignore, and the flags exist to
-mark low-confidence splits. Cost roughly triples, $0.62 → $1.95 per video-hour.
-If precision needs recovering, the first thing to try is rejecting splits whose
-pieces all carry the same label, which is a cut through one event rather than the
-discovery of two.
+**Consequences.** A large gain in event discovery for a real loss of precision:
+some genuinely single events are now over-split, which is why F1 is flat. For
+making episodes searchable, a missed event is worse than a spurious boundary the
+user can see and ignore, and flags mark low-confidence splits. Cost roughly
+triples, $0.62 → $1.95 per video-hour. If precision needs recovering, the first
+thing to try is rejecting splits whose pieces all carry the same label, which is a
+cut through one event rather than the discovery of two.
 
 ---
 
-## ADR-013 — Boundary refinement is `strict`-only: it did not earn its cost (2026-08-27)
+## ADR-013 — Boundary refinement is `strict`-only (2026-08-27)
 
-**Context.** Localised boundary refinement — re-reading a dense window around each
-proposed boundary and re-placing it — was the change we expected to matter most,
-on the reasoning that temporal segmentation is the dominant bottleneck and the
+**Context.** Localised boundary refinement (re-reading a dense window around each
+proposed boundary and re-placing it) was the change expected to matter most, on
+the reasoning that temporal segmentation is the dominant bottleneck and the
 uncertainty is concentrated at the boundaries.
 
 **Measured** on `gemini-3.7-flash`, paired on 96 episodes against the same pipeline
@@ -274,16 +271,49 @@ attributable to refinement alone:
 | boundary recall ±1.0 s | 0.579 | 0.600 | [−0.018, +0.068] |
 
 Nothing significant, and F1 trends slightly down. Refinement was **515 of 1663
-model calls — 31% of the run** — and took cost from $1.40 to $3.25 per video-hour.
+model calls, 31% of the run**, and took cost from $1.40 to $3.25 per video-hour.
 
 **Decision.** Move refinement out of `balanced` into `strict`. `balanced` is now
 windowed segmentation + subdivision + context labeling.
 
 **Consequences.** The default path is 2.3× cheaper for no measured loss. The
 capability stays available for callers who want maximum effort, and the
-`boundary_moved_*` flags it produces are still useful as a QA signal even when the
+`boundary_moved_*` flags it produces remain useful as a QA signal even when the
 moves do not improve accuracy on aggregate.
 
-Worth noting which bet paid: refinement, the expected win, did nothing, while
-subdivision — which came out of measuring recall against event duration — was the
-largest gain in the project. The measurement chose, not the plan.
+Refinement, the expected win, gave nothing. Subdivision, which came out of
+measuring recall against event duration, was the largest gain of the first pass.
+
+---
+
+## ADR-014 — The dominant failure was merging; the decomposition prompt is default (2026-08-28)
+
+**Context.** The first pass treated boundary accuracy as the problem and spent
+its effort on localisation (dense sampling, refinement windows). A failure
+taxonomy over the recorded predictions (`scripts/errors.py`) classed every
+missed gold segment as merged / split / shifted / missing: 52% of HomER gold
+segments and 74% of sub-2 s events were *merged* into a neighbour; splits and
+shifts were near zero. The model was treating pick-and-place as one event named
+after the goal, which also explained DROID's label accuracy of 0.46.
+
+**Measured.** Three added sentences in the segmentation prompt (a pick and the
+following place are two subtasks; every object gets its own; do not cap the
+count): F1 0.598 → 0.695 [+0.025, +0.156], ±0.5 s boundary recall 0.33 → 0.51
+[+0.109, +0.235], median boundary error 1.04 → 0.49 s, recall on 1–2 s events 0.18 →
+0.65; the same effect on native video input (+0.071 [+0.026, +0.118]). Native
+video alone, 4 fps, temperature, low thinking, single-call episodes and pixel
+motion priors were each measured and gave nothing reliable. Native video's
+first apparent gain failed replication and was withdrawn.
+
+**Decision.** `segment_v2.md` is the default prompt. Every knob now lives in
+`PipelineConfig`, stamped into results, so a change is a recorded configuration
+rather than an edit. No change is adopted without a paired bootstrap whose
+interval excludes zero *and* a replication; a lower CI bound of +0.001 is not
+evidence.
+
+**Consequences.** The largest gain in the project cost nothing at inference
+time and came from reading the errors. Boundary *placement* is now the residual
+problem (`f1_wgo` 0.43–0.47 against Macrodata's 0.306 at the same protocol).
+The queued work targets it: subdivision and native-video refinement on top of
+the new prompt, the label-prompt fix, and four further datasets. See
+`docs/research-log.md`.

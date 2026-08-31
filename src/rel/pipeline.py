@@ -1,7 +1,8 @@
 """Stage orchestration: one video in, validated annotations out.
 
-`quality` selects a pipeline shape rather than exposing individual knobs. The
-internals are free to change; the response contract is not.
+`quality` selects a preset `PipelineConfig`; callers who are measuring rather
+than shipping pass an explicit config. The response contract does not change
+with either.
 """
 
 from __future__ import annotations
@@ -10,22 +11,20 @@ import time
 from concurrent.futures import ThreadPoolExecutor
 
 from .annotation.label import label_segment
-from .annotation.llm import DEFAULT_MODEL, GeminiClient, prompts_fingerprint
+from .annotation.llm import GeminiClient, prompts_fingerprint
 from .annotation.refine import refine_boundary
 from .annotation.segment import CoarseSegment, segment_episode
+from .annotation.segment_state import segment_episode_state
+from .annotation.segment_video import segment_episode_video
 from .annotation.subdivide import subdivide_segment
 from .annotation.validate import clean
+from .config import DEFAULT_MODEL, PipelineConfig, config_for
 from .schemas import (
     AnnotateRequest, AnnotateResponse, Confidence, Quality, Segment, base_metadata,
 )
 from .video.decode import VideoInfo, probe
 from .video.source import resolve
 
-COARSE_INTERVAL = 0.5
-TILE_WIDTH = 224
-FRAMES_PER_SHEET = 20
-SHEET_COLUMNS = 5
-MAX_PARALLEL = 4
 # A refinement that moves a boundary further than this is reported, not trusted.
 BOUNDARY_MOVE_FLAG = 0.75
 
@@ -38,7 +37,8 @@ def _to_segments(coarse: list[CoarseSegment]) -> list[Segment]:
 
 
 def _refine_all(
-    client: GeminiClient, request: AnnotateRequest, segments: list[Segment], info: VideoInfo
+    client: GeminiClient, request: AnnotateRequest, segments: list[Segment],
+    info: VideoInfo, cfg: PipelineConfig,
 ) -> list[str]:
     """Re-place every internal boundary. Mutates `segments` in place."""
     if len(segments) < 2:
@@ -53,11 +53,12 @@ def _refine_all(
         t, reason = refine_boundary(
             client, request.video, candidate,
             before=segments[i].label, after=segments[i + 1].label,
-            duration=info.duration,
+            duration=info.duration, half_window=cfg.refine_half_window,
+            input_mode=cfg.refine_input, fps=cfg.refine_fps, width=cfg.refine_width,
         )
         return i, t, reason
 
-    with ThreadPoolExecutor(max_workers=MAX_PARALLEL) as pool:
+    with ThreadPoolExecutor(max_workers=cfg.max_parallel) as pool:
         results = sorted(pool.map(work, jobs), key=lambda r: r[0])
 
     notes: list[str] = []
@@ -79,75 +80,131 @@ def _refine_all(
 
 
 def _label_all(
-    client: GeminiClient, request: AnnotateRequest, segments: list[Segment], info: VideoInfo
+    client: GeminiClient, request: AnnotateRequest, segments: list[Segment],
+    info: VideoInfo, cfg: PipelineConfig,
 ) -> list[Segment]:
     def work(i: int) -> Segment:
         return label_segment(
             client, request.video, segments[i], request, info.duration,
             previous=segments[i - 1].label if i > 0 else None,
             following=segments[i + 1].label if i + 1 < len(segments) else None,
+            context=cfg.label_context, width=cfg.label_width,
+            max_frames=cfg.label_max_frames, prompt_name=cfg.label_prompt,
         )
 
-    with ThreadPoolExecutor(max_workers=MAX_PARALLEL) as pool:
+    with ThreadPoolExecutor(max_workers=cfg.max_parallel) as pool:
         return list(pool.map(work, range(len(segments))))
+
+
+def _subdivide_all(
+    client: GeminiClient, request: AnnotateRequest, coarse: list[CoarseSegment],
+    cfg: PipelineConfig,
+) -> list[CoarseSegment]:
+    if not coarse:
+        return coarse
+
+    def work(seg: CoarseSegment) -> list[CoarseSegment]:
+        return subdivide_segment(
+            client, request.video, seg, request,
+            min_duration=cfg.subdivide_min_duration, interval=cfg.subdivide_interval,
+            width=cfg.subdivide_width, max_frames=cfg.subdivide_max_frames,
+            prompt_name=cfg.subdivide_prompt, input_mode=cfg.subdivide_input,
+            fps=cfg.subdivide_fps, video_width=cfg.video_width,
+        )
+
+    with ThreadPoolExecutor(max_workers=cfg.max_parallel) as pool:
+        pieces = list(pool.map(work, coarse))
+    return [p for group in pieces for p in group]
+
+
+def _segment(
+    client: GeminiClient, request: AnnotateRequest, info: VideoInfo, cfg: PipelineConfig,
+) -> list[CoarseSegment]:
+    if cfg.segment_input == "video":
+        return segment_episode_video(
+            client, request.video, request, duration=info.duration,
+            fps=cfg.video_fps, window=cfg.video_window, overlap=cfg.video_overlap,
+            width=cfg.video_width, prompt_name=cfg.segment_video_prompt,
+        )
+    if cfg.segment_input == "state":
+        return segment_episode_state(
+            client, request.video, request, duration=info.duration,
+            interval=cfg.coarse_interval, width=cfg.tile_width,
+            per_sheet=cfg.frames_per_sheet, columns=cfg.sheet_columns,
+            max_sheets=cfg.max_sheets_per_call, overlap=cfg.sheet_overlap,
+            prompt_name=cfg.segment_state_prompt, output=cfg.state_output,
+        )
+    return segment_episode(
+        client, request.video, request, duration=info.duration,
+        interval=cfg.coarse_interval, width=cfg.tile_width,
+        per_sheet=cfg.frames_per_sheet, columns=cfg.sheet_columns,
+        max_sheets=cfg.max_sheets_per_call, overlap=cfg.sheet_overlap,
+        prompt_name=cfg.segment_prompt,
+    )
+
+
+def client_for(cfg: PipelineConfig, api_key: str | None = None) -> GeminiClient:
+    """`api_key` overrides GEMINI_API_KEY; hosted front ends pass the caller's own
+    key here rather than through the process environment, which is shared
+    between concurrent requests."""
+    return GeminiClient(
+        model=cfg.model, api_key=api_key, temperature=cfg.temperature,
+        thinking_level=cfg.thinking_level, thinking_budget=cfg.thinking_budget,
+        media_resolution=cfg.media_resolution, media_processing=cfg.media_processing,
+    )
+
+
+def resolve_config(
+    request: AnnotateRequest, config: PipelineConfig | None, model: str | None,
+    subdivide: bool | None,
+) -> PipelineConfig:
+    cfg = config or config_for(request.quality)
+    overrides = {}
+    if model is not None and config is None:
+        overrides["model"] = model
+    if subdivide is not None:
+        overrides["subdivide"] = subdivide
+    return cfg.with_overrides(**overrides) if overrides else cfg
 
 
 def annotate(
     request: AnnotateRequest,
     client: GeminiClient | None = None,
-    model: str = DEFAULT_MODEL,
+    model: str | None = None,
     subdivide: bool | None = None,
+    config: PipelineConfig | None = None,
 ) -> AnnotateResponse:
     """Accepts a local path, an http(s) URL or a data URI as `request.video`.
 
-    `subdivide` overrides the quality mode's default second-pass behaviour; it
-    exists so the pass can be measured in isolation.
+    `config` overrides the quality preset entirely; `model` and `subdivide` are
+    convenience overrides on top of the preset so a stage can be measured in
+    isolation.
     """
+    cfg = resolve_config(request, config, model, subdivide)
+    if client is None:
+        client = client_for(cfg)
     with resolve(request.video) as local:
-        return _annotate_local(request.model_copy(update={"video": str(local)}),
-                               client or GeminiClient(model=model), subdivide)
-
-
-def _subdivide_all(
-    client: GeminiClient, request: AnnotateRequest, coarse: list[CoarseSegment]
-) -> list[CoarseSegment]:
-    if not coarse:
-        return coarse
-    with ThreadPoolExecutor(max_workers=MAX_PARALLEL) as pool:
-        pieces = list(pool.map(
-            lambda seg: subdivide_segment(client, request.video, seg, request), coarse
-        ))
-    return [p for group in pieces for p in group]
+        return _annotate_local(request.model_copy(update={"video": str(local)}), client, cfg)
 
 
 def _annotate_local(
-    request: AnnotateRequest, client: GeminiClient, subdivide: bool | None = None
+    request: AnnotateRequest, client: GeminiClient, cfg: PipelineConfig,
 ) -> AnnotateResponse:
     started = time.time()
     info = probe(request.video)
     quality = request.quality
-    if subdivide is None:
-        subdivide = quality in (Quality.balanced, Quality.strict)
 
-    coarse = segment_episode(
-        client, request.video, request, duration=info.duration,
-        interval=COARSE_INTERVAL, width=TILE_WIDTH,
-        per_sheet=FRAMES_PER_SHEET, columns=SHEET_COLUMNS,
-    )
-    if subdivide:
-        coarse = _subdivide_all(client, request, coarse)
+    coarse = _segment(client, request, info, cfg)
+    if cfg.subdivide:
+        coarse = _subdivide_all(client, request, coarse, cfg)
 
     segments = _to_segments(coarse)
     notes: list[str] = []
 
-    if quality is Quality.strict and segments:
+    if cfg.repeat_pass and segments:
         # A second independent segmentation pass; where the two disagree about
         # how many events happened, say so rather than presenting one as fact.
-        second = _to_segments(segment_episode(
-            client, request.video, request, duration=info.duration,
-            interval=COARSE_INTERVAL, width=TILE_WIDTH,
-            per_sheet=FRAMES_PER_SHEET, columns=SHEET_COLUMNS,
-        ))
+        second = _to_segments(_segment(client, request, info, cfg))
         if len(second) != len(segments):
             notes.append(
                 f"repeat segmentation disagreed on segment count "
@@ -157,18 +214,15 @@ def _annotate_local(
                 s.flags = [*s.flags, "segment_count_unstable"]
                 s.confidence = Confidence.low
 
-    if quality in (Quality.balanced, Quality.strict):
-        segments, warnings = clean(segments, info.duration, request)
-        # Boundary refinement is `strict`-only. Measured on WGO-Bench it was 31% of
-        # all calls and moved no boundary metric significantly (+0.002 at +-0.5s),
-        # so the default path does not pay for it. See docs/results.md.
-        if quality is Quality.strict:
-            notes += _refine_all(client, request, segments, info)
-        segments = _label_all(client, request, segments, info)
+    segments, warnings = clean(segments, info.duration, request)
+    if cfg.refine:
+        # Measured on WGO-Bench: 31% of all calls for no significant movement in
+        # any boundary metric, so only `strict` pays for it. See docs/results.md.
+        notes += _refine_all(client, request, segments, info, cfg)
+    if cfg.label:
+        segments = _label_all(client, request, segments, info, cfg)
         segments, more = clean(segments, info.duration, request)
         warnings += more
-    else:
-        segments, warnings = clean(segments, info.duration, request)
 
     return AnnotateResponse(
         task=request.prompt,
@@ -177,8 +231,10 @@ def _annotate_local(
         warnings=warnings + notes,
         metadata=base_metadata(
             client.model, quality,
-            sampling_interval=COARSE_INTERVAL,
-            subdivided=subdivide,
+            sampling_interval=(1.0 / cfg.video_fps if cfg.segment_input == "video"
+                               else cfg.coarse_interval),
+            subdivided=cfg.subdivide,
+            config=cfg.to_dict(),
             prompts=prompts_fingerprint(),
             elapsed_seconds=round(time.time() - started, 2),
             usage=client.usage.as_dict(),

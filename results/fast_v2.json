@@ -19,6 +19,35 @@
       "segmentation_precision": 0.6791,
       "segmentation_recall": 0.4535,
       "segmentation_f1": 0.5438,
+      "f1_at_iou": {
+        "0.1": 0.741,
+        "0.25": 0.7211,
+        "0.5": 0.5438,
+        "0.75": 0.259
+      },
+      "f1_wgo": 0.2948,
+      "recall_by_duration": {
+        "0-1": {
+          "recall": 0.0,
+          "n": 32
+        },
+        "1-2": {
+          "recall": 0.1134,
+          "n": 97
+        },
+        "2-4": {
+          "recall": 0.4247,
+          "n": 186
+        },
+        "4-8": {
+          "recall": 0.5506,
+          "n": 158
+        },
+        "8-inf": {
+          "recall": 0.7442,
+          "n": 129
+        }
+      },
       "boundary_recall_at": {
         "0.25": 0.1131,
         "0.5": 0.2339,
@@ -42,6 +71,27 @@
         "segmentation_precision": 0.5915,
         "segmentation_recall": 0.6131,
         "segmentation_f1": 0.6022,
+        "f1_at_iou": {
+          "0.1": 0.8602,
+          "0.25": 0.8172,
+          "0.5": 0.6022,
+          "0.75": 0.3082
+        },
+        "f1_wgo": 0.4086,
+        "recall_by_duration": {
+          "2-4": {
+            "recall": 0.5556,
+            "n": 18
+          },
+          "4-8": {
+            "recall": 0.537,
+            "n": 54
+          },
+          "8-inf": {
+            "recall": 0.6923,
+            "n": 65
+          }
+        },
         "boundary_recall_at": {
           "0.25": 0.0778,
           "0.5": 0.1778,
@@ -64,6 +114,35 @@
         "segmentation_precision": 0.7525,
         "segmentation_recall": 0.6179,
         "segmentation_f1": 0.6786,
+        "f1_at_iou": {
+          "0.1": 0.8661,
+          "0.25": 0.8571,
+          "0.5": 0.6786,
+          "0.75": 0.3571
+        },
+        "f1_wgo": 0.4018,
+        "recall_by_duration": {
+          "0-1": {
+            "recall": 0.0,
+            "n": 1
+          },
+          "1-2": {
+            "recall": 0.2273,
+            "n": 22
+          },
+          "2-4": {
+            "recall": 0.6212,
+            "n": 66
+          },
+          "4-8": {
+            "recall": 0.8519,
+            "n": 27
+          },
+          "8-inf": {
+            "recall": 1.0,
+            "n": 7
+          }
+        },
         "boundary_recall_at": {
           "0.25": 0.1429,
           "0.5": 0.398,
@@ -86,6 +165,35 @@
         "segmentation_precision": 0.7107,
         "segmentation_recall": 0.3304,
         "segmentation_f1": 0.4511,
+        "f1_at_iou": {
+          "0.1": 0.6188,
+          "0.25": 0.6068,
+          "0.5": 0.4511,
+          "0.75": 0.1876
+        },
+        "f1_wgo": 0.1836,
+        "recall_by_duration": {
+          "0-1": {
+            "recall": 0.0,
+            "n": 31
+          },
+          "1-2": {
+            "recall": 0.08,
+            "n": 75
+          },
+          "2-4": {
+            "recall": 0.2745,
+            "n": 102
+          },
+          "4-8": {
+            "recall": 0.4545,
+            "n": 77
+          },
+          "8-inf": {
+            "recall": 0.7719,
+            "n": 57
+          }
+        },
         "boundary_recall_at": {
           "0.25": 0.1138,
           "0.5": 0.2,

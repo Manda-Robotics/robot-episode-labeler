@@ -8,7 +8,7 @@ from __future__ import annotations
 
 from pydantic import BaseModel, Field
 
-from ..schemas import AnnotateRequest, Confidence, Result, Segment
+from ..schemas import NO_EVENT_LABEL, AnnotateRequest, Confidence, Result, Segment
 from ..video.contact_sheet import build_sheets
 from ..video.decode import sample_frames
 from .llm import GeminiClient, LLMError, load_prompt
@@ -33,17 +33,21 @@ def label_segment(
     duration: float,
     previous: str | None = None,
     following: str | None = None,
+    context: float = LABEL_CONTEXT,
+    width: int = LABEL_WIDTH,
+    max_frames: int = LABEL_MAX_FRAMES,
+    prompt_name: str = "label.md",
 ) -> Segment:
     """Return a copy of `segment` with label, result, attributes and description."""
-    lo = max(0.0, segment.start_seconds - LABEL_CONTEXT)
-    hi = min(duration, segment.end_seconds + LABEL_CONTEXT)
+    lo = max(0.0, segment.start_seconds - context)
+    hi = min(duration, segment.end_seconds + context)
     span = max(hi - lo, 0.5)
-    interval = max(span / LABEL_MAX_FRAMES, 0.1)
+    interval = max(span / max_frames, 0.1)
 
-    frames = sample_frames(video, interval=interval, width=LABEL_WIDTH, start=lo, end=hi)
+    frames = sample_frames(video, interval=interval, width=width, start=lo, end=hi)
     if not frames:
         return segment
-    sheets = build_sheets(frames, per_sheet=LABEL_MAX_FRAMES, columns=5)
+    sheets = build_sheets(frames, per_sheet=max_frames, columns=5)
 
     neighbours = ""
     if previous or following:
@@ -56,13 +60,16 @@ def label_segment(
 
     if request.schema_mode:
         vocab = (" You MUST use exactly one of these labels verbatim:\n"
-                 + "\n".join(f"    - {s}" for s in request.subtasks))
+                 + "\n".join(f"    - {s}" for s in request.subtasks)
+                 + f"\n    - {NO_EVENT_LABEL}   (use this if no subtask completes in "
+                   "this segment: the robot fumbles, retries without success, or is idle)")
     else:
-        vocab = " Use a short verb-object phrase in lower snake_case."
+        vocab = (" Use a short verb-object phrase in lower snake_case, or "
+                 f"{NO_EVENT_LABEL} if nothing completes in this segment.")
     attrs = (" Allowed attributes: " + ", ".join(request.attributes)
              if request.attributes else " No rubric was supplied; return an empty list.")
 
-    prompt = load_prompt("label.md").format(
+    prompt = load_prompt(prompt_name).format(
         instruction=request.prompt, start=segment.start_seconds, end=segment.end_seconds,
         neighbours=neighbours, vocabulary=vocab, attributes=attrs,
     )
@@ -72,6 +79,15 @@ def label_segment(
         return segment
 
     updated = segment.model_copy(deep=True)
+
+    # Segmentation already found that nothing completes here. The labeling pass may
+    # enrich it, but must not overwrite the finding with a task-shaped label: doing
+    # so is exactly the fabrication the reserved label exists to prevent.
+    if segment.label.strip().lower() == NO_EVENT_LABEL:
+        updated.description = (out.description or "").strip()
+        updated.attributes = list(out.attributes or [])
+        updated.result = Result.failed
+        return updated
 
     updated.label = out.label or segment.label
     try:

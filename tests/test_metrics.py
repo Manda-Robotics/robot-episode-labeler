@@ -89,3 +89,31 @@ def test_duplicate_boundaries_are_not_double_counted():
     # Zero-length segments must not manufacture extra boundaries.
     spans = [(0.0, 2.0), (2.0, 2.0), (2.0, 5.0)]
     assert internal_boundaries(spans) == [2.0]
+
+
+def test_f1_at_looser_iou_is_never_lower():
+    a = Aggregate()
+    a.add([(0, 2.6), (2.6, 5.0), (5.0, 9.0)], GOLD)   # first segment IoU 0.77, fine at every threshold
+    a.add([(0, 3.4), (3.4, 9.0)], GOLD)               # (0,3.4) vs (0,2) is IoU 0.59; (3.4,9) vs (5,9) is 0.71
+    r = a.report()["f1_at_iou"]
+    assert r["0.1"] >= r["0.25"] >= r["0.5"]
+
+
+def test_recall_by_duration_buckets_gold_events():
+    a = Aggregate()
+    # (2,9) misses the 3 s event (IoU 0.43) but still matches the 4 s one (IoU 0.57).
+    a.add([(0.0, 2.0), (2.0, 9.0)], GOLD)
+    r = a.report()["recall_by_duration"]
+    assert r["2-4"] == {"recall": 0.5, "n": 2}
+    assert r["4-8"] == {"recall": 1.0, "n": 1}
+
+
+def test_wgo_f1_snaps_outer_boundaries_only():
+    from rel.eval.metrics import snap_ends
+    # Predicted first start late and last end early: both are dictated by the
+    # episode, so the WGO convention forgives them; the internal boundary is not touched.
+    pred = [(0.4, 2.0), (2.0, 5.0), (5.0, 8.0)]
+    assert snap_ends(pred, GOLD) == [(0.0, 2.0), (2.0, 5.0), (5.0, 9.0)]
+    a = Aggregate()
+    a.add(pred, GOLD)
+    assert a.report()["f1_wgo"] == 1.0

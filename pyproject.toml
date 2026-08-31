@@ -20,7 +20,15 @@ dependencies = [
 rel = "rel.cli:main"
 
 [project.optional-dependencies]
-dev = ["pytest>=8.0", "certifi>=2024.0", "mcap>=1.4"]
+dev = [
+    "pytest>=8.0",
+    "certifi>=2024.0",
+    "mcap>=1.4",
+    "huggingface-hub>=0.30",
+]
+hf = [
+    "gradio>=5",
+]
 
 [build-system]
 requires = ["hatchling"]

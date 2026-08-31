@@ -54,3 +54,15 @@ def test_gaps_are_snapped_so_output_is_contiguous():
 def test_empty_input_warns_rather_than_raises():
     out, warns = clean([], duration=9.0, request=req())
     assert out == [] and warns
+
+
+def test_no_event_label_is_kept_not_snapped_in_schema_mode():
+    from rel.schemas import NO_EVENT_LABEL, Result
+    req = AnnotateRequest(video="x.mp4", prompt="p", subtasks=["Pick Up Block", "Place Block"])
+    segs = [Segment(start_seconds=0, end_seconds=4, label="Pick Up Block"),
+            Segment(start_seconds=4, end_seconds=9, label=NO_EVENT_LABEL)]
+    out, warnings = clean(segs, 10.0, req)
+    assert out[1].label == NO_EVENT_LABEL
+    assert out[1].result is Result.failed
+    assert "no_completed_subtask" in out[1].flags
+    assert not any("snapped" in w for w in warnings)

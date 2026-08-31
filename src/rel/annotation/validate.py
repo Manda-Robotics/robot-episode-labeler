@@ -7,7 +7,7 @@ language model to respect them and hoping is not a contract.
 
 from __future__ import annotations
 
-from ..schemas import AnnotateRequest, Confidence, Result, Segment
+from ..schemas import NO_EVENT_LABEL, AnnotateRequest, Confidence, Result, Segment
 
 # Segments shorter than this are treated as noise rather than events.
 MIN_DURATION = 0.15
@@ -59,6 +59,16 @@ def clean(
             warnings.append(f"dropped segment '{s.label}' shorter than {MIN_DURATION}s")
             continue
         s.start_seconds, s.end_seconds = round(start, 2), round(end, 2)
+
+        if s.label.strip().lower() == NO_EVENT_LABEL:
+            # A stretch where nothing completed. Kept, not snapped and not dropped:
+            # on failure-heavy data this is the finding, not an absence of one.
+            s.label = NO_EVENT_LABEL
+            s.result = Result.failed
+            if "no_completed_subtask" not in s.flags:
+                s.flags = [*s.flags, "no_completed_subtask"]
+            kept.append(s)
+            continue
 
         if request.schema_mode:
             snapped = _closest(s.label, request.subtasks)
