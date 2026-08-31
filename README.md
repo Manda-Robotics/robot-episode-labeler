@@ -22,18 +22,18 @@ measures:
 
 | metric | value |
 |---|---:|
-| true boundaries within 0.5 s | 51% |
-| median boundary error | 0.49 s |
-| segmentation F1 at IoU 0.5 | 0.70 |
-| events lasting 1–2 s found | 65% (previously 18%) |
-| events under 1 s found | 19% (previously 0%) |
+| segmentation F1 at IoU 0.5, no vocabulary | 0.68–0.73 (replicated) |
+| segmentation F1 with a caller vocabulary (schema mode) | 0.77 |
+| end-to-end schema mode (segmentation + labels) | 0.70 |
+| true boundaries within 0.5 s | 49–51% |
+| median boundary error | 0.44–0.53 s |
+| label accuracy on matched segments (model-judged) | 0.80 |
+| events lasting 1–2 s found | 65–68% (previously 18%) |
 
-These are segmentation-only numbers. The end-to-end `balanced` path (segmentation,
-subdivision, labeling) was last measured on the previous prompt: F1 0.629, 40.5%
-of boundaries within 0.5 s, label accuracy 0.72 on matched segments. It has not
-been re-measured with the new segmentation. The scoring protocol and what is not
-yet measured are in [`docs/results.md`](docs/results.md); working notes, including
-what did not work, are in [`docs/research-log.md`](docs/research-log.md). Do not
+Schema-mode rows use vocabularies derived from each episode's own gold labels,
+the best case. Ranges span independent replications. Protocol and record:
+[`docs/results.md`](docs/results.md); working notes, including what did not
+work: [`docs/research-log.md`](docs/research-log.md). Do not
 describe this as "sub-second accurate".
 
 ## Install
@@ -82,8 +82,8 @@ SOP; the hard part is applying it consistently across thousands of episodes.
 | Mode | Pipeline | For |
 |---|---|---|
 | `fast` | windowed coarse segmentation | dataset browsing, prototyping |
-| `balanced` | + subdivision of long segments + context labeling | default |
-| `strict` | + boundary refinement, repeat pass, disagreement flags | curation, QA |
+| `balanced` | + context labeling | default |
+| `strict` | + subdivision of long segments, boundary refinement, repeat pass, disagreement flags | curation, QA |
 
 Each mode is a preset over `rel.config.PipelineConfig`. Every knob (sampling
 interval, tile size, prompts, model, thinking level, input modality) is a field,
@@ -112,12 +112,13 @@ at 31% of all model calls for no significant movement in any boundary metric
    accuracy at about 35% lower cost) and per-frame state classification with
    boundaries derived in code (`segment_input="state"`, more short events found,
    edges placed less precisely).
-4. **Subdivide.** Any segment longer than 3 s is re-read at 0.25 s sampling and
-   split where a second completed event is visible. Without this, recall is a
-   function of event duration (0.00 below one second at coarse sampling). This
-   was the first pass's largest gain.
-5. **Label.** Each segment is named and judged pass/fail with its neighbours as
-   context.
+4. **Label.** Each segment is named and judged pass/fail with its neighbours as
+   context; the label prompt names the event that completes at the segment's
+   end, not the episode goal (+0.046 label accuracy, DROID 0.50 → 0.59).
+5. **Subdivide** (`strict` only). Segments longer than 3 s are re-read at finer
+   sampling. It was the first pass's largest gain; the decomposition prompt
+   absorbed it (F1 −0.002 on top of v2), leaving a small boundary-recall gain
+   at 2.6× the cost.
 6. **Refine** (`strict` only). Each boundary is re-placed from a dense window
    around it. Measured as not earning its cost.
 7. **Validate.** Ordering, bounds, contiguity, closed vocabularies and rubrics

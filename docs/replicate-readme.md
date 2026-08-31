@@ -65,26 +65,26 @@ Most robotics teams want this mode. The SOP already exists. The hard part is app
 | Mode | Pipeline | For |
 |---|---|---|
 | `fast` | windowed segmentation | dataset browsing, prototyping |
-| `balanced` | plus subdivision of long segments, plus context labeling | default |
-| `strict` | plus boundary refinement and disagreement flags | curation and QA |
+| `balanced` | plus context labeling | default |
+| `strict` | plus subdivision of long segments, boundary refinement and disagreement flags | curation and QA |
 
 ## Accuracy
 
 Measured on [WGO-Bench](https://huggingface.co/datasets/macrodata/WGO-Bench), a public benchmark of 100 manually annotated robot and egocentric episodes with 743 gold subtask segments.
 
-Segmentation pass (current default prompt, `fast` mode):
+Current default pipeline, paired-bootstrap checked, replicated where marked:
 
 | Metric | Value |
 |---|---|
-| Segmentation F1 (IoU 0.5) | 0.695 |
-| Segmentation F1 at WGO-Bench's own protocol (IoU 0.75; the benchmark authors publish 0.306) | 0.434 |
-| True boundaries found within 0.5 s | 51% |
-| True boundaries found within 1.0 s | 70% |
-| Median boundary error | 0.49 s |
-| Events lasting 1–2 s found | 65% |
-| Events under 1 s found | 19% |
+| Segmentation F1 (IoU 0.5), no vocabulary | 0.68–0.73 (replicated) |
+| Segmentation F1 with a caller vocabulary (schema mode) | 0.77 |
+| End-to-end schema mode (segmentation + labels) | 0.70 |
+| F1 at WGO-Bench's own protocol (IoU 0.75; the benchmark authors publish 0.306) | 0.40–0.48 |
+| True boundaries found within 0.5 s | 49–51% |
+| Median boundary error | 0.44–0.53 s |
+| Label accuracy on matched segments (model-judged) | 0.80 |
 
-The end-to-end `balanced` path (segmentation plus subdivision plus labeling) was last measured on the previous prompt: F1 0.629, 40.5% of boundaries within 0.5 s, label accuracy 0.72 on matched segments. It has not been re-measured on the current default. Treat the table above as the segmentation ceiling and those figures as the floor.
+Schema-mode numbers use vocabularies derived from each episode's own gold labels, which is the best case; a coarser customer SOP list will land between the two F1 rows.
 
 Scoring protocol: greedy one-to-one matching, pooled across the corpus. Boundary recall counts interior boundaries only, since the first start and last end are set by the episode rather than discovered. Every number was checked against run-to-run noise with a paired bootstrap. Details and negative results are in the repository's `docs/`.
 
@@ -94,7 +94,7 @@ Scoring protocol: greedy one-to-one matching, pooled across the corpus. Boundary
 
 **Over-splitting.** Precision is 0.68 in `balanced` (0.73 for the segmentation pass alone). Finding more real events costs some spurious boundaries. For search that is usually the right trade, and low-confidence splits carry flags you can filter on.
 
-**Label accuracy varies by robot.** 0.80 on some sources, 0.46 on DROID, whose reference labels read like task instructions rather than event descriptions.
+**Label accuracy varies by robot.** 0.89 on Galaxea, 0.84 on egocentric video, 0.59 on DROID, whose reference labels read like task instructions rather than event descriptions.
 
 **No human review.** The labels are generated automatically. Treat them as a first pass over a corpus. They are not ground truth.
 

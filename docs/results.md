@@ -59,10 +59,13 @@ significant, 40% cheaper); one call per episode instead of windows (no
 reliable difference); pixel motion-energy boundary priors (worse than a uniform
 grid).
 
-**Not yet measured:** the `balanced` path (subdivision + labeling) on top of the
-new prompt; the `label_v2.md` fix for DROID's goal-named labels; native-video
-boundary refinement; the four additional datasets. The queue is in
-`scripts/resume_queue.sh`.
+**Measured 2026-08-30** (see `research-log.md` for CIs): both prompt effects
+replicated; native video + decomposition is the best coarse pass (F1 0.734,
+`f1_wgo` 0.476); schema mode (gold-derived vocabularies) F1 0.771 segmentation,
+0.699 end-to-end; `label_v2.md` +0.046 label accuracy (DROID 0.500 → 0.594),
+adopted; subdivision on the new prompt is a measured null for F1 and moved to
+`strict`. **Still not measured:** native-video boundary refinement; the four
+additional datasets; schema mode with customer-grade (coarser) vocabularies.
 
 **Cost correction.** The figures in the sections below were computed at
 $0.30 / $2.50 per M tokens, the pre-2026 flash price. At the current list price

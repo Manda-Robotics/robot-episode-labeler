@@ -54,9 +54,11 @@ and about $4 per hour for `balanced`, charged to your Gemini account.
    boundary as a completed world-state change and states that a pick and the
    following place are two subtasks. That rule produced the largest measured
    improvement.
-3. In `balanced` and `strict`, segments longer than 3 s are re-read at 0.25 s
-   to find short events that coarse sampling hides.
-4. Each segment is named and judged pass or fail with its neighbours as context.
+3. Each segment is named and judged pass or fail with its neighbours as
+   context. The label prompt names the event that completes at the segment's
+   end, not the episode goal.
+4. In `strict`, segments longer than 3 s are re-read at finer sampling and
+   boundaries are re-placed from a dense window.
 5. Ordering, bounds, contiguity and closed vocabularies are enforced in code.
    Every correction is reported as a warning.
 
